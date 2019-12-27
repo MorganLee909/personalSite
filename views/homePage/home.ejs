@@ -2,24 +2,39 @@
 <html lang="en">
     <head>
         <title>Lee Morgan</title>
+        <meta charset="utf-8">
         <link rel="stylesheet" href="/shared/shared.css">
         <link rel="stylesheet" href="/homePage/home.css">
     </head>
     <body>
         <%- include ("../shared/header.ejs") %>
 
-        <div id="homeStrand">
+        <div id="landingStrand">
             <div class="card">
                 <h1>Resume</h1> 
                 <img src="../shared/images/resume.jpeg" alt="Resume">
                 <p>Some text here about my resume</p>
             </div>
 
-            <div class="card">
+            <div class="card" onclick="projectsObj.display()">
                 <h1>Projects</h1> 
                 <img src="../shared/images/jeopardy.png" alt="Projects">
                 <p>A list of some of my biggest, best projects</p>
             </div>
         </div>
+
+        <div id="projectsStrand">
+            <a href="/jeopardy">
+                <div class="card">
+                    <h1>Jeopardy</h1> 
+                    <img src="../shared/images/resume.jpeg" alt="Resume">
+                    <p>A Jeopardy game for ESL students.  Primarily created for speaking clubs</p>
+                </div>
+            </a>
+        </div>
+
+        <script src="/homePage/landing.js"></script>
+        <script src="/homePage/projects.js"></script>
+        <script src="/homePage/controller.js"></script>
     </body>
 </html>

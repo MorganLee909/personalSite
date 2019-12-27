@@ -1,9 +1,9 @@
-#homeStrand{
+#landingStrand{
     display: flex;
     justify-content: space-around;
 }
 
-    #homeStrand > *{
+    #landingStrand > *{
         margin: 15px;
     }
 
@@ -37,3 +37,12 @@
         .card p{
             font-size: 20px;
         }
+
+#projectsStrand{
+    display: none;
+    justify-content: space-around;
+}
+
+    #projectsStrand{
+        margin: 15px;
+    }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>JEOPARDY!</title>
+        <link rel="stylesheet" href="/shared/shared.css">
+        <link rel="stylesheet" href="/jeopardyPage/jeopardy.css">
+    </head>
+    <body>
+        <%- include ("../shared/header.ejs") %>
+
+        <%- include ("../shared/banner.ejs") %>
+
+        <div id="gameStrand">
+            <h1>JEOPARDY!</h1>
+
+            <div class="buttonsDiv">
+                <button onclick="createQuestionObj.display()">Create Question</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div id="createQuestionStrand">
+            <h1>Create your JEOPARDY! questions</h1>
+            
+            <form onsubmit="createQuestionObj.submit()">
+                <label>Title:
+                    <input id="title" type="text" required>
+                </label>
+
+                <label>Question 1:
+                    <input id="questionOne" type="text" placeholder="QUESTION" required>
+
+                    <input id="answerOne" type="text" placeholder="ANSWER" required>
+                </label>
+
+                <label>Question 2:
+                    <input id="questionTwo" type="text" placeholder="QUESTION" required>
+
+                    <input id="answerTwo" type="text" placeholder="ANSWER" required>
+                </label>
+
+                <label>Question 3:
+                    <input id="questionThree" type="text" placeholder="QUESTION" required>
+
+                    <input id="answerThree" type="text" placeholder="ANSWER" required>
+                </label>
+
+                <label>Question 4:
+                    <input id="questionFour" type="text" placeholder="QUESTION" required>
+
+                    <input id="answerFour" type="text" placeholder="ANSWER" required>
+                </label>
+
+                <label>Question 5:
+                    <input id="questionFive" type="text" placeholder="QUESTION" required>
+                    
+                    <input id="answerFive" type="text" placeholder="ANSWER" required>
+                </label>
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="/shared/validation.js"></script>
+        <script src="/jeopardyPage/game.js"></script>
+        <script src="/jeopardyPage/createQuestion.js"></script>
+        <script src="/jeopardyPage/controller.js"></script>
+    </body>
+    </html>
+</html>

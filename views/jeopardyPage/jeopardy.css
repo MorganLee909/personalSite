@@ -1,0 +1,19 @@
+#gameStrand{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    #gameStrand > *{
+        margin: 15px;
+    }
+
+#createQuestionStrand{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+    #createQuestionStrand > *{
+        margin: 15px;
+    }
