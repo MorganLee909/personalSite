@@ -1,0 +1,39 @@
+#homeStrand{
+    display: flex;
+    justify-content: space-around;
+}
+
+    #homeStrand > *{
+        margin: 15px;
+    }
+
+    .card{
+        display: flex;
+        flex-direction: column;
+        align-items: center;;
+        margin: 25px;
+        padding: 15px;
+        border: 2px solid black;
+        box-shadow: 5px 5px 5px rgb(0, 91, 188);
+        border-radius: 10px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+        .card:hover{
+            box-shadow: 3px 3px 3px rgb(255, 214, 0);
+            transform: translateY(2px);
+        }
+
+        .card > *{
+            margin: 10px;
+        }
+
+        .card img{
+            height: 250px;
+            width: 250px;
+        }
+
+        .card p{
+            font-size: 20px;
+        }
