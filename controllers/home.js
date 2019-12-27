@@ -1,4 +1,4 @@
-const JeopardyCategory = require("../models/jeopardyCategory");
+const JeopardySet = require("../models/jeopardyCategory");
 
 module.exports = {
     renderMain: function(req, res){
@@ -6,7 +6,14 @@ module.exports = {
     },
 
     renderJeopardy: function(req, res){
-        return res.render("jeopardyPage/jeopardy");
+        JeopardySet.find()
+            .limit(6)
+            .then((sets)=>{
+                return res.render("jeopardyPage/jeopardy", {sets: sets});
+            })
+            .catch((err)=>{
+                return res.redirect("/");
+            });
     },
 
 
