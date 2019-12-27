@@ -24,7 +24,6 @@ let gameObj = {
             tbody.appendChild(row);
 
             for(let j = 0; j < 6; j++){
-                console.log(`${i}: ${j}`);
                 let question = document.createElement("td");
                 question.innerText = sets[j].questions[i].question;
                 row.appendChild(question);

@@ -1,3 +1,12 @@
+body {
+    height: 100%;
+    background-size: cover;
+    font-family: "Roboto Slab", serif;
+    font-weight: bold;
+    background-image: url("https://i.postimg.cc/k4fxhKzF/craps-big-background.jpg");
+}
+
+/* Game Strand */
 #gameStrand{
     display: flex;
     flex-direction: column;
@@ -8,6 +17,55 @@
         margin: 15px;
     }
 
+    #gameStrand h1{
+        color: white;
+        font-size: 180%;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    #jepTable{
+        border-spacing: 0px;
+        padding: 8%;
+        padding-top: 0;
+        filter: opacity(80%);
+        pointer-events: all;
+        transition: 0.5s;
+        text-align: center;
+        width: 100%;
+    }
+
+        #jepTable td{
+            color: #e0eae0;
+            font-family: "Roboto Slab", serif;
+            font-weight: bolder;
+            cursor: pointer;
+            border-style: solid;
+            border-width: 1.9px;
+            padding: 1.6%;
+            border-color: #e0eae0;
+            font-size: 115%;
+        }
+
+            #jepTable td:hover{
+                background-color: #dfeae1;
+                color: rgb(31, 90, 45);
+                transition: 0.7s;
+            }
+
+        #jepTable th{
+            background-color: #ffffffdb;
+            color: rgb(31, 90, 45);
+            height: 6vh;
+            width: 155px;
+            font-family: "Roboto Slab", serif;
+            padding: 8px;
+            border-style: solid;
+            border-color: rgb(31, 90, 45);
+            font-size: 100%;
+        }
+
+/* Create Questions Strand */
 #createQuestionStrand{
     display: none;
     flex-direction: column;
