@@ -1,0 +1,14 @@
+*{margin:0;padding:0;}
+
+#header{
+    display: flex;
+    align-items: center;
+    height: 75px;
+    background: black;
+    width: 100%;
+    color: white;
+}
+
+    #header > *{
+        margin-left: 25px;
+    }
