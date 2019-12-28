@@ -47,14 +47,14 @@ body {
             font-size: 115%;
         }
 
-            #jepTable td:hover{
+            #jepTable .tdHover:hover{
                 background-color: #dfeae1;
                 color: rgb(31, 90, 45);
                 transition: 0.7s;
             }
 
         #jepTable th{
-            background-color: #ffffffdb;
+            background-color: #ffffff;
             color: rgb(31, 90, 45);
             height: 6vh;
             width: 155px;
@@ -75,3 +75,27 @@ body {
     #createQuestionStrand > *{
         margin: 15px;
     }
+
+/* Question Strand */
+#questionStrand{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .questionBox{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 5px solid #e0eae0;
+        color: #e0eae0;
+        margin-top: 10vh;
+        width: 50vw;
+        height: 50vh;
+        border-radius: 10px;
+    }
+
+        .questionBox h1{
+            font-size: 40px;
+        }

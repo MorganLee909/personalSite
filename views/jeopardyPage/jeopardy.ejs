@@ -68,11 +68,20 @@
             </form>
         </div>
 
+        <div id="questionStrand">
+            <div class="questionBox">
+                <h1></h1>
+            </div>
+
+            <button class="jepButton" onclick="questionObj.displayAnswer()">Display Answer</button>
+        </div>
+
         <script>let sets = <%- JSON.stringify(sets) %>;</script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="/shared/validation.js"></script>
         <script src="/jeopardyPage/game.js"></script>
         <script src="/jeopardyPage/createQuestion.js"></script>
+        <script src="/jeopardyPage/question.js"></script>
         <script src="/jeopardyPage/controller.js"></script>
     </body>
     </html>

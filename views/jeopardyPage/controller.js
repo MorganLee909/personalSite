@@ -1,10 +1,12 @@
 let controller = {
     gameStrand: document.querySelector("#gameStrand"),
     createQuestionStrand: document.querySelector("#createQuestionStrand"),
+    questionStrand: document.querySelector("#questionStrand"),
 
     clearScreen: function(){
         this.gameStrand.style.display = "none";
         this.createQuestionStrand.style.display = "none";
+        this.questionStrand.style.display = "none";
     },
 
     onStart: function(){

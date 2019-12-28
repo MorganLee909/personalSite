@@ -6,6 +6,7 @@ let gameObj = {
         controller.gameStrand.style.display = "flex";
         if(!this.isPopulated){
             this.populateQuestions();
+            this.isPopulated = true;
         }
     },
 
@@ -24,10 +25,20 @@ let gameObj = {
             tbody.appendChild(row);
 
             for(let j = 0; j < 6; j++){
-                let question = document.createElement("td");
-                question.innerText = sets[j].questions[i].question;
-                row.appendChild(question);
+                let questionTd = document.createElement("td");
+                questionTd.classList = "tdHover";
+                questionTd.onclick = ()=>{this.chooseQuestion(questionTd, sets[j].questions[i])}
+                questionTd.innerText = (i + 1) * 100;
+                row.appendChild(questionTd);
             }
         }
+    },
+
+    chooseQuestion: function(questionTd, question){
+        questionTd.innerText = "";
+        questionTd.classList = "";
+        questionTd.style.cursor = "default";
+
+        questionObj.display(question);
     }
 }
