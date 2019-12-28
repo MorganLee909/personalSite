@@ -5,13 +5,13 @@ module.exports = {
         return res.render("homePage/home");
     },
 
-    renderJeopardy: function(req, res){
-        JeopardySet.find()
-            .limit(6)
+    renderJeopardy: async function(req, res){
+        JeopardySet.aggregate([{$sample: {size: 6}}])
             .then((sets)=>{
                 return res.render("jeopardyPage/jeopardy", {sets: sets});
             })
             .catch((err)=>{
+                console.log(err);
                 return res.redirect("/");
             });
     },
@@ -22,7 +22,7 @@ module.exports = {
     //  req.body.title: string
     //  req.body.questions: list of objects(question, answer)
     createQuestion: function(req, res){
-        let question = new JeopardyCategory({
+        let question = new JeopardySet({
             title: req.body.title,
             questions: req.body.questions
         });
