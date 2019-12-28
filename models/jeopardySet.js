@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const JeopardyCategorySchema = new mongoose.Schema({
+const JeopardySetSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -18,4 +18,4 @@ const JeopardyCategorySchema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model("JeopardyCategory", JeopardyCategorySchema);
+module.exports = mongoose.model("JeopardySet", JeopardySetSchema);

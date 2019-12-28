@@ -1,4 +1,4 @@
-const JeopardySet = require("../models/jeopardyCategory");
+const JeopardySet = require("../models/jeopardySet");
 
 module.exports = {
     renderMain: function(req, res){
