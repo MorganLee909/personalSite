@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+console.log(process.env.PERSONAL_SITE);
+console.log(typeof(process.env.PERSONAL_SITE));
 mongoose.connect(process.env.PERSONAL_SITE, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.set("view engine", "ejs");
