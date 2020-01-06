@@ -7,5 +7,5 @@ module.exports = function(app){
     app.post("/jeopardy/question/create", home.createQuestion);
     app.post("/jeopardy/questions", home.getQuestions);
     
-    app.post("/sudoku", home.sudoku);
+    app.get("/sudoku", home.sudoku);
 }
