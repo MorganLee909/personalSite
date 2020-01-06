@@ -3,19 +3,16 @@
     <head>
         <meta charset="utf-8">
         <title>JEOPARDY!</title>
-        <link rel="stylesheet" href="/shared/shared.css">
         <link rel="stylesheet" href="/jeopardyPage/jeopardy.css">
     </head>
     <body>
-        <%- include ("../shared/header.ejs") %>
-
         <%- include ("../shared/banner.ejs") %>
 
         <div id="gameStrand">
             <h1>JEOPARDY!</h1>
 
             <div class="buttonsDiv">
-                <button onclick="createQuestionObj.display()">Create Question</button>
+                <button class="jepButton" onclick="createQuestionObj.display()">Create Question</button>
             </div>
 
             <table id="jepTable">
@@ -32,6 +29,10 @@
             <form onsubmit="createQuestionObj.submit()">
                 <label>Title:
                     <input id="title" type="text" required>
+                </label>
+
+                <label>Category:
+                    <input id="category" type="text">
                 </label>
 
                 <label>Question 1:
@@ -64,7 +65,11 @@
                     <input id="answerFive" type="text" placeholder="ANSWER" required>
                 </label>
 
-                <input type="submit" value="Submit">
+                <div>
+                    <input class="jepButton" type="submit" value="Submit">
+
+                    <button class="jepButton" id="cancel" onclick="createQuestionObj.cancel()">Cancel</button>
+                </div>
             </form>
         </div>
 

@@ -11,7 +11,6 @@ module.exports = {
                 return res.render("jeopardyPage/jeopardy", {sets: sets});
             })
             .catch((err)=>{
-                console.log(err);
                 return res.redirect("/");
             });
     },
@@ -20,10 +19,12 @@ module.exports = {
     //POST - Create a new jeopardy question
     //inputs:
     //  req.body.title: string
+    //  req.body.category: category name
     //  req.body.questions: list of objects(question, answer)
     createQuestion: function(req, res){
         let question = new JeopardySet({
             title: req.body.title,
+            category: req.body.category,
             questions: req.body.questions
         });
 
