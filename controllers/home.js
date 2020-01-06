@@ -65,6 +65,7 @@ module.exports = {
         }
     },
 
+    //GET - Shows the sudoku solver page
     sudoku: function(req, res){
         return res.render("sudokuPage/sudoku");
     }

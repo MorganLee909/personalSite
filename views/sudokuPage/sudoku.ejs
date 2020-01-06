@@ -3,10 +3,18 @@
 	<head>
         <meta charset="utf-8">
     	<title>Sudoku Solver</title>
-        <link rel="stylesheet" href="/shared/shared.css">
         <link rel="stylesheet" href="/sudokuPage/sudoku.css">
 	</head>
     <body>
-        <script type="text/javascript" src="/sudokuPage/sudoku.js"></script>
+        <div id="sudokuStrand">
+            <table>
+                <tbody></tbody>
+            </table>
+
+            <button onclick="sudokuObj.solve()">Solve</button>
+        </div>
+
+        <script src="/sudokuPage/sudoku.js"></script>
+        <script src="/sudokuPage/controller.js"></script>
     </body>
 </html>
