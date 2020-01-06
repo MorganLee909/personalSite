@@ -11,7 +11,7 @@ let gameObj = {
         }
     },
 
-    populateQuestions: function(newSets = sets){
+    populateQuestions: function(){
         let thead = document.querySelector("#gameStrand thead tr");
         let tbody = document.querySelector("#gameStrand tbody");
 
@@ -22,7 +22,7 @@ let gameObj = {
             tbody.removeChild(tbody.firstChild);
         }
 
-        for(let set of newSets){
+        for(let set of sets){
             let head = document.createElement("th");
             head.innerText = set.title;
             thead.appendChild(head);
@@ -35,7 +35,7 @@ let gameObj = {
             for(let j = 0; j < 6; j++){
                 let questionTd = document.createElement("td");
                 questionTd.classList = "tdHover";
-                questionTd.onclick = ()=>{this.chooseQuestion(questionTd, newSets[j].questions[i])}
+                questionTd.onclick = ()=>{this.chooseQuestion(questionTd, sets[j].questions[i])}
                 questionTd.innerText = (i + 1) * 100;
                 row.appendChild(questionTd);
             }

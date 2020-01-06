@@ -86,7 +86,17 @@
         <div id="chooseQuestionsStrand">
             <h1>Choose some questions, Motherfucker</h1>
 
-            <button onclick="chooseQuestionsObj.submit()">Finish</button>
+            <form onsubmit="chooseQuestionsObj.newSets()">
+                <input id="catSearch" type="text" placeholder="Category">
+
+                <button class="jepButton">Find Questions</button>
+            </form>
+
+            <div class="buttonsDiv">
+                <button class="jepButton" onclick="chooseQuestionsObj.submit()">Finish</button>
+
+                <button class="jepButton" onclick="gameObj.display()">Cancel</button>
+            </div>
 
             <div id="sets"></div>
         </div>

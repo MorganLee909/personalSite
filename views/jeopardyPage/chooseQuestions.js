@@ -24,9 +24,18 @@ let chooseQuestionsObj = {
                         let card = document.createElement("div");
                         card.set = set;
                         card.classList = "setCard";
-                        card.innerText = set.title;
                         card.onclick = ()=>{this.addSet(card);};
                         container.appendChild(card);
+
+                        let title = document.createElement("h3");
+                        title.innerText = set.title;
+                        card.appendChild(title);
+
+                        for(let question of set.questions){
+                            let questionPar = document.createElement("p");
+                            questionPar.innerText = `${question.question} - ${question.answer}`;
+                            card.appendChild(questionPar);
+                        }
                     }
                 }
             })
@@ -35,10 +44,20 @@ let chooseQuestionsObj = {
             });
     },
 
+    newSets: function(){
+        event.preventDefault();
+
+        this.populateSets(document.querySelector("#catSearch").value);
+    },
+
     addSet: function(card){
-        this.sets.push(card.set);
-        card.classList = "chosenCard";
-        card.onclick = ()=>{this.removeSet(card);};
+        if(this.sets.length < 6){
+            this.sets.push(card.set);
+            card.classList = "chosenCard";
+            card.onclick = ()=>{this.removeSet(card);};
+        }else{
+            banner.createError("You can only choose 6 sets of questions");
+        }
     },
 
     removeSet: function(card){
@@ -54,8 +73,13 @@ let chooseQuestionsObj = {
     },
 
     submit: function(){
-        gameObj.display();
-        gameObj.populateQuestions(sets);
-        this.sets = [];
+        if(this.sets.length === 6){
+            sets = this.sets;
+            this.sets = [];
+            gameObj.isPopulated = false;
+            gameObj.display();
+        }else{
+            banner.createError("You must choose exactly 6 sets of questions");
+        }
     }
 }
