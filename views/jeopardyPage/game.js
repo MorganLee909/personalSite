@@ -4,17 +4,25 @@ let gameObj = {
     display: function(){
         controller.clearScreen();
         controller.gameStrand.style.display = "flex";
+
         if(!this.isPopulated){
             this.populateQuestions();
             this.isPopulated = true;
         }
     },
 
-    populateQuestions: function(){
+    populateQuestions: function(newSets = sets){
         let thead = document.querySelector("#gameStrand thead tr");
         let tbody = document.querySelector("#gameStrand tbody");
 
-        for(let set of sets){
+        while(thead.children.length > 0){
+            thead.removeChild(thead.firstChild);
+        }
+        while(tbody.children.length > 0){
+            tbody.removeChild(tbody.firstChild);
+        }
+
+        for(let set of newSets){
             let head = document.createElement("th");
             head.innerText = set.title;
             thead.appendChild(head);
@@ -27,7 +35,7 @@ let gameObj = {
             for(let j = 0; j < 6; j++){
                 let questionTd = document.createElement("td");
                 questionTd.classList = "tdHover";
-                questionTd.onclick = ()=>{this.chooseQuestion(questionTd, sets[j].questions[i])}
+                questionTd.onclick = ()=>{this.chooseQuestion(questionTd, newSets[j].questions[i])}
                 questionTd.innerText = (i + 1) * 100;
                 row.appendChild(questionTd);
             }

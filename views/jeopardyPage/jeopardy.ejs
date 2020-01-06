@@ -13,6 +13,8 @@
 
             <div class="buttonsDiv">
                 <button class="jepButton" onclick="createQuestionObj.display()">Create Question</button>
+
+                <button class="jepButton" onclick="chooseQuestionsObj.display()">Choose Questions</button>
             </div>
 
             <table id="jepTable">
@@ -81,12 +83,21 @@
             <button class="jepButton" onclick="questionObj.displayAnswer()">Display Answer</button>
         </div>
 
+        <div id="chooseQuestionsStrand">
+            <h1>Choose some questions, Motherfucker</h1>
+
+            <button onclick="chooseQuestionsObj.submit()">Finish</button>
+
+            <div id="sets"></div>
+        </div>
+
         <script>let sets = <%- JSON.stringify(sets) %>;</script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="/shared/validation.js"></script>
         <script src="/jeopardyPage/game.js"></script>
         <script src="/jeopardyPage/createQuestion.js"></script>
         <script src="/jeopardyPage/question.js"></script>
+        <script src="/jeopardyPage/chooseQuestions.js"></script>
         <script src="/jeopardyPage/controller.js"></script>
     </body>
     </html>

@@ -35,5 +35,33 @@ module.exports = {
             .catch((err)=>{
                 return res.json("Error: The question could not be created");
             });
+    },
+
+    //POST - Get questions to choose from
+    //inputs:
+    //  req.body.category: category to choose questions from
+    //returns:
+    //  sets: up to 30 sets of questions
+    getQuestions: function(req, res){
+        if(req.body.category === ""){
+            JeopardySet.aggregate([{$sample: {size: 30}}])
+                .then((sets)=>{
+                    return res.json(sets);
+                })
+                .catch((err)=>{
+                    return res.json("Error: Could not retrieve sets");
+                });
+        }else{
+            JeopardySet.aggregate([
+                {$match: {category: req.body.category}},
+                {$sample: {size: 30}}
+            ])
+                .then((sets)=>{
+                    return res.json(sets);
+                })
+                .catch((err)=>{
+                    return res.json("Error: Could not retrieve sets");
+                });
+        }
     }
 }

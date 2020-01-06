@@ -135,3 +135,32 @@ body{
         .questionBox h1{
             font-size: 40px;
         }
+
+/* Choose Questions Strand */
+#chooseQuestionsStrand{
+    display: none;
+    flex-direction: column;
+}
+
+    #chooseQuestionsStrand > *{
+        margin: 15px;
+    }
+
+    #sets{
+        display: flex;
+        justify-content: space-around;
+    }
+
+        .setCard{
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 25px;
+            cursor: pointer;
+        }
+
+        .chosenCard{
+            border: 2px solid red;
+            border-radius: 10px;
+            padding: 25px;
+            cursor: pointer;
+        }
