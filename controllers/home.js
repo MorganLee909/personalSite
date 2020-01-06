@@ -63,5 +63,9 @@ module.exports = {
                     return res.json("Error: Could not retrieve sets");
                 });
         }
+    },
+
+    sudoku: function(req, res){
+        return res.render("sudokuPage/sudoku");
     }
 }
