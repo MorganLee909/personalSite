@@ -63,5 +63,10 @@ module.exports = {
                     return res.json("Error: Could not retrieve sets");
                 });
         }
+    },
+
+    //GET - Shows the sudoku solver page
+    sudoku: function(req, res){
+        return res.render("sudokuPage/sudoku");
     }
 }

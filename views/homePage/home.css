@@ -40,9 +40,24 @@
 
 #projectsStrand{
     display: none;
+    flex-direction: column;
     justify-content: space-around;
 }
 
-    #projectsStrand{
+    #projectsStrand a{
+        text-decoration: none;
+        color: black;
+    }
+
+    #projectsStrand > *{
         margin: 15px;
+    }
+
+    #projectsStrand .card{
+        flex-direction: row;
+        max-height: 15vh;
+    }
+
+    #projectsStrand .card img{
+        max-height: 13vh;
     }
