@@ -5,6 +5,8 @@ let birthdayParadoxObj = {
     display: function(){
         let datesDiv = document.querySelector("#datesDiv");
 
+        document.querySelector("#partiers").value = this.partiers;
+
         while(datesDiv.children.length > 0){
             datesDiv.removeChild(datesDiv.firstChild);
         }
@@ -28,7 +30,6 @@ let birthdayParadoxObj = {
                 }
             }
         }
-        
 
         for(let num of nums){
             let date = new Date(2020, 0);
@@ -46,6 +47,23 @@ let birthdayParadoxObj = {
                 }
             }
         }
+
+        this.calculateChance();
+    },
+
+    calculateChance: function(){
+        let chance = document.querySelector("h3");
+        let input = document.querySelector("#partiers");
+        
+        this.partiers = input.value;
+        
+
+        let percent = 1
+        for(let i = 1; i < this.partiers; i++){
+            percent *= (365 - i) / 365;
+        }
+
+        chance.innerText = `${(1 - percent) * 100}%`;
     }
 }
 

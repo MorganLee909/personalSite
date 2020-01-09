@@ -8,9 +8,13 @@
     <body>
         <a href="https://en.m.wikipedia.org/wiki/Birthday_problem" target="_blank"><h1>The Birthday Paradox</h1></a>
 
-        <div id="datesDiv"></div>
+        <button class="button" onclick="birthdayParadoxObj.display()">Try Again!</button>
 
-        <h2></h2>
+        <input id="partiers" onkeyup="birthdayParadoxObj.calculateChance()" type="number" step="1" min="0" max="365">
+        
+        <h3></h3>
+
+        <div id="datesDiv"></div>
 
         <script src="/birthdayParadoxPage/birthdayParadox.js"></script>
     </body>
