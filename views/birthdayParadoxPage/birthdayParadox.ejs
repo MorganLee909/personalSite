@@ -6,12 +6,20 @@
         <link rel="stylesheet" href="/birthdayParadoxPage/birthdayParadox.css">
     </head>
     <body>
-        <a href="https://en.m.wikipedia.org/wiki/Birthday_problem" target="_blank"><h1>The Birthday Paradox</h1></a>
-
-        <button class="button" onclick="birthdayParadoxObj.display()">Try Again!</button>
-
-        <input id="partiers" onkeyup="birthdayParadoxObj.calculateChance()" type="number" step="1" min="0" max="365">
+        <h1>The Birthday Paradox</h1>
         
+        <p class="text"><a href="https://en.m.wikipedia.org/wiki/Birthday_problem" target="_blank">The birthday paradox</a> is the idea that if there are 23 people in a room, there is about a 50% chance that two people in the room have the same birthday.  While counterintuitive it is very true.  This page shows this by creating random "birthdays" and then showing the matches, if any.  Play around with the number of people to see different odds.</p>
+
+        <p class="text">Watch an explanation <a href="https://www.youtube.com/watch?v=ofTb57aZHZs" target="_blank">here</a>.</p>
+
+        <div class="interactive">
+            <label>Number of people:
+                <input id="partiers" onkeyup="birthdayParadoxObj.calculateChance()" onchange="birthdayParadoxObj.calculateChance()" type="number" step="1">
+            </label>
+
+            <button class="button" onclick="birthdayParadoxObj.display()">Try Again!</button>
+        </div>
+
         <h3></h3>
 
         <div id="datesDiv"></div>

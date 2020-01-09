@@ -11,6 +11,43 @@ body{
         margin: 15px;
     }
 
+.text{
+    max-width: 75vw;
+    font-size: 20px;
+}
+
+.interactive{
+    display: flex;
+    justify-content: space-around;
+}
+
+    .interactive > *{
+        margin: 10px;
+    }
+
+    .button{
+        border: 3px solid black;
+        font-weight: bold;
+        font-size: 20px;
+        box-shadow: 5px 5px 5px black;
+        border-radius: 10px;
+        transition: 0.4s;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+        .button:hover{
+            background: black;
+            border: 3px solid white;
+            color: white;
+        }
+
+    #partiers{
+        text-align: center;
+        font-size: 20px;
+        max-width: 75px;
+    }
+
 #datesDiv{
     display: flex;
     justify-content: space-around;
@@ -31,24 +68,3 @@ body{
         color: rgb(255, 214, 0);
         border: 2px solid rgb(255, 214, 0);
     }
-
-.button{
-    border: 3px solid black;
-    font-weight: bold;
-    font-size: 30px;
-    box-shadow: 5px 5px 5px black;
-    border-radius: 10px;
-    transition: 0.4s;
-    padding: 5px;
-    cursor: pointer;
-}
-
-    .button:hover{
-        background: black;
-        border: 3px solid white;
-        color: white;
-    }
-
-#partiers{
-    text-align: center;
-}

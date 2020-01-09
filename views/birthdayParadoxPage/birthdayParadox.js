@@ -63,7 +63,7 @@ let birthdayParadoxObj = {
             percent *= (365 - i) / 365;
         }
 
-        chance.innerText = `${(1 - percent) * 100}%`;
+        chance.innerText = `${(1 - percent) * 100}% chance of a match`;
     }
 }
 
