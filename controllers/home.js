@@ -1,10 +1,12 @@
 const JeopardySet = require("../models/jeopardySet");
 
 module.exports = {
+    //GET - Renders the landing page
     renderMain: function(req, res){
         return res.render("homePage/home");
     },
 
+    //GET - Shows the jeopardy page
     renderJeopardy: async function(req, res){
         JeopardySet.aggregate([{$sample: {size: 6}}])
             .then((sets)=>{
@@ -15,6 +17,20 @@ module.exports = {
             });
     },
 
+    //GET - Shows the sudoku solver page
+    sudoku: function(req, res){
+        return res.render("sudokuPage/sudoku");
+    },
+
+    //GET - Shows the birthday paradox page
+    birthdayParadox: function(req, res){
+        return res.render("birthdayParadoxPage/birthdayParadox");
+    },
+
+    //GET - Renders the resume page
+    resume: function(req, res){
+        return res.render("resumePage/resume");
+    },
 
     //POST - Create a new jeopardy question
     //inputs:
@@ -63,14 +79,5 @@ module.exports = {
                     return res.json("Error: Could not retrieve sets");
                 });
         }
-    },
-
-    //GET - Shows the sudoku solver page
-    sudoku: function(req, res){
-        return res.render("sudokuPage/sudoku");
-    },
-
-    birthdayParadox: function(req, res){
-        return res.render("birthdayParadoxPage/birthdayParadox");
     }
 }

@@ -10,17 +10,21 @@
         <%- include ("../shared/header.ejs") %>
 
         <div id="landingStrand">
-            <div class="card">
-                <h1>Resume</h1> 
-                <img src="../shared/images/resume.jpeg" alt="Resume">
-                <p>Some text here about my resume</p>
-            </div>
+            <a href="/resume">
+                <div class="card" >
+                    <h1>Resume</h1> 
+                    <img src="../shared/images/resume.jpeg" alt="Resume">
+                    <p>Some text here about my resume</p>
+                </div>
+            </a>
 
-            <div class="card" onclick="projectsObj.display()">
-                <h1>Projects</h1> 
-                <img src="../shared/images/jeopardy.png" alt="Projects">
-                <p>A list of some of my biggest, best projects</p>
-            </div>
+            <a>
+                <div class="card" onclick="projectsObj.display()">
+                    <h1>Projects</h1> 
+                    <img src="../shared/images/jeopardy.png" alt="Projects">
+                    <p>A list of some of my biggest, best projects</p>
+                </div>
+            </a>
         </div>
 
         <div id="projectsStrand">
