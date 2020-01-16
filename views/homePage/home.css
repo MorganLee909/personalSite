@@ -3,6 +3,7 @@ a{
     text-decoration: none;
 }
 
+/* Landing Strand */
 #landingStrand{
     display: flex;
     justify-content: space-around;
@@ -19,14 +20,13 @@ a{
         margin: 25px;
         padding: 15px;
         border: 2px solid black;
-        box-shadow: 5px 5px 5px rgb(0, 91, 188);
-        border-radius: 10px;
+        box-shadow: 10px 10px 10px gray;
         cursor: pointer;
         text-align: center;
     }
 
         .card:hover{
-            box-shadow: 3px 3px 3px rgb(255, 214, 0);
+            box-shadow: 6px 6px 6px black;
             transform: translateY(2px);
         }
 
@@ -43,19 +43,14 @@ a{
             font-size: 20px;
         }
 
+/* Projects Strand */
 #projectsStrand{
     display: none;
-    flex-direction: column;
     justify-content: space-around;
 }
 
     #projectsStrand > *{
         margin: 15px;
-    }
-
-    #projectsStrand .card{
-        flex-direction: row;
-        max-height: 15vh;
     }
 
     #projectsStrand .card img{

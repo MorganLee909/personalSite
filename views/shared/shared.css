@@ -1,16 +1,28 @@
 *{margin:0;padding:0;}
 
+body{
+    font-family: 'IBM Plex Mono', monospace;
+}
+
 #header{
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 75px;
-    background: rgb(0, 91, 188);
+    background: black;
     width: 100%;
-    color: rgb(255, 214, 0);
+    color: white;
+    
 }
 
     #header > *{
         margin-left: 25px;
+    }
+
+    #header a{
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
     }
 
 form{

@@ -7,14 +7,13 @@
         <link rel="stylesheet" href="/homePage/home.css">
     </head>
     <body>
-        <%- include ("../shared/header.ejs") %>
+        <header-tag></header-tag>
 
         <div id="landingStrand">
             <a href="/bio">
                 <div class="card">
                     <h1>Bio</h1>
                     <img src="../shared/images/lee.jpeg" alt="Lee Morgan">
-                    <p>A little bit about myself</p>
                 </div>
             </a>
             
@@ -22,7 +21,6 @@
                 <div class="card" >
                     <h1>Resume</h1> 
                     <img src="../shared/images/resume.jpeg" alt="Resume">
-                    <p>Some text here about my resume</p>
                 </div>
             </a>
 
@@ -30,7 +28,6 @@
                 <div class="card" onclick="projectsObj.display()">
                     <h1>Projects</h1> 
                     <img src="../shared/images/jeopardy.png" alt="Projects">
-                    <p>A list of some of my biggest, best projects</p>
                 </div>
             </a>
 
@@ -71,6 +68,7 @@
             </a>
         </div>
 
+        <script src="/shared/header.js"></script>
         <script src="/homePage/landing.js"></script>
         <script src="/homePage/projects.js"></script>
         <script src="/homePage/controller.js"></script>
