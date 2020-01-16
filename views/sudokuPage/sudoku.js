@@ -126,5 +126,20 @@ let sudokuObj = {
                 row.children[j].children[0].value = this.arr[i][j];
             }
         }
+    },
+
+    reset: function(){
+        let tbody = document.querySelector("tbody");
+
+        for(let row of tbody.children){
+            for(let td of row.children){
+                td.children[0].value = "";
+            }
+        }
+
+        this.arr = [];
+        this.emptyX = [];
+        this.emptyY = [];
+        this.count = 0;
     }
 }
