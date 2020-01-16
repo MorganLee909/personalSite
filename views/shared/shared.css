@@ -4,6 +4,30 @@ body{
     font-family: 'IBM Plex Mono', monospace;
 }
 
+/* Components */
+strand-selector{
+    display: flex;
+    justify-content: center;
+}
+
+    strand-selector button{
+        margin: 10px;
+        background: none;
+        font-size: 25px;
+        font-weight: bold;
+        border: none;
+        transition: box-shadow 1s;
+        padding: 5px;
+    }
+
+        strand-selector button:hover{
+            box-shadow: 15px 15px 15px gray;
+        }
+
+.strand{
+    transition: width 1s linear;
+}
+
 #header{
     display: flex;
     align-items: center;
@@ -23,6 +47,7 @@ body{
         color: white;
         font-size: 30px;
         font-weight: bold;
+        text-decoration: none;
     }
 
 form{
