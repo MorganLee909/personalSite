@@ -32,6 +32,10 @@ module.exports = {
         return res.render("resumePage/resume");
     },
 
+    bio: function(req, res){
+        return res.render("bioPage/bio");
+    },
+
     //POST - Create a new jeopardy question
     //inputs:
     //  req.body.title: string
