@@ -27,6 +27,10 @@ module.exports = {
         return res.render("birthdayParadoxPage/birthdayParadox");
     },
 
+    corona: function(req, res){
+        return res.render("coronaPage/corona");
+    },
+
     //GET - Renders the resume page
     resume: function(req, res){
         return res.render("resumePage/resume");
