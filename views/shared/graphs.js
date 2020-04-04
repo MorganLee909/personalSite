@@ -39,7 +39,6 @@ class LineGraph{
     //  xRange = array containing two elements, start and end for x axis data (currently only dates)
     //  name = string name for the line.  Used for display and finding lines.  Each must be unique
     addData(data, xRange, name){
-        console.log(data);
         data = {
             set: data,
             colorIndex: this.colorIndex,
@@ -94,7 +93,7 @@ class LineGraph{
     }
 
     //Completely clears all data
-    //Does not delete the current graph displaying
+    //Does not delete the current data displaying
     clearData(){
         this.max = 0;
         this.data = [];

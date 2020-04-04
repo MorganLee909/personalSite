@@ -1,0 +1,42 @@
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1{
+    margin: 20px;
+}
+
+h2{
+    margin: 10px;
+}
+
+canvas{
+    height: 75vh;
+    width: 85vw;
+}
+
+.horizontal{
+    display: flex;
+    justify-content: space-between;
+}
+
+    .stats{
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+        .stats > *{
+            margin: 5px;
+        }
+
+        .stat{
+            display: flex;
+        }
+
+        .stat p:first-of-type{
+            font-weight: bold;
+            width: 75%;
+        }

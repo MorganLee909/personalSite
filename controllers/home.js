@@ -1,4 +1,12 @@
 const JeopardySet = require("../models/jeopardySet");
+const MongoClient = require("mongodb").MongoClient;
+
+let Corona = {};
+
+MongoClient.connect(process.env.PERSONAL_SITE, (err, client)=>{
+    let db = client.db("corona2");
+    Corona = db.collection("data");
+});
 
 module.exports = {
     //GET - Renders the landing page
@@ -27,8 +35,40 @@ module.exports = {
         return res.render("birthdayParadoxPage/birthdayParadox");
     },
 
+    //GET - Shows the CCP Corona Virus page
     corona: function(req, res){
-        return res.render("coronaPage/corona");
+        Corona.aggregate([
+            {$match: {
+                countryterritoryCode: "USA",
+            }},
+            {$group: {
+                _id: {
+                    year: "$year",
+                    month: "$month",
+                    day: "$day"
+                },
+                cases: {$sum: "$cases"},
+                deaths: {$sum: "$deaths"}
+            }},
+            {$sort: {
+                "_id.year": 1,
+                "_id.month": 1,
+                "_id.day": 1
+            }},
+            {$project: {
+                _id: 0,
+                countryterritoryCode: 1,
+                date: {$toDate: {$concat: [{$toString: "$_id.year"}, "-", {$toString: "$_id.month"}, "-", {$toString: "$_id.day"}]}},
+                newCases: "$cases",
+                newDeaths: "$deaths"
+            }}
+        ]).toArray()
+            .then((response)=>{
+                return res.render("coronaPage/corona", {data: response});
+            })
+            .catch((err)=>{
+                console.log(err);
+            });
     },
 
     //GET - Renders the resume page

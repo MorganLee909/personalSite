@@ -7,6 +7,58 @@
         <link rel="stylesheet" href="/shared/shared.css">
     </head>
     <body>
-        <h1>Corona Virus</h1>
+        <h1>CCP Corona Virus</h1>
+
+        <h2></h2>
+
+        <input id="date" type="date" onchange="dataChange()">
+
+        <div class="horizontal">
+            <div class="stats">
+                <div class="stat">
+                    <p>Total Cases:</p>
+                    <p id="totalCases"></p>
+                </div>
+                <hr>
+
+                <div class="stat">
+                    <p>Total Deaths:</p>
+                    <p id="totalDeaths"></p>
+                </div>
+                <hr>
+
+                <div class="stat">
+                    <p>New Cases Today:</p>
+                    <p id="newCases"></p>
+                </div>
+                <hr>
+
+                <div class="stat">
+                    <p>New Deaths Today:</p>
+                    <p id="newDeaths"></p>
+                </div>
+                <hr>
+
+                <div class="stat">
+                    <p>7-Day new case average: </p>
+                    <p id="newCaseAverage7"></p>
+                </div>
+                <hr>
+
+                <div class="stat">
+                    <p>30-Day new case average: </p>
+                    <p id="newCaseAverage30"></p>
+                </div>
+            </div>
+
+            <canvas id="myCanvas"></canvas>
+        </div>
+
+        <script>
+            let data = {};
+            data.us = <%- JSON.stringify(data) %>;
+        </script>
+        <script src="../shared/graphs.js"></script> 
+        <script src="/coronaPage/corona.js"></script>
     </body>
 </html>
