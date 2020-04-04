@@ -3,10 +3,17 @@ const MongoClient = require("mongodb").MongoClient;
 
 let Corona = {};
 
-MongoClient.connect(process.env.PERSONAL_SITE, (err, client)=>{
-    let db = client.db("corona2");
-    Corona = db.collection("data");
-});
+MongoClient.connect(
+    process.env.PERSONAL_SITE, 
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    },
+    (err, client)=>{
+        let db = client.db("corona2");
+        Corona = db.collection("data");
+    }
+);
 
 module.exports = {
     //GET - Renders the landing page
