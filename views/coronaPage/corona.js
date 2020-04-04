@@ -77,7 +77,6 @@ let graphNewCases = function(numDays, endDateIndex = data.us.length - 1){
         arr.push(data.us[i].newCases);
     }
 
-    console.log(arr);
     return arr;
 }
 
@@ -112,7 +111,9 @@ let graph = new LineGraph(
     "Date"
 )
 
-let dateArr = [new Date(data.us[data.us.length-30].date), new Date(data.us[data.us.length-1].date)];
+let date1 = new Date(data.us[data.us.length-31].date);
+let date2 = new Date(data.us[data.us.length-1].date);
+let dateArr = [date1, date2];
 graph.addData(graphTotalCases(30), dateArr, "Total Cases");
 graph.addData(graphNewCases(30), dateArr, "New Cases");
 graph.addData(graphTotalDeaths(30), dateArr, "Total Deaths");
