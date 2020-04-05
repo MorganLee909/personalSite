@@ -12,6 +12,12 @@ h2{
     margin: 10px;
 }
 
+h3{
+    margin: 10px;
+    text-decoration: underline;
+    text-align: center;
+}
+
 canvas{
     height: 75vh;
     width: 85vw;
@@ -25,6 +31,7 @@ canvas{
     .stats{
         display: flex;
         flex-direction: column;
+        align-items: left;
         padding: 10px;
     }
 
@@ -32,11 +39,20 @@ canvas{
             margin: 5px;
         }
 
+        .general{
+            margin-bottom: 25px;
+        }
+
         .stat{
             display: flex;
+            padding: 5px;
         }
 
         .stat p:first-of-type{
             font-weight: bold;
             width: 75%;
+        }
+
+        .newCases > p{
+            margin-bottom: 10px;
         }

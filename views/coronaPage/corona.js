@@ -5,6 +5,8 @@ switch(displayLocation){
     case "us": displayLocation = "United States of America"; break;
     case "russia": displayLocation = "Russia"; break;
     case "china": displayLocation = "China"; break;
+    case "taiwan": displayLocation = "Taiwan"; break;
+    case "canada": displayLocation = "Canada"; break;
     default: displayLocation = "World";
 }
 
@@ -58,12 +60,49 @@ let calculateNewCaseAverage = function(numDays, endDate){
     return Math.round(total / numDays);
 }
 
+let calculateGrowth = function(currentCases, compareCases){
+    let num = ((currentCases - compareCases) / compareCases) * 100;
+
+    return num;
+}
+
 document.querySelector("#totalCases").innerText = calculateTotalCases(latestDate);
 document.querySelector("#totalDeaths").innerText = calculateTotalDeaths(latestDate);
-document.querySelector("#newCases").innerText = data[data.length-1].newCases;
 document.querySelector("#newDeaths").innerText = data[data.length-1].newDeaths;
+
+document.querySelector("#newCases").innerText = data[data.length-1].newCases;
 document.querySelector("#newCaseAverage7").innerText = calculateNewCaseAverage(7, latestDate);
 document.querySelector("#newCaseAverage30").innerText = calculateNewCaseAverage(30, latestDate);
+
+let percentYesterday = document.querySelector("#percentYesterday");
+let percent = calculateGrowth(data[data.length-1].newCases, data[data.length-2].newCases);
+if(percent > 0){
+    percentYesterday.innerText = `${percent.toFixed(2)}% more cases than previous day`;
+    percentYesterday.style.color = "red";
+}else{
+    percentYesterday.innerText = `${percent.toFixed(2)}% fewer cases than previous day`;
+    percentYesterday.style.color = "green";
+}
+
+let percent7Day = document.querySelector("#percent7Day");
+percent = calculateGrowth(data[data.length-1].newCases, calculateNewCaseAverage(7, latestDate));
+if(percent > 0){
+    percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
+    percent7Day.style.color = "red";
+}else{
+    percent7Day.innerText = `${percent.toFixed(2)}% fewer cases than 7-day average`;
+    percent7Day.style.color = "green";
+}
+
+let percent30Day = document.querySelector("#percent30Day");
+percent = calculateGrowth(data[data.length-1].newCases, calculateNewCaseAverage(30, latestDate));
+if(percent > 0){
+    percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
+    percent30Day.style.color = "red";
+}else{
+    percent30Day.innerText = `${percent.toFixed(2)}% fewer cases than 30-day average`;
+    percent30Day.style.color = "green";
+}
 
 //Graphing
 let graphTotalCases = function(numDays, endDateIndex = data.length - 1){
@@ -155,6 +194,37 @@ let dataChange = function(){
     document.querySelector("#newDeaths").innerText = data[newDateIndex].newDeaths;
     document.querySelector("#newCaseAverage7").innerText = calculateNewCaseAverage(7, date);
     document.querySelector("#newCaseAverage30").innerText = calculateNewCaseAverage(30, date);
+
+    let percentYesterday = document.querySelector("#percentYesterday");
+    let percent = calculateGrowth(data[newDateIndex].newCases, data[newDateIndex-1].newCases);
+    if(percent > 0){
+        percentYesterday.innerText = `${percent.toFixed(2)}% more cases than previous day`;
+        percentYesterday.style.color = "red";
+    }else{
+        percentYesterday.innerText = `${percent.toFixed(2)}% fewer cases than previous day`;
+        percentYesterday.style.color = "green";
+    }
+
+    let percent7Day = document.querySelector("#percent7Day");
+    percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(7, date));
+    if(percent > 0){
+        percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
+        percent7Day.style.color = "red";
+    }else{
+        percent7Day.innerText = `${percent.toFixed(2)}% fewer cases than 7-day average`;
+        percent7Day.style.color = "green";
+    }
+
+    let percent30Day = document.querySelector("#percent30Day");
+    percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(30, date));
+    if(percent > 0){
+        percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
+        percent30Day.style.color = "red";
+    }else{
+        percent30Day.innerText = `${percent.toFixed(2)}% fewer cases than 30-day average`;
+        percent30Day.style.color = "green";
+    }
+
 
     graph.clearData();
     let dateArr = [new Date(data[newDateIndex - 30].date), new Date(data[newDateIndex].date)];

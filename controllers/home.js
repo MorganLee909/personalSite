@@ -49,6 +49,8 @@ module.exports = {
             case "us": location = "United_States_of_America"; break;
             case "russia": location = "Russia"; break;
             case "china": location = "China"; break;
+            case "taiwan": location = "Taiwan"; break;
+            case "canada": location = "Canada"; break;
             default: location = "";
         }
 
