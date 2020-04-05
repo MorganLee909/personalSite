@@ -164,9 +164,9 @@ let graph = new LineGraph(
 let date1 = new Date(data[data.length-31].date);
 let date2 = new Date(data[data.length-1].date);
 let dateArr = [date1, date2];
-graph.addData(graphTotalCases(30), dateArr, "Total Cases");
+// graph.addData(graphTotalCases(30), dateArr, "Total Cases");
 graph.addData(graphNewCases(30), dateArr, "New Cases");
-graph.addData(graphTotalDeaths(30), dateArr, "Total Deaths");
+// graph.addData(graphTotalDeaths(30), dateArr, "Total Deaths");
 graph.addData(graphNewDeaths(30), dateArr, "New Deaths");
 
 //Data change
@@ -227,8 +227,8 @@ let dataChange = function(){
 
     graph.clearData();
     let dateArr = [new Date(data[newDateIndex - 30].date), new Date(data[newDateIndex].date)];
-    graph.addData(graphTotalCases(30, newDateIndex), dateArr, "Total Cases");
+    // graph.addData(graphTotalCases(30, newDateIndex), dateArr, "Total Cases");
     graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
-    graph.addData(graphTotalDeaths(30, newDateIndex), dateArr, "Total Deaths");
+    // graph.addData(graphTotalDeaths(30, newDateIndex), dateArr, "Total Deaths");
     graph.addData(graphNewDeaths(30, newDateIndex), dateArr, "New Deaths");
 }
