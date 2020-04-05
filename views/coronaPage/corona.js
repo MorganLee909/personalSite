@@ -1,11 +1,23 @@
-let latestDate = new Date(data.us[data.us.length-1].date);
-document.querySelector("h2").innerText = latestDate.toDateString();
+let latestDate = new Date(data[data.length-1].date);
+let url = window.location.href;
+let displayLocation = url.slice(url.indexOf("corona") + 7);
+switch(displayLocation){
+    case "us": displayLocation = "United States of America"; break;
+    case "russia": displayLocation = "Russia"; break;
+    case "china": displayLocation = "China"; break;
+    default: displayLocation = "World";
+}
+
+data
+
+document.querySelector("#locationHeader").innerText = displayLocation;
+document.querySelector("#dateHeader").innerText = latestDate.toDateString();
 document.querySelector("#date").valueAsDate = latestDate;
 
 //Left-hand data
 let calculateTotalCases = function(endDate){
     let total = 0;
-    for(let point of data.us){
+    for(let point of data){
         if(new Date(point.date) > endDate){
             break;
         }
@@ -18,7 +30,7 @@ let calculateTotalCases = function(endDate){
 
 let calculateTotalDeaths = function(endDate){
     let total = 0;
-    for(let point of data.us){
+    for(let point of data){
         if(new Date(point.date) > endDate){
             break;
         }
@@ -30,15 +42,15 @@ let calculateTotalDeaths = function(endDate){
 
 let calculateNewCaseAverage = function(numDays, endDate){
     let total = 0;
-    for(let i = 0; i < data.us.length; i++){
-        let forDate = new Date(data.us[i].date);
+    for(let i = 0; i < data.length; i++){
+        let forDate = new Date(data[i].date);
         if(
             forDate.getDate() === endDate.getDate() &&
             forDate.getMonth() === endDate.getMonth()
         ){
             for(let j = 0; j < numDays; j++){
                 
-                total += data.us[i-j].newCases;
+                total += data[i-j].newCases;
             }
         }
     }
@@ -48,17 +60,17 @@ let calculateNewCaseAverage = function(numDays, endDate){
 
 document.querySelector("#totalCases").innerText = calculateTotalCases(latestDate);
 document.querySelector("#totalDeaths").innerText = calculateTotalDeaths(latestDate);
-document.querySelector("#newCases").innerText = data.us[data.us.length-1].newCases;
-document.querySelector("#newDeaths").innerText = data.us[data.us.length-1].newDeaths;
+document.querySelector("#newCases").innerText = data[data.length-1].newCases;
+document.querySelector("#newDeaths").innerText = data[data.length-1].newDeaths;
 document.querySelector("#newCaseAverage7").innerText = calculateNewCaseAverage(7, latestDate);
 document.querySelector("#newCaseAverage30").innerText = calculateNewCaseAverage(30, latestDate);
 
 //Graphing
-let graphTotalCases = function(numDays, endDateIndex = data.us.length - 1){
+let graphTotalCases = function(numDays, endDateIndex = data.length - 1){
     let arr = [];
     let total = 0;
-    for(let i = 0; i < data.us.length; i++){
-        total += data.us[i].newCases;
+    for(let i = 0; i < data.length; i++){
+        total += data[i].newCases;
         if(i >= endDateIndex - numDays){
             arr.push(total);
         }
@@ -70,21 +82,21 @@ let graphTotalCases = function(numDays, endDateIndex = data.us.length - 1){
     return arr;
 }
 
-let graphNewCases = function(numDays, endDateIndex = data.us.length - 1){
+let graphNewCases = function(numDays, endDateIndex = data.length - 1){
     let arr = [];
     for(let i = endDateIndex - numDays; i <= endDateIndex; i++){
         
-        arr.push(data.us[i].newCases);
+        arr.push(data[i].newCases);
     }
 
     return arr;
 }
 
-let graphTotalDeaths = function(numDays, endDateIndex = data.us.length - 1){
+let graphTotalDeaths = function(numDays, endDateIndex = data.length - 1){
     let arr = [];
     let total = 0;
-    for(let i = 0; i < data.us.length; i++){
-        total += data.us[i].newDeaths;
+    for(let i = 0; i < data.length; i++){
+        total += data[i].newDeaths;
         if(i >= endDateIndex - numDays){
             arr.push(total);
         }
@@ -96,10 +108,10 @@ let graphTotalDeaths = function(numDays, endDateIndex = data.us.length - 1){
     return arr;
 }
 
-let graphNewDeaths = function(numDays, endDateIndex = data.us.length - 1){
+let graphNewDeaths = function(numDays, endDateIndex = data.length - 1){
     let arr = [];
     for(let i = endDateIndex - numDays; i <= endDateIndex; i++){
-        arr.push(data.us[i].newDeaths);
+        arr.push(data[i].newDeaths);
     }
 
     return arr;
@@ -111,8 +123,8 @@ let graph = new LineGraph(
     "Date"
 )
 
-let date1 = new Date(data.us[data.us.length-31].date);
-let date2 = new Date(data.us[data.us.length-1].date);
+let date1 = new Date(data[data.length-31].date);
+let date2 = new Date(data[data.length-1].date);
 let dateArr = [date1, date2];
 graph.addData(graphTotalCases(30), dateArr, "Total Cases");
 graph.addData(graphNewCases(30), dateArr, "New Cases");
@@ -124,10 +136,10 @@ let dataChange = function(){
 
     let date = document.querySelector("#date").valueAsDate;
     let newDateIndex = 0;
-    document.querySelector("h2").innerText = date.toDateString();
+    document.querySelector("#dateHeader").innerText = date.toDateString();
 
-    for(let i = 0; i < data.us.length; i++){
-        let forDate = new Date(data.us[i].date);
+    for(let i = 0; i < data.length; i++){
+        let forDate = new Date(data[i].date);
         if(
             forDate.getDate() === date.getDate() &&
             forDate.getMonth() === date.getMonth()
@@ -139,13 +151,13 @@ let dataChange = function(){
     
     document.querySelector("#totalCases").innerText = calculateTotalCases(date);
     document.querySelector("#totalDeaths").innerText = calculateTotalDeaths(date);
-    document.querySelector("#newCases").innerText = data.us[newDateIndex].newCases;
-    document.querySelector("#newDeaths").innerText = data.us[newDateIndex].newDeaths;
+    document.querySelector("#newCases").innerText = data[newDateIndex].newCases;
+    document.querySelector("#newDeaths").innerText = data[newDateIndex].newDeaths;
     document.querySelector("#newCaseAverage7").innerText = calculateNewCaseAverage(7, date);
     document.querySelector("#newCaseAverage30").innerText = calculateNewCaseAverage(30, date);
 
     graph.clearData();
-    let dateArr = [new Date(data.us[newDateIndex - 30].date), new Date(data.us[newDateIndex].date)];
+    let dateArr = [new Date(data[newDateIndex - 30].date), new Date(data[newDateIndex].date)];
     graph.addData(graphTotalCases(30, newDateIndex), dateArr, "Total Cases");
     graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
     graph.addData(graphTotalDeaths(30, newDateIndex), dateArr, "Total Deaths");

@@ -7,9 +7,11 @@
         <link rel="stylesheet" href="/shared/shared.css">
     </head>
     <body>
-        <h1>CCP Corona Virus in the U.S.</h1>
+        <h1>CCP Corona Virus Data</h1>
 
-        <h2></h2>
+        <h2 id="locationHeader"></h2>
+
+        <h2 id="dateHeader"></h2>
 
         <input id="date" type="date" onchange="dataChange()">
 
@@ -57,10 +59,7 @@
         <p>*I will do my best to update all of the data every day</p>
         <p>**All data is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">European Centre for Disease Prevention and Control</a></p>
 
-        <script>
-            let data = {};
-            data.us = <%- JSON.stringify(data) %>;
-        </script>
+        <script>let data = <%-JSON.stringify(data) %>;</script>
         <script src="../shared/graphs.js"></script> 
         <script src="/coronaPage/corona.js"></script>
     </body>

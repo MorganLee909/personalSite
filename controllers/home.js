@@ -44,38 +44,78 @@ module.exports = {
 
     //GET - Shows the CCP Corona Virus page
     corona: function(req, res){
-        Corona.aggregate([
-            {$match: {
-                countryterritoryCode: "USA",
-            }},
-            {$group: {
-                _id: {
-                    year: "$year",
-                    month: "$month",
-                    day: "$day"
-                },
-                cases: {$sum: "$cases"},
-                deaths: {$sum: "$deaths"}
-            }},
-            {$sort: {
-                "_id.year": 1,
-                "_id.month": 1,
-                "_id.day": 1
-            }},
-            {$project: {
-                _id: 0,
-                countryterritoryCode: 1,
-                date: {$toDate: {$concat: [{$toString: "$_id.year"}, "-", {$toString: "$_id.month"}, "-", {$toString: "$_id.day"}]}},
-                newCases: "$cases",
-                newDeaths: "$deaths"
-            }}
-        ]).toArray()
-            .then((response)=>{
-                return res.render("coronaPage/corona", {data: response});
-            })
-            .catch((err)=>{
-                console.log(err);
-            });
+        let location = req.url.slice(req.url.indexOf("corona") + 7);
+        switch(location){
+            case "us": location = "United_States_of_America"; break;
+            case "russia": location = "Russia"; break;
+            case "china": location = "China"; break;
+            default: location = "";
+        }
+
+        if(location.length === 0){
+            Corona.aggregate([
+                {$group: {
+                    _id: {
+                        year: "$year",
+                        month: "$month",
+                        day: "$day"
+                    },
+                    cases: {$sum: "$cases"},
+                    deaths: {$sum: "$deaths"}
+                }},
+                {$sort: {
+                    "_id.year": 1,
+                    "_id.month": 1,
+                    "_id.day": 1
+                }},
+                {$project: {
+                    _id: 0,
+                    countryterritoryCode: 1,
+                    date: {$toDate: {$concat: [{$toString: "$_id.year"}, "-", {$toString: "$_id.month"}, "-", {$toString: "$_id.day"}]}},
+                    newCases: "$cases",
+                    newDeaths: "$deaths"
+                }}
+            ]).toArray()
+                .then((response)=>{
+                    return res.render("coronaPage/corona", {data: response});
+                })
+                .catch((err)=>{
+                    console.log(err);
+                });
+        }else{
+            Corona.aggregate([
+                {$match: {
+                    countriesAndTerritories: location,
+                }},
+                {$group: {
+                    _id: {
+                        year: "$year",
+                        month: "$month",
+                        day: "$day"
+                    },
+                    cases: {$sum: "$cases"},
+                    deaths: {$sum: "$deaths"}
+                }},
+                {$sort: {
+                    "_id.year": 1,
+                    "_id.month": 1,
+                    "_id.day": 1
+                }},
+                {$project: {
+                    _id: 0,
+                    countryterritoryCode: 1,
+                    date: {$toDate: {$concat: [{$toString: "$_id.year"}, "-", {$toString: "$_id.month"}, "-", {$toString: "$_id.day"}]}},
+                    newCases: "$cases",
+                    newDeaths: "$deaths"
+                }}
+            ]).toArray()
+                .then((response)=>{
+                    return res.render("coronaPage/corona", {data: response});
+                })
+                .catch((err)=>{
+                    console.log(err);
+                });
+        }
     },
 
     //GET - Renders the resume page
