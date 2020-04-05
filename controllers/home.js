@@ -10,8 +10,8 @@ MongoClient.connect(
         useUnifiedTopology: true
     },
     (err, client)=>{
-        let db = client.db("corona2");
-        Corona = db.collection("data");
+        let db = client.db("corona");
+        Corona = db.collection("worldData");
     }
 );
 
