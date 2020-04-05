@@ -47,7 +47,6 @@ module.exports = {
         let location = req.url.slice(req.url.indexOf("corona") + 7);
         switch(location){
             case "us": location = "United_States_of_America"; break;
-            case "russia": location = "Russia"; break;
             case "china": location = "China"; break;
             case "taiwan": location = "Taiwan"; break;
             case "canada": location = "Canada"; break;

@@ -7,9 +7,15 @@
         <link rel="stylesheet" href="/shared/shared.css">
     </head>
     <body>
-        <h1>CCP Corona Virus Data</h1>
+        <div>
+            <a href="/corona/world">World</a>
+            <a href="/corona/us">USA</a>
+            <a href="/corona/china">China</a>
+            <a href="/corona/taiwan">Taiwan</a>
+            <a href="/corona/canada">Canada</a>
+        </div>
 
-        <h2 id="locationHeader"></h2>
+        <h1 id="locationHeader"></h1>
 
         <h2 id="dateHeader"></h2>
 
@@ -43,7 +49,7 @@
                     <p id="percent7Day"></p>
                     <p id="percent30Day"></p>
                 </div>
-                
+
                 <div class="general">
                     <h3>General Information</h3>
                     <div class="stat">
@@ -70,7 +76,8 @@
         </div>
 
         <p>*I will do my best to update all of the data every day</p>
-        <p>**All data is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">European Centre for Disease Prevention and Control</a></p>
+        <p>**Data for China is inacurrate.  The CCP fabricates its data as propaganda.  This data is what is available, but China's data cannot be trusted</p>
+        <p>***All data is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">European Centre for Disease Prevention and Control</a></p>
 
         <script>let data = <%-JSON.stringify(data) %>;</script>
         <script src="../shared/graphs.js"></script> 
