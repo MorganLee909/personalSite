@@ -24,11 +24,17 @@
         <div class="horizontal">
             <div class="stats">
                 <div class="newCases">
-                    <h3>New Cases (growth)</h3>
+                    <h3>Data</h3>
                     
                     <div class="stat">
                         <p>New Cases:</p>
                         <p id="newCases"></p>
+                    </div>
+                    <hr>
+
+                    <div class="stat">
+                        <p>Total Cases:</p>
+                        <p id="totalCases"></p>
                     </div>
                     <hr>
 
@@ -42,21 +48,6 @@
                         <p>30-Day new case average: </p>
                         <p id="newCaseAverage30"></p>
                     </div>
-                    <hr>
-
-                    <h4>This Day:</h4>
-                    <p id="percentYesterday"></p>
-                    <p id="percent7Day"></p>
-                    <p id="percent30Day"></p>
-                </div>
-
-                <div class="general">
-                    <h3>General Information</h3>
-                    <div class="stat">
-                        <p>Total Cases:</p>
-                        <p id="totalCases"></p>
-                    </div>
-                    <hr>
 
                     <div class="stat">
                         <p>Total Deaths:</p>
@@ -70,6 +61,19 @@
                     </div>
                     <hr>
                 </div>
+
+                <div class="general">
+                    <h3>Analysis</h3>
+                    <p id="percentYesterday"></p>
+                    <p id="percent7Day"></p>
+                    <p id="percent30Day"></p>
+                    <p id="percentAverages"></p>
+                </div>
+
+                <div class="comments">
+                    <h3>Opinion</h3>
+                    <p></p>
+                </div>
             </div>
 
             <canvas id="myCanvas"></canvas>
@@ -79,8 +83,9 @@
         <p>**Data for China is inacurrate.  The CCP fabricates its data as propaganda.  This data is what is available, but China's data cannot be trusted</p>
         <p>***All data is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">European Centre for Disease Prevention and Control</a></p>
 
-        <script>let data = <%-JSON.stringify(data) %>;</script>
-        <script src="../shared/graphs.js"></script> 
+        <script>let data = <%- JSON.stringify(data) %>;</script>
+        <script>let comments = <%- JSON.stringify(comments) %>;</script>
+        <script src="../shared/graphs.js"></script>
         <script src="/coronaPage/corona.js"></script>
     </body>
 </html>

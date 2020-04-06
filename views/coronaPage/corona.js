@@ -9,8 +9,6 @@ switch(displayLocation){
     default: displayLocation = "World";
 }
 
-data
-
 document.querySelector("#locationHeader").innerText = `CCP Corona Virus Data for ${displayLocation}`;
 document.querySelector("#dateHeader").innerText = latestDate.toDateString();
 document.querySelector("#date").valueAsDate = latestDate;
@@ -79,7 +77,7 @@ if(percent > 0){
     percentYesterday.innerText = `${percent.toFixed(2)}% more cases than previous day`;
     percentYesterday.style.color = "red";
 }else{
-    percentYesterday.innerText = `${percent.toFixed(2)}% fewer cases than previous day`;
+    percentYesterday.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than previous day`;
     percentYesterday.style.color = "green";
 }
 
@@ -89,7 +87,7 @@ if(percent > 0){
     percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
     percent7Day.style.color = "red";
 }else{
-    percent7Day.innerText = `${percent.toFixed(2)}% fewer cases than 7-day average`;
+    percent7Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 7-day average`;
     percent7Day.style.color = "green";
 }
 
@@ -99,8 +97,35 @@ if(percent > 0){
     percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
     percent30Day.style.color = "red";
 }else{
-    percent30Day.innerText = `${percent.toFixed(2)}% fewer cases than 30-day average`;
+    percent30Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 30-day average`;
     percent30Day.style.color = "green";
+}
+
+let percentAverages = document.querySelector("#percentAverages");
+percent = calculateGrowth(calculateNewCaseAverage(7, latestDate), calculateNewCaseAverage(30, latestDate));
+if(percent > 0){
+    percentAverages.innerText = `7-day average is ${percent.toFixed(2)}% higher than the 30-day average`;
+    percentAverages.style.color = "red";
+}else{
+    percentAverages.innerText = `7-day average is ${Math.abs(percent).toFixed(2)}% lower than the 30-day average`;
+    percentAverages.style.color = "green";
+}
+
+let isComment = false;
+for(let comment of comments){
+    if(
+        latestDate.getFullYear() === comment.year &&
+        latestDate.getMonth() === comment.month - 1 &&
+        latestDate.getDate() === comment.day
+    ){
+        document.querySelector(".comments p").innerText = comment.comment;
+        isComment = true;
+        break;
+    }
+}
+
+if(!isComment){
+    document.querySelector(".comments p").innerText = "No comments for this day";
 }
 
 //Graphing
@@ -200,7 +225,7 @@ let dataChange = function(){
         percentYesterday.innerText = `${percent.toFixed(2)}% more cases than previous day`;
         percentYesterday.style.color = "red";
     }else{
-        percentYesterday.innerText = `${percent.toFixed(2)}% fewer cases than previous day`;
+        percentYesterday.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than previous day`;
         percentYesterday.style.color = "green";
     }
 
@@ -210,7 +235,7 @@ let dataChange = function(){
         percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
         percent7Day.style.color = "red";
     }else{
-        percent7Day.innerText = `${percent.toFixed(2)}% fewer cases than 7-day average`;
+        percent7Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 7-day average`;
         percent7Day.style.color = "green";
     }
 
@@ -220,10 +245,36 @@ let dataChange = function(){
         percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
         percent30Day.style.color = "red";
     }else{
-        percent30Day.innerText = `${percent.toFixed(2)}% fewer cases than 30-day average`;
+        percent30Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 30-day average`;
         percent30Day.style.color = "green";
     }
 
+    let percentAverages = document.querySelector("#percentAverages");
+    percent = calculateGrowth(calculateNewCaseAverage(7, date), calculateNewCaseAverage(30, date));
+    if(percent > 0){
+        percentAverages.innerText = `7-day average is ${percent.toFixed(2)}% higher than the 30-day average`;
+        percentAverages.style.color = "red";
+    }else{
+        percentAverages.innerText = `7-day average is ${Math.abs(percent).toFixed(2)}% lower than the 30-day average`;
+        percentAverages.style.color = "green";
+    }
+
+    let isComment = false;
+    for(let comment of comments){
+        if(
+            date.getFullYear() === comment.year &&
+            date.getMonth() === comment.month - 1 &&
+            date.getDate() === comment.day
+        ){
+            document.querySelector(".comments p").innerText = comment.comment;
+            isComment = true;
+            break;
+        }
+    }
+
+    if(!isComment){
+        document.querySelector(".comments p").innerText = "No comments for this day";
+    }
 
     graph.clearData();
     let dateArr = [new Date(data[newDateIndex - 30].date), new Date(data[newDateIndex].date)];

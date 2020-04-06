@@ -2,6 +2,7 @@ const JeopardySet = require("../models/jeopardySet");
 const MongoClient = require("mongodb").MongoClient;
 
 let Corona = {};
+let Comment = {};
 
 MongoClient.connect(
     process.env.PERSONAL_SITE, 
@@ -12,6 +13,7 @@ MongoClient.connect(
     (err, client)=>{
         let db = client.db("corona");
         Corona = db.collection("worldData");
+        Comment = db.collection("comments");
     }
 );
 
@@ -77,12 +79,14 @@ module.exports = {
                     newDeaths: "$deaths"
                 }}
             ]).toArray()
-                .then((response)=>{
-                    return res.render("coronaPage/corona", {data: response});
-                })
-                .catch((err)=>{
-                    console.log(err);
-                });
+            .then((data)=>{
+                Comment.find().toArray()
+                    .then((comments)=>{
+                        return res.render("coronaPage/corona", {data: data, comments: comments})
+                    })
+                    .catch((err)=>{});
+            })
+            .catch((err)=>{});
         }else{
             Corona.aggregate([
                 {$match: {
@@ -110,12 +114,14 @@ module.exports = {
                     newDeaths: "$deaths"
                 }}
             ]).toArray()
-                .then((response)=>{
-                    return res.render("coronaPage/corona", {data: response});
-                })
-                .catch((err)=>{
-                    console.log(err);
-                });
+            .then((data)=>{
+                Comment.find().toArray()
+                    .then((comments)=>{
+                        return res.render("coronaPage/corona", {data: data, comments: comments})
+                    })
+                    .catch((err)=>{});
+            })
+            .catch((err)=>{});
         }
     },
 
