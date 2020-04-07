@@ -52,6 +52,7 @@ module.exports = {
             case "china": location = "China"; break;
             case "taiwan": location = "Taiwan"; break;
             case "canada": location = "Canada"; break;
+            case "russia": location = "Russia"; break;
             default: location = "";
         }
 

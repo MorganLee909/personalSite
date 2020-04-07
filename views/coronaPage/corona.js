@@ -11,6 +11,7 @@ switch(displayLocation){
     case "china": displayLocation = "China"; break;
     case "taiwan": displayLocation = "Taiwan"; break;
     case "canada": displayLocation = "Canada"; break;
+    case "russia": displayLocation = "Russia"; break;
     default: displayLocation = "World";
 }
 
@@ -134,6 +135,20 @@ if(!isComment){
 }
 
 //Graphing
+let graphDataValid = function(startIndex, endIndex){
+    let isValid = true;
+    for(let i = startIndex; i < endIndex; i++){
+        let nextDay = new Date(data[i].date.getTime());
+        nextDay = new Date(nextDay.setDate(nextDay.getDate() + 1));
+        if(nextDay.getTime() !== data[i+1].date.getTime()){
+            isValid = false;
+            break;
+        }
+    }
+
+    return isValid;
+}
+
 let graphTotalCases = function(numDays, endDateIndex = data.length - 1){
     let arr = [];
     let total = 0;
@@ -184,20 +199,35 @@ let graphNewDeaths = function(numDays, endDateIndex = data.length - 1){
 
     return arr;
 }
-let canvas = document.querySelector("#myCanvas");
-let graph = new LineGraph(
-    canvas,
-    "",
-    "Date"
-)
 
-let date1 = data[data.length-31].date;
-let date2 = data[data.length-1].date;
-let dateArr = [date1, date2];
-// graph.addData(graphTotalCases(30), dateArr, "Total Cases");
-graph.addData(graphNewCases(30), dateArr, "New Cases");
-// graph.addData(graphTotalDeaths(30), dateArr, "Total Deaths");
-graph.addData(graphNewDeaths(30), dateArr, "New Deaths");
+let main = document.querySelector(".horizontal");
+if(graphDataValid(data.length - 31, data.length -1)){
+    
+    let canvas = document.createElement("canvas");
+    main.appendChild(canvas);
+
+    let graph = new LineGraph(
+        canvas,
+        "",
+        "Date"
+    )
+    
+    let date1 = data[data.length-31].date;
+    let date2 = data[data.length-1].date;
+    let dateArr = [date1, date2];
+    graph.addData(graphNewCases(30), dateArr, "New Cases");
+    graph.addData(graphNewDeaths(30), dateArr, "New Deaths");
+}else{
+    let badData = document.createElement("p");
+    badData.innerText = "INCOMPLETE DATA FOR GRAPHING";
+    badData.style.marginTop = "10px";
+    badData.style.color = "red";
+    badData.style.fontWeight = "bold";
+    main.insertBefore(badData, document.querySelector(".stats"));
+
+    main.style.flexDirection = "column";
+    main.style.alignItems = "center";
+}
 
 //Data change
 let dataChange = function(){
@@ -283,8 +313,6 @@ let dataChange = function(){
 
     graph.clearData();
     let dateArr = [data[newDateIndex - 30].date, data[newDateIndex].date];
-    // graph.addData(graphTotalCases(30, newDateIndex), dateArr, "Total Cases");
     graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
-    // graph.addData(graphTotalDeaths(30, newDateIndex), dateArr, "Total Deaths");
     graph.addData(graphNewDeaths(30, newDateIndex), dateArr, "New Deaths");
 }
