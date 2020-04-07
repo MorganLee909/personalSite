@@ -1,4 +1,9 @@
-let latestDate = new Date(data[data.length-1].date);
+for(let point of data){
+    point.date = new Date(point.date);
+    point.date.setDate(point.date.getDate() - 1);
+}
+
+let latestDate = data[data.length-1].date;
 let url = window.location.href;
 let displayLocation = url.slice(url.indexOf("corona") + 7);
 switch(displayLocation){
@@ -17,7 +22,7 @@ document.querySelector("#date").valueAsDate = latestDate;
 let calculateTotalCases = function(endDate){
     let total = 0;
     for(let point of data){
-        if(new Date(point.date) > endDate){
+        if(point.date > endDate){
             break;
         }
 
@@ -30,7 +35,7 @@ let calculateTotalCases = function(endDate){
 let calculateTotalDeaths = function(endDate){
     let total = 0;
     for(let point of data){
-        if(new Date(point.date) > endDate){
+        if(point.date > endDate){
             break;
         }
         total += point.newDeaths;
@@ -42,7 +47,7 @@ let calculateTotalDeaths = function(endDate){
 let calculateNewCaseAverage = function(numDays, endDate){
     let total = 0;
     for(let i = 0; i < data.length; i++){
-        let forDate = new Date(data[i].date);
+        let forDate = data[i].date;
         if(
             forDate.getDate() === endDate.getDate() &&
             forDate.getMonth() === endDate.getMonth()
@@ -186,8 +191,8 @@ let graph = new LineGraph(
     "Date"
 )
 
-let date1 = new Date(data[data.length-31].date);
-let date2 = new Date(data[data.length-1].date);
+let date1 = data[data.length-31].date;
+let date2 = data[data.length-1].date;
 let dateArr = [date1, date2];
 // graph.addData(graphTotalCases(30), dateArr, "Total Cases");
 graph.addData(graphNewCases(30), dateArr, "New Cases");
@@ -277,7 +282,7 @@ let dataChange = function(){
     }
 
     graph.clearData();
-    let dateArr = [new Date(data[newDateIndex - 30].date), new Date(data[newDateIndex].date)];
+    let dateArr = [data[newDateIndex - 30].date, data[newDateIndex].date];
     // graph.addData(graphTotalCases(30, newDateIndex), dateArr, "Total Cases");
     graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
     // graph.addData(graphTotalDeaths(30, newDateIndex), dateArr, "Total Deaths");
