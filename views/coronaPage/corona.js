@@ -201,29 +201,25 @@ let graphNewDeaths = function(numDays, endDateIndex = data.length - 1){
 }
 
 let main = document.querySelector(".horizontal");
-if(graphDataValid(data.length - 31, data.length -1)){
-    
-    let canvas = document.createElement("canvas");
-    main.appendChild(canvas);
+let canvas = document.querySelector("#myCanvas");
+let badData = document.querySelector("#status");
 
-    let graph = new LineGraph(
-        canvas,
-        "",
-        "Date"
-    )
-    
-    let date1 = data[data.length-31].date;
-    let date2 = data[data.length-1].date;
-    let dateArr = [date1, date2];
+let graph = new LineGraph(
+    canvas,
+    "",
+    "Date"
+)
+
+if(graphDataValid(data.length - 31, data.length -1)){
+    badData.style.height = 0;
+    badData.style.width = 0;
+
+    let dateArr = [data[data.length-31].date, data[data.length-1].date];
     graph.addData(graphNewCases(30), dateArr, "New Cases");
     graph.addData(graphNewDeaths(30), dateArr, "New Deaths");
 }else{
-    let badData = document.createElement("p");
     badData.innerText = "INCOMPLETE DATA FOR GRAPHING";
     badData.style.marginTop = "10px";
-    badData.style.color = "red";
-    badData.style.fontWeight = "bold";
-    main.insertBefore(badData, document.querySelector(".stats"));
 
     main.style.flexDirection = "column";
     main.style.alignItems = "center";
@@ -231,8 +227,9 @@ if(graphDataValid(data.length - 31, data.length -1)){
 
 //Data change
 let dataChange = function(){
-
     let date = document.querySelector("#date").valueAsDate;
+    let badData = document.querySelector("#status");
+    let main = document.querySelector(".horizontal");
     let newDateIndex = 0;
     document.querySelector("#dateHeader").innerText = date.toDateString();
 
@@ -311,8 +308,23 @@ let dataChange = function(){
         document.querySelector(".comments p").innerText = "No comments for this day";
     }
 
-    graph.clearData();
-    let dateArr = [data[newDateIndex - 30].date, data[newDateIndex].date];
-    graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
-    graph.addData(graphNewDeaths(30, newDateIndex), dateArr, "New Deaths");
+    if(graphDataValid(data.length - 31, data.length -1)){
+        badData.style.height = 0;
+        badData.style.width = 0;
+        badData.style.marginTop = "0";
+
+        main.style.flexDirection = "row";
+        main.style.justifyContent = "space-around";
+
+        graph.clearData();
+        let dateArr = [data[newDateIndex - 30].date, data[newDateIndex].date];
+        graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
+        graph.addData(graphNewDeaths(30, newDateIndex), dateArr, "New Deaths");
+    }else{
+        badData.innerText = "INCOMPLETE DATA FOR GRAPHING";
+        badData.style.marginTop = "10px";
+        
+        main.style.flexDirection = "column";
+        main.style.alignItems = "center";
+    }
 }
