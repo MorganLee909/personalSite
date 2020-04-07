@@ -7,12 +7,12 @@ let latestDate = data[data.length-1].date;
 let url = window.location.href;
 let displayLocation = url.slice(url.indexOf("corona") + 7);
 switch(displayLocation){
-    case "us": displayLocation = "USA"; break;
+    case "us": displayLocation = "the US"; break;
     case "china": displayLocation = "China"; break;
     case "taiwan": displayLocation = "Taiwan"; break;
     case "canada": displayLocation = "Canada"; break;
     case "russia": displayLocation = "Russia"; break;
-    default: displayLocation = "World";
+    default: displayLocation = "the world";
 }
 
 document.querySelector("#locationHeader").innerText = `CCP Corona Virus Data for ${displayLocation}`;
