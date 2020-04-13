@@ -14,6 +14,8 @@
             <a href="/corona/taiwan">Taiwan</a>
             <a href="/corona/canada">Canada</a>
             <a href="/corona/russia">Russia</a>
+            <a href="/corona/ukraine">Ukraine</a>
+            <a href="/corona/kazakhstan">Kazakhstan</a>
         </div>
 
         <h1 id="locationHeader"></h1>
@@ -63,6 +65,17 @@
                         <p id="newDeaths"></p>
                     </div>
                     <hr>
+
+                    <div class="stat">
+                        <p>Case Fatality Rate: <a href="https://www.britannica.com/science/case-fatality-rate"><img src="/shared/images/info.svg" alt="info"></a></p>
+                        <p id="caseFatality"></p>
+                    </div>
+                    <hr>
+
+                    <div class="stat">
+                        <p>*Mortality: <a href="https://www.britannica.com/science/mortality-demography"><img src="/shared/images/info.svg" alt="info"></a></p>
+                        <p id="mortality"></p>
+                    </div>
                 </div>
 
                 <div class="general">
@@ -72,22 +85,17 @@
                     <p id="percent30Day"></p>
                     <p id="percentAverages"></p>
                 </div>
-
-                <div class="comments">
-                    <h3>Opinion</h3>
-                    <p></p>
-                </div>
             </div>
 
             <canvas id="myCanvas"></canvas>
         </div>
 
-        <p>*I will do my best to update all of the data every day</p>
-        <p>**Data for China is inacurrate.  The CCP fabricates its data as propaganda.  This data is what is available, but China's data cannot be trusted</p>
-        <p>***All data is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">European Centre for Disease Prevention and Control</a></p>
+        <p>- I will do my best to update all of the data every day</p>
+        <p>- Data for China is inacurrate.  The CCP fabricates its data as propaganda.  This data is what is available, but China's data cannot be trusted</p>
+        <p>- All data is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">European Centre for Disease Prevention and Control</a></p>
+        <p>* Population for countries is from 2018, same source as the rest of the data.  World population I set to 7,643,000,000.  <a href="https://www.census.gov/popclock/world">Source</a></p>
 
         <script>let data = <%- JSON.stringify(data) %>;</script>
-        <script>let comments = <%- JSON.stringify(comments) %>;</script>
         <script src="../shared/graphs.js"></script>
         <script src="/coronaPage/corona.js"></script>
     </body>

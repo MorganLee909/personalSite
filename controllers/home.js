@@ -53,6 +53,8 @@ module.exports = {
             case "taiwan": location = "Taiwan"; break;
             case "canada": location = "Canada"; break;
             case "russia": location = "Russia"; break;
+            case "ukraine": location = "Ukraine"; break;
+            case "kazakhstan": location = "Kazakhstan"; break;
             default: location = "";
         }
 
@@ -65,7 +67,7 @@ module.exports = {
                         day: "$day"
                     },
                     cases: {$sum: "$cases"},
-                    deaths: {$sum: "$deaths"}
+                    deaths: {$sum: "$deaths"},
                 }},
                 {$sort: {
                     "_id.year": 1,
@@ -77,15 +79,15 @@ module.exports = {
                     countryterritoryCode: 1,
                     date: {$toDate: {$concat: [{$toString: "$_id.year"}, "-", {$toString: "$_id.month"}, "-", {$toString: "$_id.day"}]}},
                     newCases: "$cases",
-                    newDeaths: "$deaths"
+                    newDeaths: "$deaths",
                 }}
             ]).toArray()
             .then((data)=>{
-                Comment.find().toArray()
-                    .then((comments)=>{
-                        return res.render("coronaPage/corona", {data: data, comments: comments})
-                    })
-                    .catch((err)=>{});
+                for(let point of data){
+                    point.population = 7643000000;
+                }
+
+                return res.render("coronaPage/corona", {data: data});
             })
             .catch((err)=>{});
         }else{
@@ -100,7 +102,8 @@ module.exports = {
                         day: "$day"
                     },
                     cases: {$sum: "$cases"},
-                    deaths: {$sum: "$deaths"}
+                    deaths: {$sum: "$deaths"},
+                    population: {$avg: "$popData2018"}
                 }},
                 {$sort: {
                     "_id.year": 1,
@@ -112,15 +115,12 @@ module.exports = {
                     countryterritoryCode: 1,
                     date: {$toDate: {$concat: [{$toString: "$_id.year"}, "-", {$toString: "$_id.month"}, "-", {$toString: "$_id.day"}]}},
                     newCases: "$cases",
-                    newDeaths: "$deaths"
+                    newDeaths: "$deaths",
+                    population: 1
                 }}
             ]).toArray()
             .then((data)=>{
-                Comment.find().toArray()
-                    .then((comments)=>{
-                        return res.render("coronaPage/corona", {data: data, comments: comments})
-                    })
-                    .catch((err)=>{});
+                return res.render("coronaPage/corona", {data: data});
             })
             .catch((err)=>{});
         }

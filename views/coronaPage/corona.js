@@ -12,6 +12,8 @@ switch(displayLocation){
     case "taiwan": displayLocation = "Taiwan"; break;
     case "canada": displayLocation = "Canada"; break;
     case "russia": displayLocation = "Russia"; break;
+    case "ukraine": displayLocation = "Ukraine"; break;
+    case "kazakhstan": displayLocation = "Kazakhstan"; break;
     default: displayLocation = "the world";
 }
 
@@ -69,84 +71,23 @@ let calculateGrowth = function(currentCases, compareCases){
     return num;
 }
 
-document.querySelector("#totalCases").innerText = calculateTotalCases(latestDate);
-document.querySelector("#totalDeaths").innerText = calculateTotalDeaths(latestDate);
-document.querySelector("#newDeaths").innerText = data[data.length-1].newDeaths;
-
-document.querySelector("#newCases").innerText = data[data.length-1].newCases;
-document.querySelector("#newCaseAverage7").innerText = calculateNewCaseAverage(7, latestDate);
-document.querySelector("#newCaseAverage30").innerText = calculateNewCaseAverage(30, latestDate);
-
-let percentYesterday = document.querySelector("#percentYesterday");
-let percent = calculateGrowth(data[data.length-1].newCases, data[data.length-2].newCases);
-if(percent > 0){
-    percentYesterday.innerText = `${percent.toFixed(2)}% more cases than previous day`;
-    percentYesterday.style.color = "red";
-}else{
-    percentYesterday.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than previous day`;
-    percentYesterday.style.color = "green";
-}
-
-let percent7Day = document.querySelector("#percent7Day");
-percent = calculateGrowth(data[data.length-1].newCases, calculateNewCaseAverage(7, latestDate));
-if(percent > 0){
-    percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
-    percent7Day.style.color = "red";
-}else{
-    percent7Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 7-day average`;
-    percent7Day.style.color = "green";
-}
-
-let percent30Day = document.querySelector("#percent30Day");
-percent = calculateGrowth(data[data.length-1].newCases, calculateNewCaseAverage(30, latestDate));
-if(percent > 0){
-    percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
-    percent30Day.style.color = "red";
-}else{
-    percent30Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 30-day average`;
-    percent30Day.style.color = "green";
-}
-
-let percentAverages = document.querySelector("#percentAverages");
-percent = calculateGrowth(calculateNewCaseAverage(7, latestDate), calculateNewCaseAverage(30, latestDate));
-if(percent > 0){
-    percentAverages.innerText = `7-day average is ${percent.toFixed(2)}% higher than the 30-day average`;
-    percentAverages.style.color = "red";
-}else{
-    percentAverages.innerText = `7-day average is ${Math.abs(percent).toFixed(2)}% lower than the 30-day average`;
-    percentAverages.style.color = "green";
-}
-
-let isComment = false;
-for(let comment of comments){
-    if(
-        latestDate.getFullYear() === comment.year &&
-        latestDate.getMonth() === comment.month - 1 &&
-        latestDate.getDate() === comment.day
-    ){
-        document.querySelector(".comments p").innerText = comment.comment;
-        isComment = true;
-        break;
-    }
-}
-
-if(!isComment){
-    document.querySelector(".comments p").innerText = "No comments for this day";
-}
-
 //Graphing
-let graphDataValid = function(startIndex, endIndex){
+let dataValid = function(startIndex, endIndex){
     let isValid = true;
-    for(let i = startIndex; i < endIndex; i++){
-        let nextDay = new Date(data[i].date.getTime());
-        nextDay = new Date(nextDay.setDate(nextDay.getDate() + 1));
-        if(nextDay.getTime() !== data[i+1].date.getTime()){
-            isValid = false;
-            break;
+    try{
+        for(let i = startIndex; i < endIndex; i++){
+            let nextDay = new Date(data[i].date.getTime());
+            nextDay = new Date(nextDay.setDate(nextDay.getDate() + 1));
+            if(nextDay.getTime() !== data[i+1].date.getTime()){
+                isValid = false;
+                break;
+            }
         }
+    }catch{
+        isValid = false;
+    }finally{
+        return isValid;
     }
-
-    return isValid;
 }
 
 let graphTotalCases = function(numDays, endDateIndex = data.length - 1){
@@ -200,9 +141,7 @@ let graphNewDeaths = function(numDays, endDateIndex = data.length - 1){
     return arr;
 }
 
-let main = document.querySelector(".horizontal");
 let canvas = document.querySelector("#myCanvas");
-let badData = document.querySelector("#status");
 
 let graph = new LineGraph(
     canvas,
@@ -210,28 +149,23 @@ let graph = new LineGraph(
     "Date"
 )
 
-if(graphDataValid(data.length - 31, data.length -1)){
-    badData.style.height = 0;
-    badData.style.width = 0;
-
-    let dateArr = [data[data.length-31].date, data[data.length-1].date];
-    graph.addData(graphNewCases(30), dateArr, "New Cases");
-    graph.addData(graphNewDeaths(30), dateArr, "New Deaths");
-}else{
-    badData.innerText = "INCOMPLETE DATA FOR GRAPHING";
-    badData.style.marginTop = "10px";
-
-    main.style.flexDirection = "column";
-    main.style.alignItems = "center";
-}
-
 //Data change
 let dataChange = function(){
     let date = document.querySelector("#date").valueAsDate;
+    let header = document.querySelector("#dateHeader");
+    let latestDate = data[data.length-1].date;
+
+    if(date > latestDate){
+        header.innerText = "Data not available";
+        header.style.color = "red";
+        return;
+    }
+
     let badData = document.querySelector("#status");
     let main = document.querySelector(".horizontal");
     let newDateIndex = 0;
-    document.querySelector("#dateHeader").innerText = date.toDateString();
+    header.innerText = date.toDateString();
+    header.style.color = "black";
 
     for(let i = 0; i < data.length; i++){
         let forDate = new Date(data[i].date);
@@ -243,16 +177,65 @@ let dataChange = function(){
             break;
         }
     }
+
+    let newCaseAverage7 = document.querySelector("#newCaseAverage7");
+    let newCaseAverage30 = document.querySelector("#newCaseAverage30");
+    if(dataValid(newDateIndex - 7, newDateIndex)){
+        newCaseAverage7.innerText = calculateNewCaseAverage(7, date);
+        newCaseAverage7.style.color = "black";
+
+        let percent7Day = document.querySelector("#percent7Day");
+        let percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(7, date));
+        if(percent > 0){
+            percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
+            percent7Day.style.color = "red";
+        }else{
+            percent7Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 7-day average`;
+            percent7Day.style.color = "green";
+        }
+
+        if(dataValid(newDateIndex - 30, newDateIndex)){
+            newCaseAverage30.innerText = calculateNewCaseAverage(30, date);
+            newCaseAverage30.style.color = "black";
+
+            let percent30Day = document.querySelector("#percent30Day");
+            percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(30, date));
+            if(percent > 0){
+                percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
+                percent30Day.style.color = "red";
+            }else{
+                percent30Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 30-day average`;
+                percent30Day.style.color = "green";
+            }
+
+            let percentAverages = document.querySelector("#percentAverages");
+            percent = calculateGrowth(calculateNewCaseAverage(7, date), calculateNewCaseAverage(30, date));
+            if(percent > 0){
+                percentAverages.innerText = `7-day average is ${percent.toFixed(2)}% higher than the 30-day average`;
+                percentAverages.style.color = "red";
+            }else{
+                percentAverages.innerText = `7-day average is ${Math.abs(percent).toFixed(2)}% lower than the 30-day average`;
+                percentAverages.style.color = "green";
+            }
+        }else{
+            newCaseAverage30.innerText = "INSUFFICIENT DATA";
+            newCaseAverage30.style.color = "red";
+        }
+    }else{
+        newCaseAverage7.innerText = "INSUFFICIENT DATA";
+        newCaseAverage7.style.color = "red";
+    }
     
     document.querySelector("#totalCases").innerText = calculateTotalCases(date);
     document.querySelector("#totalDeaths").innerText = calculateTotalDeaths(date);
     document.querySelector("#newCases").innerText = data[newDateIndex].newCases;
     document.querySelector("#newDeaths").innerText = data[newDateIndex].newDeaths;
-    document.querySelector("#newCaseAverage7").innerText = calculateNewCaseAverage(7, date);
-    document.querySelector("#newCaseAverage30").innerText = calculateNewCaseAverage(30, date);
+    
+    document.querySelector("#caseFatality").innerText = `${((calculateTotalDeaths(date) / calculateTotalCases(date)) * 100).toFixed(2)}%`;
+    document.querySelector("#mortality").innerText = `${((calculateTotalDeaths(date) / data[0].population) * 100).toFixed(4)}%`;
 
     let percentYesterday = document.querySelector("#percentYesterday");
-    let percent = calculateGrowth(data[newDateIndex].newCases, data[newDateIndex-1].newCases);
+    percent = calculateGrowth(data[newDateIndex].newCases, data[newDateIndex-1].newCases);
     if(percent > 0){
         percentYesterday.innerText = `${percent.toFixed(2)}% more cases than previous day`;
         percentYesterday.style.color = "red";
@@ -261,57 +244,9 @@ let dataChange = function(){
         percentYesterday.style.color = "green";
     }
 
-    let percent7Day = document.querySelector("#percent7Day");
-    percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(7, date));
-    if(percent > 0){
-        percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
-        percent7Day.style.color = "red";
-    }else{
-        percent7Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 7-day average`;
-        percent7Day.style.color = "green";
-    }
-
-    let percent30Day = document.querySelector("#percent30Day");
-    percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(30, date));
-    if(percent > 0){
-        percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
-        percent30Day.style.color = "red";
-    }else{
-        percent30Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 30-day average`;
-        percent30Day.style.color = "green";
-    }
-
-    let percentAverages = document.querySelector("#percentAverages");
-    percent = calculateGrowth(calculateNewCaseAverage(7, date), calculateNewCaseAverage(30, date));
-    if(percent > 0){
-        percentAverages.innerText = `7-day average is ${percent.toFixed(2)}% higher than the 30-day average`;
-        percentAverages.style.color = "red";
-    }else{
-        percentAverages.innerText = `7-day average is ${Math.abs(percent).toFixed(2)}% lower than the 30-day average`;
-        percentAverages.style.color = "green";
-    }
-
-    let isComment = false;
-    for(let comment of comments){
-        if(
-            date.getFullYear() === comment.year &&
-            date.getMonth() === comment.month - 1 &&
-            date.getDate() === comment.day
-        ){
-            document.querySelector(".comments p").innerText = comment.comment;
-            isComment = true;
-            break;
-        }
-    }
-
-    if(!isComment){
-        document.querySelector(".comments p").innerText = "No comments for this day";
-    }
-
-    if(graphDataValid(data.length - 31, data.length -1)){
-        badData.style.height = 0;
-        badData.style.width = 0;
-        badData.style.marginTop = "0";
+    if(dataValid(newDateIndex - 31, newDateIndex)){
+        document.querySelector("#myCanvas").style.display = "block";
+        badData.style.display = "none";
 
         main.style.flexDirection = "row";
         main.style.justifyContent = "space-around";
@@ -321,10 +256,13 @@ let dataChange = function(){
         graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
         graph.addData(graphNewDeaths(30, newDateIndex), dateArr, "New Deaths");
     }else{
+        document.querySelector("#myCanvas").style.display = "none";
         badData.innerText = "INCOMPLETE DATA FOR GRAPHING";
-        badData.style.marginTop = "10px";
+        badData.style.display = "block";
         
         main.style.flexDirection = "column";
         main.style.alignItems = "center";
     }
 }
+
+dataChange();
