@@ -166,6 +166,10 @@ module.exports = {
                 }}
             ]).toArray()
             .then((countyData)=>{
+                if(countyData.length === 0){
+                    return res.redirect("/corona/us");
+                }
+
                 for(let i = countyData.length - 1; i > 0; i--){
                     countyData[i].newCases -= countyData[i-1].newCases;
                     countyData[i].newDeaths -= countyData[i-1].newDeaths;
@@ -194,6 +198,9 @@ module.exports = {
                 }}
             ]).toArray()
             .then((stateData)=>{
+                if(stateData.length === 0){
+                    return res.redirect("/corona/us");
+                }
                 for(let i = stateData.length - 1; i > 0; i--){
                     stateData[i].newCases -= stateData[i-1].newCases;
                     stateData[i].newDeaths -= stateData[i-1].newDeaths;

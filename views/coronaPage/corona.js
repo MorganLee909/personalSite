@@ -287,6 +287,10 @@ let dataChange = function(){
         main.style.flexDirection = "column";
         main.style.alignItems = "center";
     }
+
+    if(window.location.href.includes("us/")){
+        document.querySelector("#mortality").parentElement.style.display = "none";
+    }
 }
 
 let getUSData = function(){
