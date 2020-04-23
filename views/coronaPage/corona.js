@@ -6,15 +6,28 @@ for(let point of data){
 let latestDate = data[data.length-1].date;
 let url = window.location.href;
 let displayLocation = url.slice(url.indexOf("corona") + 7);
-switch(displayLocation){
-    case "us": displayLocation = "the US"; break;
-    case "china": displayLocation = "China"; break;
-    case "taiwan": displayLocation = "Taiwan"; break;
-    case "canada": displayLocation = "Canada"; break;
-    case "russia": displayLocation = "Russia"; break;
-    case "ukraine": displayLocation = "Ukraine"; break;
-    case "kazakhstan": displayLocation = "Kazakhstan"; break;
-    default: displayLocation = "the world";
+if(displayLocation.includes("us/")){
+    let placeArray = displayLocation.split("/");
+    let secondArray = placeArray[placeArray.length-1].split("-");
+    displayLocation = "";
+    for(let str of secondArray){
+        displayLocation += str[0].toUpperCase() + str.slice(1);
+        displayLocation += " ";
+    }
+    if(placeArray.length === 3){
+        displayLocation += "County";
+    }
+}else{
+    switch(displayLocation){
+        case "us": displayLocation = "the US"; break;
+        case "china": displayLocation = "China"; break;
+        case "taiwan": displayLocation = "Taiwan"; break;
+        case "canada": displayLocation = "Canada"; break;
+        case "russia": displayLocation = "Russia"; break;
+        case "ukraine": displayLocation = "Ukraine"; break;
+        case "kazakhstan": displayLocation = "Kazakhstan"; break;
+        default: displayLocation = "the world";
+    }
 }
 
 document.querySelector("#locationHeader").innerText = `CCP Corona Virus Data for ${displayLocation}`;
@@ -263,6 +276,23 @@ let dataChange = function(){
         main.style.flexDirection = "column";
         main.style.alignItems = "center";
     }
+}
+
+let getUSData = function(){
+    event.preventDefault();
+
+    let state = document.querySelector("#state").value;
+    let county = document.querySelector("#county").value;
+
+    state = state.replace(" ", "-");
+    state = state.toLowerCase();
+
+    if(county !== ""){
+        county = `/${county.replace(" ", "-").toLowerCase()}`;
+    }
+
+    console.log(`/corona/us/${state}${county}`);
+    // document.querySelector("#usSearch").action = `/corona/us/${state}/${county}`;
 }
 
 dataChange();

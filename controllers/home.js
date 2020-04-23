@@ -1,8 +1,7 @@
 const JeopardySet = require("../models/jeopardySet");
 const MongoClient = require("mongodb").MongoClient;
 
-let Corona = {};
-let Comment = {};
+let Corona, CoronaCounty, CoronaState;
 
 MongoClient.connect(
     process.env.PERSONAL_SITE, 
@@ -13,7 +12,8 @@ MongoClient.connect(
     (err, client)=>{
         let db = client.db("corona");
         Corona = db.collection("worldData");
-        Comment = db.collection("comments");
+        CoronaCounty = db.collection("usCounties");
+        CoronaState = db.collection("usStates");
     }
 );
 
@@ -86,7 +86,6 @@ module.exports = {
                 for(let point of data){
                     point.population = 7643000000;
                 }
-
                 return res.render("coronaPage/corona", {data: data});
             })
             .catch((err)=>{});
@@ -123,6 +122,86 @@ module.exports = {
                 return res.render("coronaPage/corona", {data: data});
             })
             .catch((err)=>{});
+        }
+    },
+
+    coronaUS: function(req, res){
+        let location = req.url.slice(req.url.indexOf("us/") + 3);
+        let newArray = location.split("/");
+        let state = "";
+        let county = "";
+
+        let stateArr = newArray[0].split("-");
+        for(let str of stateArr){
+            state += str[0].toUpperCase() + str.slice(1);
+            state += " ";
+        }
+        if(state[state.length - 1] === " "){
+            state = state.slice(0, state.length - 1);
+        }
+        
+        if(newArray.length === 2){
+            let countyArr = newArray[1].split("-");
+            for(let str of countyArr){
+                county += str[0].toUpperCase() + str.slice(1);
+                county += " ";
+            }
+            if(county[county.length - 1] === " "){
+                county = county.slice(0, county.length - 1);
+            }
+        }
+
+        if(county){
+            CoronaCounty.aggregate([
+                {$match: {
+                    state: state,
+                    county: county
+                }},
+                {$addFields: {date: {$toDate: "$date"}}},
+                {$sort: {date: 1}},
+                {$project: {
+                    _id: 0,
+                    date: 1,
+                    newCases: "$cases",
+                    newDeaths: "$deaths"
+                }}
+            ]).toArray()
+            .then((countyData)=>{
+                for(let i = countyData.length - 1; i > 0; i--){
+                    countyData[i].newCases -= countyData[i-1].newCases;
+                    countyData[i].newDeaths -= countyData[i-1].newDeaths;
+                }
+
+                return res.render("coronaPage/corona", {data: countyData});
+            })
+        }else{
+            CoronaCounty.aggregate([
+                {$match: {state: state}},
+                {$group: {
+                    _id: {
+                        state: "$state",
+                        date: "$date"
+                    },
+                    newCases: {$sum: "$cases"},
+                    newDeaths: {$sum: "$deaths"}
+                }},
+                {$addFields: {date: {$toDate: "$_id.date"}}},
+                {$sort: {date: 1}},
+                {$project: {
+                    _id: 0,
+                    date: 1,
+                    newCases: 1,
+                    newDeaths: 1
+                }}
+            ]).toArray()
+            .then((stateData)=>{
+                for(let i = stateData.length - 1; i > 0; i--){
+                    stateData[i].newCases -= stateData[i-1].newCases;
+                    stateData[i].newDeaths -= stateData[i-1].newDeaths;
+                }
+
+                return res.render("coronaPage/corona", {data: stateData});
+            })
         }
     },
 

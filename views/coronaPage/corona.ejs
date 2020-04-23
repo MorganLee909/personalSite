@@ -17,12 +17,26 @@
             <a href="/corona/ukraine">Ukraine</a>
             <a href="/corona/kazakhstan">Kazakhstan</a>
         </div>
+            <h1 id="locationHeader"></h1>
 
-        <h1 id="locationHeader"></h1>
+            <p>Search by state or county(leave county blank for state data)</p>
 
-        <h2 id="dateHeader"></h2>
+            <form id="usSearch" onsubmit="getUSData()" method="get">`
+                <label>State:
+                    <input id="state" type="text">
+                </label>
 
-        <input id="date" type="date" onchange="dataChange()">
+                <label>County:
+                    <input id="county" type="text">
+                </label>
+
+                <input type="submit" value="Find">
+            </form>
+
+            <h2 id="dateHeader"></h2>
+
+            <input id="date" type="date" onchange="dataChange()">
+        </div>
 
         <div class="horizontal">
             <div class="stats">
@@ -96,7 +110,7 @@
         <p>* Population for countries is from 2018, same source as the rest of the data.  World population I set to 7,643,000,000.  <a href="https://www.census.gov/popclock/world">Source</a></p>
 
         <script>let data = <%- JSON.stringify(data) %>;</script>
-        <script src="../shared/graphs.js"></script>
+        <script src="/shared/graphs.js"></script>
         <script src="/coronaPage/corona.js"></script>
     </body>
 </html>

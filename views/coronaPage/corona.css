@@ -63,3 +63,11 @@ canvas{
     font-weight: bold;
     text-align: center;
 }
+
+#usSearch{
+    display: flex;
+    flex-direction: row;
+    border: none;
+    margin: 0;
+    padding: 0;
+}

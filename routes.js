@@ -5,6 +5,7 @@ module.exports = function(app){
     app.get("/jeopardy", home.renderJeopardy);
     app.get("/sudoku", home.sudoku);
     app.get("/birthdayparadox", home.birthdayParadox);
+    app.get("/corona/us/*", home.coronaUS);
     app.get("/corona*", home.corona);
     app.get("/resume", home.resume);
     app.get("/bio", home.bio);
