@@ -1,7 +1,7 @@
 const JeopardySet = require("../models/jeopardySet");
 const MongoClient = require("mongodb").MongoClient;
 
-let Corona, CoronaCounty, CoronaState;
+let Corona, CoronaCounty;
 
 MongoClient.connect(
     process.env.PERSONAL_SITE, 
@@ -13,7 +13,6 @@ MongoClient.connect(
         let db = client.db("corona");
         Corona = db.collection("worldData");
         CoronaCounty = db.collection("usCounties");
-        CoronaState = db.collection("usStates");
     }
 );
 

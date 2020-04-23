@@ -17,6 +17,9 @@ if(displayLocation.includes("us/")){
     if(placeArray.length === 3){
         displayLocation += "County";
     }
+
+    document.querySelector("#usSearch").style.display = "flex";
+    document.querySelector("#note").style.display = "flex";
 }else{
     switch(displayLocation){
         case "us": displayLocation = "the US"; break;
@@ -27,6 +30,14 @@ if(displayLocation.includes("us/")){
         case "ukraine": displayLocation = "Ukraine"; break;
         case "kazakhstan": displayLocation = "Kazakhstan"; break;
         default: displayLocation = "the world";
+    }
+
+    if(displayLocation === "the US"){
+        document.querySelector("#usSearch").style.display = "flex";
+        document.querySelector("#note").style.display = "flex";
+    }else{
+        document.querySelector("#usSearch").style.display = "none";
+        document.querySelector("#note").style.display = "none";
     }
 }
 
@@ -284,15 +295,15 @@ let getUSData = function(){
     let state = document.querySelector("#state").value;
     let county = document.querySelector("#county").value;
 
-    state = state.replace(" ", "-");
-    state = state.toLowerCase();
+    state = state.replace(/ /g, "-").toLowerCase();
 
     if(county !== ""){
-        county = `/${county.replace(" ", "-").toLowerCase()}`;
+        county = `/${county.replace(/ /g, "-").toLowerCase()}`;
     }
 
-    console.log(`/corona/us/${state}${county}`);
-    // document.querySelector("#usSearch").action = `/corona/us/${state}/${county}`;
+    let form = document.querySelector("#usSearch");
+    form.action = `/corona/us/${state}${county}`;
+    form.submit();
 }
 
 dataChange();
