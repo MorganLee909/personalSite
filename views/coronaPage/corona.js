@@ -1,11 +1,14 @@
+let url = window.location.href;
+let displayLocation = url.slice(url.indexOf("corona") + 7);
+
 for(let point of data){
     point.date = new Date(point.date);
-    point.date.setDate(point.date.getDate() - 1);
+    if(!displayLocation.includes("us/")){
+        point.date.setDate(point.date.getDate() - 1);
+    }
 }
 
 let latestDate = data[data.length-1].date;
-let url = window.location.href;
-let displayLocation = url.slice(url.indexOf("corona") + 7);
 if(displayLocation.includes("us/")){
     let placeArray = displayLocation.split("/");
     let secondArray = placeArray[placeArray.length-1].split("-");
