@@ -271,7 +271,7 @@ let dataChange = function(){
         percentYesterday.style.color = "green";
     }
 
-    if(dataValid(newDateIndex - 31, newDateIndex)){
+    if(dataValid(newDateIndex - 61, newDateIndex)){
         document.querySelector("#myCanvas").style.display = "block";
         badData.style.display = "none";
 
@@ -279,9 +279,9 @@ let dataChange = function(){
         main.style.justifyContent = "space-around";
 
         graph.clearData();
-        let dateArr = [data[newDateIndex - 30].date, data[newDateIndex].date];
-        graph.addData(graphNewCases(30, newDateIndex), dateArr, "New Cases");
-        graph.addData(graphNewDeaths(30, newDateIndex), dateArr, "New Deaths");
+        let dateArr = [data[newDateIndex - 60].date, data[newDateIndex].date];
+        graph.addData(graphNewCases(60, newDateIndex), dateArr, "New Cases");
+        graph.addData(graphNewDeaths(60, newDateIndex), dateArr, "New Deaths");
     }else{
         document.querySelector("#myCanvas").style.display = "none";
         badData.innerText = "INCOMPLETE DATA FOR GRAPHING";
