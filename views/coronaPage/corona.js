@@ -3,9 +3,6 @@ let displayLocation = url.slice(url.indexOf("corona") + 7);
 
 for(let point of data){
     point.date = new Date(point.date);
-    if(!displayLocation.includes("us/")){
-        point.date.setDate(point.date.getDate() - 1);
-    }
 }
 
 let latestDate = data[data.length-1].date;
