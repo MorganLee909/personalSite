@@ -29,6 +29,7 @@ if(displayLocation.includes("us/")){
         case "russia": displayLocation = "Russia"; break;
         case "ukraine": displayLocation = "Ukraine"; break;
         case "kazakhstan": displayLocation = "Kazakhstan"; break;
+        case "sweden": displayLocation= "Sweden"; break;
         default: displayLocation = "the world";
     }
 
