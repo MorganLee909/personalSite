@@ -1,299 +1,299 @@
-let url = window.location.href;
-let displayLocation = url.slice(url.indexOf("corona") + 7);
+let totalDeaths, totalCases, sevenDayAvg, thirtyDayAvg;
 
-for(let point of data){
-    point.date = new Date(point.date);
+for(let i = 0; i < data.length; i++){
+    data[i].date = new Date(data[i].date);
+
+    if(!window.location.href.includes("us/")){
+        data[i].date.setDate(data[i].date.getDate() - 1);
+    }
 }
 
-let latestDate = data[data.length-1].date;
-if(displayLocation.includes("us/")){
-    let placeArray = displayLocation.split("/");
-    let secondArray = placeArray[placeArray.length-1].split("-");
-    displayLocation = "";
-    for(let str of secondArray){
-        displayLocation += str[0].toUpperCase() + str.slice(1);
-        displayLocation += " ";
-    }
-    if(placeArray.length === 3){
-        displayLocation += "County";
-    }
+//Populate page
+let createHeader = ()=>{
+    let displayLocation = window.location.href.slice(window.location.href.indexOf("corona") + 7).replace("?", "");
+    let latestDate = data[data.length-1].date;
 
-    document.querySelector("#usSearch").style.display = "flex";
-    document.querySelector("#note").style.display = "flex";
-}else{
-    switch(displayLocation){
-        case "us": displayLocation = "the US"; break;
-        case "china": displayLocation = "China"; break;
-        case "taiwan": displayLocation = "Taiwan"; break;
-        case "canada": displayLocation = "Canada"; break;
-        case "russia": displayLocation = "Russia"; break;
-        case "ukraine": displayLocation = "Ukraine"; break;
-        case "kazakhstan": displayLocation = "Kazakhstan"; break;
-        case "sweden": displayLocation= "Sweden"; break;
-        default: displayLocation = "the world";
-    }
+    if(displayLocation.includes("us/")){
+        let placeArray = displayLocation.split("/");
+        let secondArray = placeArray[placeArray.length-1].split("-");
+        displayLocation = "";
+        for(let str of secondArray){
+            displayLocation += str[0].toUpperCase() + str.slice(1);
+            displayLocation += " ";
+        }
+        if(placeArray.length === 3){
+            displayLocation += "County";
+        }
 
-    if(displayLocation === "the US"){
         document.querySelector("#usSearch").style.display = "flex";
         document.querySelector("#note").style.display = "flex";
     }else{
-        document.querySelector("#usSearch").style.display = "none";
-        document.querySelector("#note").style.display = "none";
-    }
-}
-
-document.querySelector("#locationHeader").innerText = `CCP Corona Virus Data for ${displayLocation}`;
-document.querySelector("#dateHeader").innerText = latestDate.toDateString();
-document.querySelector("#date").valueAsDate = latestDate;
-
-//Left-hand data
-let calculateTotalCases = function(endDate){
-    let total = 0;
-    for(let point of data){
-        if(point.date > endDate){
-            break;
+        switch(displayLocation){
+            case "us": displayLocation = "the US"; break;
+            case "china": displayLocation = "China"; break;
+            case "taiwan": displayLocation = "Taiwan"; break;
+            case "canada": displayLocation = "Canada"; break;
+            case "russia": displayLocation = "Russia"; break;
+            case "ukraine": displayLocation = "Ukraine"; break;
+            case "kazakhstan": displayLocation = "Kazakhstan"; break;
+            case "sweden": displayLocation= "Sweden"; break;
+            default: displayLocation = "the world";
         }
 
-        total += point.newCases;
-    }
-
-    return total;
-}
-
-let calculateTotalDeaths = function(endDate){
-    let total = 0;
-    for(let point of data){
-        if(point.date > endDate){
-            break;
-        }
-        total += point.newDeaths;
-    }
-
-    return total;
-}
-
-let calculateNewCaseAverage = function(numDays, endDate){
-    let total = 0;
-    for(let i = 0; i < data.length; i++){
-        let forDate = data[i].date;
-        if(
-            forDate.getDate() === endDate.getDate() &&
-            forDate.getMonth() === endDate.getMonth()
-        ){
-            for(let j = 0; j < numDays; j++){
-                
-                total += data[i-j].newCases;
-            }
+        if(displayLocation === "the US"){
+            document.querySelector("#usSearch").style.display = "flex";
+            document.querySelector("#note").style.display = "flex";
+        }else{
+            document.querySelector("#usSearch").style.display = "none";
+            document.querySelector("#note").style.display = "none";
         }
     }
 
-    return Math.round(total / numDays);
+    document.querySelector("#locationHeader").innerText = `CCP Corona Virus Data for ${displayLocation}`;
+    document.querySelector("#dateHeader").innerText = latestDate.toDateString();
 }
 
-let calculateGrowth = function(currentCases, compareCases){
-    let num = ((currentCases - compareCases) / compareCases) * 100;
-
-    return num;
+let newCasesData = ()=>{
+    document.querySelector("#newCases").innerText = data[data.length-1].newCases;
 }
 
-//Graphing
-let dataValid = function(startIndex, endIndex){
-    let isValid = true;
-    try{
-        for(let i = startIndex; i < endIndex; i++){
-            let nextDay = new Date(data[i].date.getTime());
-            nextDay = new Date(nextDay.setDate(nextDay.getDate() + 1));
-            if(nextDay.getTime() !== data[i+1].date.getTime()){
-                isValid = false;
-                break;
-            }
-        }
-    }catch{
-        isValid = false;
-    }finally{
-        return isValid;
-    }
-}
-
-let graphTotalCases = function(numDays, endDateIndex = data.length - 1){
-    let arr = [];
+let totalCasesData = ()=>{
     let total = 0;
     for(let i = 0; i < data.length; i++){
         total += data[i].newCases;
-        if(i >= endDateIndex - numDays){
-            arr.push(total);
-        }
-        if(i >= endDateIndex){
-            break;
-        }
     }
-
-    return arr;
+    document.querySelector("#totalCases").innerText = total;
+    totalCases = total;
 }
 
-let graphNewCases = function(numDays, endDateIndex = data.length - 1){
-    let arr = [];
-    for(let i = endDateIndex - numDays; i <= endDateIndex; i++){
-        
-        arr.push(data[i].newCases);
+let average7DayData = ()=>{
+    let element = document.querySelector("#newCaseAverage7");
+    let day = new Date(data[data.length-1].date);
+    let sum = 0;
+
+    for(let i = 1; i <= 7; i++){
+        if(data[data.length-i].date.getDate() !== day.getDate()){
+            element.innerText = "INCOMPLETE DATA";
+            element.style.color = "red";
+            return;
+        }
+
+        sum += data[data.length-i].newCases;
+
+        day.setDate(day.getDate()-1);
     }
 
-    return arr;
+    sevenDayAvg = sum / 7
+    element.innerText = Math.round(sevenDayAvg);
 }
 
-let graphTotalDeaths = function(numDays, endDateIndex = data.length - 1){
-    let arr = [];
+let average30DayData = ()=>{
+    let element = document.querySelector("#newCaseAverage30");
+    let day = new Date(data[data.length-1].date);
+    let sum = 0;
+
+    for(let i = 1; i <= 30; i++){
+        if(data[data.length-i].date.getDate() !== day.getDate()){
+            element.innerText = "INCOMPLETE DATA";
+            element.style.color = "red";
+            return;
+        }
+
+        sum += data[data.length-i].newCases;
+
+        day.setDate(day.getDate()-1);
+    }
+
+    thirtyDayAvg = sum / 30;
+    element.innerText = Math.round(thirtyDayAvg);
+}
+
+let totalDeathsData = ()=>{
     let total = 0;
+
     for(let i = 0; i < data.length; i++){
-        total += data[i].newDeaths;
-        if(i >= endDateIndex - numDays){
-            arr.push(total);
-        }
-        if(i >= endDateIndex){
-            break;
-        }
+        total += data[i].newDeaths
     }
 
-    return arr;
+    document.querySelector("#totalDeaths").innerText = total;
+    totalDeaths = total;
 }
 
-let graphNewDeaths = function(numDays, endDateIndex = data.length - 1){
-    let arr = [];
-    for(let i = endDateIndex - numDays; i <= endDateIndex; i++){
-        arr.push(data[i].newDeaths);
-    }
-
-    return arr;
+let newDeathsData = ()=>{
+    document.querySelector("#newDeaths").innerText = data[data.length-1].newDeaths;
 }
 
-let canvas = document.querySelector("#myCanvas");
+let caseFatalityData = ()=>{
+    document.querySelector("#caseFatality").innerText = `${((totalDeaths / totalCases) * 100).toFixed(4)}%`;
+}
 
-let graph = new LineGraph(
-    canvas,
-    "",
-    "Date"
-)
-
-//Data change
-let dataChange = function(){
-    let date = document.querySelector("#date").valueAsDate;
-    let header = document.querySelector("#dateHeader");
-    let latestDate = data[data.length-1].date;
-
-    if(date > latestDate){
-        header.innerText = "Data not available";
-        header.style.color = "red";
+let mortalityData = ()=>{
+    if(window.location.href.includes("us/")){
         return;
     }
 
-    let badData = document.querySelector("#status");
-    let main = document.querySelector(".horizontal");
-    let newDateIndex = 0;
-    header.innerText = date.toDateString();
-    header.style.color = "black";
+    document.querySelector("#mortality").innerText = `${((totalDeaths / data[0].population) * 100).toFixed(4)}%`;
+}
 
-    for(let i = 0; i < data.length; i++){
-        let forDate = new Date(data[i].date);
-        if(
-            forDate.getDate() === date.getDate() &&
-            forDate.getMonth() === date.getMonth()
-        ){
-            newDateIndex = i;
-            break;
-        }
-    }
+let previousDayAnal = ()=>{
+    let percent = ((data[data.length-1].newCases - data[data.length-2].newCases) / data[data.length-2].newCases) * 100;
+    let element = document.querySelector("#percentYesterday");
 
-    let newCaseAverage7 = document.querySelector("#newCaseAverage7");
-    let newCaseAverage30 = document.querySelector("#newCaseAverage30");
-    if(dataValid(newDateIndex - 7, newDateIndex)){
-        newCaseAverage7.innerText = calculateNewCaseAverage(7, date);
-        newCaseAverage7.style.color = "black";
-
-        let percent7Day = document.querySelector("#percent7Day");
-        let percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(7, date));
-        if(percent > 0){
-            percent7Day.innerText = `${percent.toFixed(2)}% more cases than 7-day average`;
-            percent7Day.style.color = "red";
-        }else{
-            percent7Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 7-day average`;
-            percent7Day.style.color = "green";
-        }
-
-        if(dataValid(newDateIndex - 30, newDateIndex)){
-            newCaseAverage30.innerText = calculateNewCaseAverage(30, date);
-            newCaseAverage30.style.color = "black";
-
-            let percent30Day = document.querySelector("#percent30Day");
-            percent = calculateGrowth(data[newDateIndex].newCases, calculateNewCaseAverage(30, date));
-            if(percent > 0){
-                percent30Day.innerText = `${percent.toFixed(2)}% more cases than 30-day average`;
-                percent30Day.style.color = "red";
-            }else{
-                percent30Day.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than 30-day average`;
-                percent30Day.style.color = "green";
-            }
-
-            let percentAverages = document.querySelector("#percentAverages");
-            percent = calculateGrowth(calculateNewCaseAverage(7, date), calculateNewCaseAverage(30, date));
-            if(percent > 0){
-                percentAverages.innerText = `7-day average is ${percent.toFixed(2)}% higher than the 30-day average`;
-                percentAverages.style.color = "red";
-            }else{
-                percentAverages.innerText = `7-day average is ${Math.abs(percent).toFixed(2)}% lower than the 30-day average`;
-                percentAverages.style.color = "green";
-            }
-        }else{
-            newCaseAverage30.innerText = "INSUFFICIENT DATA";
-            newCaseAverage30.style.color = "red";
-        }
-    }else{
-        newCaseAverage7.innerText = "INSUFFICIENT DATA";
-        newCaseAverage7.style.color = "red";
-    }
-    
-    document.querySelector("#totalCases").innerText = calculateTotalCases(date);
-    document.querySelector("#totalDeaths").innerText = calculateTotalDeaths(date);
-    document.querySelector("#newCases").innerText = data[newDateIndex].newCases;
-    document.querySelector("#newDeaths").innerText = data[newDateIndex].newDeaths;
-    
-    document.querySelector("#caseFatality").innerText = `${((calculateTotalDeaths(date) / calculateTotalCases(date)) * 100).toFixed(2)}%`;
-    document.querySelector("#mortality").innerText = `${((calculateTotalDeaths(date) / data[0].population) * 100).toFixed(4)}%`;
-
-    let percentYesterday = document.querySelector("#percentYesterday");
-    percent = calculateGrowth(data[newDateIndex].newCases, data[newDateIndex-1].newCases);
     if(percent > 0){
-        percentYesterday.innerText = `${percent.toFixed(2)}% more cases than previous day`;
-        percentYesterday.style.color = "red";
+        element.innerText = `${percent.toFixed(2)}% more new cases than yesterday`;
+        element.style.color = "red";
+    }else if(percent < 0){
+        element.innerText = `${Math.abs(percent).toFixed(2)}% fewer new cases than yesterday`;
+        element.style.color = "green";
     }else{
-        percentYesterday.innerText = `${Math.abs(percent).toFixed(2)}% fewer cases than previous day`;
-        percentYesterday.style.color = "green";
-    }
-
-    if(dataValid(newDateIndex - 61, newDateIndex)){
-        document.querySelector("#myCanvas").style.display = "block";
-        badData.style.display = "none";
-
-        main.style.flexDirection = "row";
-        main.style.justifyContent = "space-around";
-
-        graph.clearData();
-        let dateArr = [data[newDateIndex - 60].date, data[newDateIndex].date];
-        graph.addData(graphNewCases(60, newDateIndex), dateArr, "New Cases");
-        graph.addData(graphNewDeaths(60, newDateIndex), dateArr, "New Deaths");
-    }else{
-        document.querySelector("#myCanvas").style.display = "none";
-        badData.innerText = "INCOMPLETE DATA FOR GRAPHING";
-        badData.style.display = "block";
-        
-        main.style.flexDirection = "column";
-        main.style.alignItems = "center";
-    }
-
-    if(window.location.href.includes("us/")){
-        document.querySelector("#mortality").parentElement.style.display = "none";
+        element.innerText = "Same number of new cases as yesterday";
     }
 }
 
+let sevenDayAnal = ()=>{
+    let percent = ((data[data.length-1].newCases - sevenDayAvg) / sevenDayAvg) * 100;
+    let element = document.querySelector("#percent7Day");
+
+    if(percent > 0){
+        element.innerText = `${percent.toFixed(2)}% more new cases than the 7-day average`;
+        element.style.color = "red";
+    }else if(percent < 0){
+        element.innerText = `${Math.abs(percent).toFixed(2)}% fewer new cases than the 7-day average`;
+        element.style.color = "green";
+    }else{
+        element.innerText = "Same number of new cases as the 7-day average";
+    }
+}
+
+let thirtyDayAnal = ()=>{
+    let percent = ((data[data.length-1].newCases - thirtyDayAvg) / thirtyDayAvg) * 100;
+    let element = document.querySelector("#percent30Day");
+
+    if(percent > 0){
+        element.innerText = `${percent.toFixed(2)}% more new cases than the 30-day average`;
+        element.style.color = "red";
+    }else if(percent < 0){
+        element.innerText = `${Math.abs(percent).toFixed(2)}% fewer new cases than the 30-day average`;
+        element.style.color = "green";
+    }else{
+        element.innerText = "Same number of new cases as the 30-day average";
+    }
+}
+
+let sevenThirtyAnal = ()=>{
+    let percent = ((sevenDayAvg - thirtyDayAvg) / thirtyDayAvg) * 100;
+    let element = document.querySelector("#percentAverages");
+
+    if(percent > 0){
+        element.innerText = `7-day average is ${percent.toFixed(2)}% higher than 30-day average`;
+        element.style.color = "red";
+    }else if(percent < 0){
+        element.innerText = `7-day average is ${Math.abs(percent).toFixed(2)}% lower than 30-day average`;
+        element.style.color = "green";
+    }else{
+        element.innerText = "7-day and 30-day averages are the same";
+    }
+}
+
+//Graph stuff
+let getDates = ()=>{
+    let arr = [];
+    let checkDate = new Date(data[0].date.getFullYear(), data[0].date.getMonth(), data[0].date.getDate());
+
+    for(let i = 0; i < data.length; i++){
+        let newDate = new Date(data[i].date.getFullYear(), data[i].date.getMonth(), data[i].date.getDate());
+        
+        arr.push(new Date(checkDate));
+
+        if(checkDate.getTime() !== newDate.getTime()){
+            i--;
+        }
+
+        checkDate.setDate(checkDate.getDate() + 1);
+    }
+
+    return arr;
+}
+
+let getNewCases = ()=>{
+    let arr = []
+    let checkDate = new Date(data[0].date.getFullYear(), data[0].date.getMonth(), data[0].date.getDate());
+
+    for(let i = 0; i < data.length; i++){
+        let newDate = new Date(data[i].date.getFullYear(), data[i].date.getMonth(), data[i].date.getDate());
+        
+        if(checkDate.getTime() !== newDate.getTime()){
+            arr.push(undefined);
+            i--;
+        }else{
+            arr.push(data[i].newCases);
+        }
+
+        checkDate.setDate(checkDate.getDate() + 1);
+    }
+
+    return arr;
+}
+
+let getNewDeaths = ()=>{
+    let arr = []
+    let checkDate = new Date(data[0].date.getFullYear(), data[0].date.getMonth(), data[0].date.getDate());
+
+    for(let i = 0; i < data.length; i++){
+        let newDate = new Date(data[i].date.getFullYear(), data[i].date.getMonth(), data[i].date.getDate());
+        
+        if(checkDate.getTime() !== newDate.getTime()){
+            arr.push(undefined);
+            i--;
+        }else{
+            arr.push(data[i].newDeaths);
+        }
+
+        checkDate.setDate(checkDate.getDate() + 1);
+    }
+
+    return arr;
+}
+
+let graph = ()=>{
+    let dates = getDates();
+
+    let newDeaths = {
+        x: dates,
+        y: getNewDeaths(),
+        mode: "lines+markers",
+        name: "New Deaths"
+    }
+
+    let newCases = {
+        x: dates,
+        y: getNewCases(),
+        mode: "lines+markers",
+        name: "New Cases"
+    }
+
+    let graphData = [newDeaths, newCases];
+
+
+    Plotly.newPlot("graph", graphData, layout);
+}
+
+createHeader();
+newCasesData();
+totalCasesData();
+average7DayData();
+average30DayData();
+totalDeathsData();
+newDeathsData();
+caseFatalityData();
+mortalityData();
+previousDayAnal();
+sevenDayAnal();
+thirtyDayAnal();
+sevenThirtyAnal();
+graph();
+
+//US data form submission
 let getUSData = function(){
     event.preventDefault();
 
@@ -308,7 +308,6 @@ let getUSData = function(){
 
     let form = document.querySelector("#usSearch");
     form.action = `/corona/us/${state}${county}`;
+    console.log(form.action);
     form.submit();
 }
-
-dataChange();

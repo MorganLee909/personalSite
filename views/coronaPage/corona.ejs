@@ -35,8 +35,6 @@
             </form>
 
             <h2 id="dateHeader"></h2>
-
-            <input id="date" type="date" onchange="dataChange()">
         </div>
 
         <div class="horizontal">
@@ -102,7 +100,7 @@
                 </div>
             </div>
 
-            <canvas id="myCanvas"></canvas>
+            <div id="graph"></div>
         </div>
 
         <p>- I will do my best to update all of the data every day</p>
@@ -111,7 +109,7 @@
         <p>* Population for countries is from 2018, same source as the rest of the data.  World population I set to 7,643,000,000.  <a href="https://www.census.gov/popclock/world">Source</a></p>
 
         <script>let data = <%- JSON.stringify(data) %>;</script>
-        <script src="/shared/graphs.js"></script>
+        <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
         <script src="/coronaPage/corona.js"></script>
     </body>
 </html>

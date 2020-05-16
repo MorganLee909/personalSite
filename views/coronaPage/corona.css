@@ -26,6 +26,7 @@ canvas{
 .horizontal{
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 
     .stats{
@@ -56,6 +57,10 @@ canvas{
 
         .general > p{
             margin-bottom: 10px;
+        }
+
+        #graph{
+            flex-grow: 2;
         }
 
 #status{

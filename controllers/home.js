@@ -126,7 +126,7 @@ module.exports = {
     },
 
     coronaUS: function(req, res){
-        let location = req.url.slice(req.url.indexOf("us/") + 3);
+        let location = req.url.slice(req.url.indexOf("us/") + 3).replace("?", "");
         let newArray = location.split("/");
         let state = "";
         let county = "";
