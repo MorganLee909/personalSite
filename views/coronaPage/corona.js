@@ -274,8 +274,7 @@ let graph = ()=>{
 
     let graphData = [newDeaths, newCases];
 
-
-    Plotly.newPlot("graph", graphData, layout);
+    Plotly.newPlot("graph", graphData);
 }
 
 createHeader();
