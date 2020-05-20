@@ -18,24 +18,26 @@
             <a href="/corona/kazakhstan">Kazakhstan</a>
             <a href="/corona/sweden">Sweden</a>
         </div>
-            <h1 id="locationHeader"></h1>
 
-            <p id="note">Search by state or county(leave county blank for state data)</p>
+        <h1 id="locationHeader"></h1>
 
-            <form id="usSearch" onsubmit="getUSData()" method="get">`
-                <label>State:
-                    <input id="state" type="text">
-                </label>
+        <p id="note">Search by state or county(leave county blank for state data)</p>
 
-                <label>County:
-                    <input id="county" type="text">
-                </label>
+        <form id="usSearch" onsubmit="getUSData()" method="get">
+            <label>State:
+                <input id="state" type="text">
+            </label>
 
-                <input type="submit" value="Find">
-            </form>
+            <label>County:
+                <input id="county" type="text">
+            </label>
 
-            <h2 id="dateHeader"></h2>
-        </div>
+            <input type="submit" value="Find">
+        </form>
+
+        <h2 id="dateHeader"></h2>
+
+        <a href="/corona/compare">Compare countries/states</a>
 
         <div class="horizontal">
             <div class="stats">

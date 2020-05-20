@@ -152,7 +152,9 @@ module.exports = {
             }
         }
 
+        console.log(county);
         if(county){
+            let countyData = {}
             CoronaCounty.aggregate([
                 {$match: {
                     state: state,
@@ -167,7 +169,21 @@ module.exports = {
                     newDeaths: "$deaths"
                 }}
             ]).toArray()
-            .then((countyData)=>{
+            .then((response)=>{
+                countyData = response;
+
+                return PopData.aggregate([
+                    {$match: {
+                        STNAME: state,
+                        CTYNAME: `${county} County`
+                    }},
+                    {$project: {
+                        _id: 0,
+                        population: "$POPESTIMATE2019"
+                    }}
+                ]).toArray()
+            })
+            .then((response)=>{
                 if(countyData.length === 0){
                     return res.redirect("/corona/us");
                 }
@@ -177,7 +193,7 @@ module.exports = {
                     countyData[i].newDeaths -= countyData[i-1].newDeaths;
                 }
 
-                return res.render("coronaPage/corona", {data: countyData});
+                return res.render("coronaPage/corona", {data: countyData, population: response});
             })
             .catch((err)=>{});
         }else{
@@ -214,6 +230,7 @@ module.exports = {
                         population: "$POPESTIMATE2019"
                     }}
                 ]).toArray()
+            })
             .then((response)=>{
                 if(stateData.length === 0){
                     return res.redirect("/corona/us");
@@ -224,9 +241,6 @@ module.exports = {
                 }
 
                 return res.render("coronaPage/corona", {data: stateData, population: response});
-            })
-
-                
             })
             .catch((err)=>{});
         }

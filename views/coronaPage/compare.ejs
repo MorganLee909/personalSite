@@ -9,20 +9,9 @@
     <body>
         <h1>CCP Corona Virus</h1>
         <p>(Click headers to sort)</p>
+        <a href="/corona">Individual countries/states</a>
         
         <div class="tables">
-            <table id="stateList">
-                <thead>
-                    <th onclick="populateStates('name')">State</th>
-                    <th onclick="populateStates('population')">Population</th>
-                    <th onclick="populateStates('totalCases')">Total Cases</th>
-                    <th onclick="populateStates('totalDeaths')">Total Deaths</th>
-                    <th onclick="populateStates('infectionRate')">Infection Rate</th>
-                    <th onclick="populateStates('mortality')">Mortality</th>
-                </thead>
-                <tbody></tbody>
-            </table>
-
             <table id="countryList">
                 <thead>
                     <th onclick="populateCountries('name')">Country</th>
@@ -31,6 +20,18 @@
                     <th onclick="populateCountries('totalDeaths')">Total Deaths</th>
                     <th onclick="populateCountries('infectionRate')">Infection Rate</th>
                     <th onclick="populateCountries('mortality')">Mortality</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table id="stateList">
+                <thead>
+                    <th onclick="populateStates('name')">State</th>
+                    <th onclick="populateStates('population')">Population</th>
+                    <th onclick="populateStates('totalCases')">Total Cases</th>
+                    <th onclick="populateStates('totalDeaths')">Total Deaths</th>
+                    <th onclick="populateStates('infectionRate')">Infection Rate</th>
+                    <th onclick="populateStates('mortality')">Mortality</th>
                 </thead>
                 <tbody></tbody>
             </table>
