@@ -204,7 +204,6 @@ module.exports = {
             ]).toArray()
             .then((response)=>{
                 stateData = response;
-                console.log("got data");
                 return PopData.aggregate([
                     {$match: {
                         STNAME: state,
@@ -216,8 +215,6 @@ module.exports = {
                     }}
                 ]).toArray()
             .then((response)=>{
-                console.log("got population");
-                console.log(response);
                 if(stateData.length === 0){
                     return res.redirect("/corona/us");
                 }
@@ -291,5 +288,96 @@ module.exports = {
                     return res.json("Error: Could not retrieve sets");
                 });
         }
+    },
+
+    coronaCompare: function(req, res){
+        let countryData = Corona.aggregate([
+            {$group: {
+                _id: "$countriesAndTerritories",
+                totalCases: {$sum: "$cases"},
+                totalDeaths: {$sum: "$deaths"},
+                population: {$avg: "$popData2018"}
+            }},
+            {$project: {
+                _id: 0,
+                name: "$_id",
+                totalCases: 1,
+                totalDeaths: 1,
+                population: 1
+            }}
+        ]).toArray();
+
+        let stateData = CoronaCounty.aggregate([
+            {$group: {
+                _id: {
+                    state: "$state",
+                    date: "$date"
+                },
+                totalCases: {$sum: "$cases"},
+                totalDeaths: {$sum: "$deaths"}
+            }},
+            {$project: {
+                _id: 0,
+                name: "$_id.state",
+                date: {$toDate: "$_id.date"},
+                totalCases: 1,
+                totalDeaths: 1
+            }}
+        ]).toArray();
+
+        let populationData = PopData.aggregate([
+            {$match: {
+                COUNTY: 0
+            }},
+            {$project: {
+                _id: 0,
+                STNAME: 1,
+                POPESTIMATE2019: 1
+            }}
+        ]).toArray();
+
+        Promise.all([countryData, stateData, populationData])
+            .then((response)=>{
+                let states = [];
+
+                for(let i = 0; i < response[1].length; i++){
+                    let exists = false;
+                    for(let j = 0; j < states.length; j++){
+                        if(states[j].name === response[1][i].name){
+                            if(states[j].date < response[1][i].date){
+                                states[j] = response[1][i];
+                            }
+                            exists = true;
+                        }
+                    }
+
+                    if(!exists){
+                        states.push(response[1][i]);
+                    }
+                }
+
+                for(let i = 0; i < states.length; i++){
+                    let isMatch = false;
+                    for(let j = 0; j < response[2].length; j++){
+                        if(states[i].name === response[2][j].STNAME){
+                            states[i].population = response[2][j].POPESTIMATE2019;
+                            isMatch = true;
+                        }
+                    }
+
+                    if(!isMatch){
+                        states.splice(i, 1);
+                        i--;
+                    }
+                }
+
+                let data = {
+                    countries: response[0],
+                    states: states,
+                }
+
+                return res.render("coronaPage/compare", {data: data});
+            })
+            .catch((err)=>{});
     }
 }

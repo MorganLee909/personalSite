@@ -316,6 +316,5 @@ let getUSData = function(){
 
     let form = document.querySelector("#usSearch");
     form.action = `/corona/us/${state}${county}`;
-    console.log(form.action);
     form.submit();
 }

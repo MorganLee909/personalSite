@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CCP Corona Virus</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/coronaPage/compare.css">
+        <link rel="stylesheet" href="/shared/shared.css">
+    </head>
+    <body>
+        <h1>CCP Corona Virus</h1>
+        <p>(Click headers to sort)</p>
+        
+        <div class="tables">
+            <table id="stateList">
+                <thead>
+                    <th onclick="populateStates('name')">State</th>
+                    <th onclick="populateStates('population')">Population</th>
+                    <th onclick="populateStates('totalCases')">Total Cases</th>
+                    <th onclick="populateStates('totalDeaths')">Total Deaths</th>
+                    <th onclick="populateStates('infectionRate')">Infection Rate</th>
+                    <th onclick="populateStates('mortality')">Mortality</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table id="countryList">
+                <thead>
+                    <th onclick="populateCountries('name')">Country</th>
+                    <th onclick="populateCountries('population')">Population</th>
+                    <th onclick="populateCountries('totalCases')">Total Cases</th>
+                    <th onclick="populateCountries('totalDeaths')">Total Deaths</th>
+                    <th onclick="populateCountries('infectionRate')">Infection Rate</th>
+                    <th onclick="populateCountries('mortality')">Mortality</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <template id="state">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </template>
+
+        <p>- I will do my best to update all of the data every day</p>
+
+        <p>- Data for China is inacurrate.  The CCP fabricates its data as propaganda.  This data is what is available, but China's data cannot be trusted</p>
+
+        <p>- Data for individual countries is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">ECDC</a>.  Data for individual states and counties in the US is from <a href="https://github.com/nytimes/covid-19-data">The New York Times</a></p>
+
+        <p>- Population for countries is from 2018 and from <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">ECDC</a>.  World population is set to 7,643,000,000.  <a href="https://www.census.gov/popclock/world">Source</a></p>
+
+        <p>- State and county population data is from the <a href="https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/totals/">US Census</a></p>
+
+        <script>let data = <%- JSON.stringify(data); %></script>
+        <script src="/coronaPage/compare.js"></script>
+    </body>
+</html>

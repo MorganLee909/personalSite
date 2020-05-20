@@ -29,8 +29,6 @@ let sudokuObj = {
         this.getInputs();
         this.recurse(0);
         this.fillIn();
-
-        console.log(this.count);
     },
 
     getInputs: function(){

@@ -1,0 +1,32 @@
+*{margin:0;padding:0;}
+
+body, html{
+    width: 100%;
+    text-align: center;
+}
+
+.tables{
+    padding-top: 50px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+table, th, td{
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+th{
+    cursor: pointer;
+}
+
+th:hover{
+    background: black;
+    color: white;
+}
+
+td{
+    max-width: 200px;
+}
