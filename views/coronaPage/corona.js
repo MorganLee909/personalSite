@@ -123,16 +123,24 @@ let newDeathsData = ()=>{
     document.querySelector("#newDeaths").innerText = data[data.length-1].newDeaths;
 }
 
+let infectionRateData = ()=>{
+    if(window.location.href.includes("us/")){
+        document.querySelector("#infectionRate").innerText = `${((totalCases / population) * 100).toFixed(4)}%`;
+    }else{
+        document.querySelector("#infectionRate").innerText = `${((totalCases / data[0].population) * 100).toFixed(4)}%`;
+    }  
+}
+
 let caseFatalityData = ()=>{
     document.querySelector("#caseFatality").innerText = `${((totalDeaths / totalCases) * 100).toFixed(4)}%`;
 }
 
 let mortalityData = ()=>{
     if(window.location.href.includes("us/")){
-        return;
+        document.querySelector("#mortality").innerText = `${((totalDeaths / population) * 100).toFixed(4)}%`;
+    }else{
+        document.querySelector("#mortality").innerText = `${((totalDeaths / data[0].population) * 100).toFixed(4)}%`;
     }
-
-    document.querySelector("#mortality").innerText = `${((totalDeaths / data[0].population) * 100).toFixed(4)}%`;
 }
 
 let previousDayAnal = ()=>{
@@ -284,6 +292,7 @@ average7DayData();
 average30DayData();
 totalDeathsData();
 newDeathsData();
+infectionRateData();
 caseFatalityData();
 mortalityData();
 previousDayAnal();

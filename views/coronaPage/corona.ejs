@@ -80,6 +80,11 @@
                     <hr>
 
                     <div class="stat">
+                        <p>Infection rate: </p>
+                        <p id="infectionRate"></p>
+                    </div>
+
+                    <div class="stat">
                         <p>Case Fatality Rate: <a href="https://www.britannica.com/science/case-fatality-rate"><img src="/shared/images/info.svg" alt="info"></a></p>
                         <p id="caseFatality"></p>
                     </div>
@@ -104,11 +109,21 @@
         </div>
 
         <p>- I will do my best to update all of the data every day</p>
-        <p>- Data for China is inacurrate.  The CCP fabricates its data as propaganda.  This data is what is available, but China's data cannot be trusted</p>
-        <p>- Data for individual countries is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">ECDC</a>.  Data for individual states and counties in the US is from <a href="https://github.com/nytimes/covid-19-data">The New York Times</a></p>
-        <p>* Population for countries is from 2018, same source as the rest of the data.  World population I set to 7,643,000,000.  <a href="https://www.census.gov/popclock/world">Source</a></p>
 
-        <script>let data = <%- JSON.stringify(data) %>;</script>
+        <p>- Data for China is inacurrate.  The CCP fabricates its data as propaganda.  This data is what is available, but China's data cannot be trusted</p>
+
+        <p>- Data for individual countries is from the <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">ECDC</a>.  Data for individual states and counties in the US is from <a href="https://github.com/nytimes/covid-19-data">The New York Times</a></p>
+
+        <p>- Population for countries is from 2018 and from <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">ECDC</a>.  World population is set to 7,643,000,000.  <a href="https://www.census.gov/popclock/world">Source</a></p>
+
+        <p>- State and county population data is from the <a href="https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/totals/">US Census</a></p>
+
+        <script>let data = <%- JSON.stringify(data); %></script>
+        <script>
+            <% if(locals.population){ %>
+                let population = <%- JSON.stringify(population[0].population); %>
+            <% } %>
+        </script>
         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
         <script src="/coronaPage/corona.js"></script>
     </body>

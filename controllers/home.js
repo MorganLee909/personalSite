@@ -1,7 +1,7 @@
 const JeopardySet = require("../models/jeopardySet");
 const MongoClient = require("mongodb").MongoClient;
 
-let Corona, CoronaCounty;
+let Corona, CoronaCounty, PopData;
 
 MongoClient.connect(
     process.env.PERSONAL_SITE, 
@@ -13,6 +13,7 @@ MongoClient.connect(
         let db = client.db("corona");
         Corona = db.collection("worldData");
         CoronaCounty = db.collection("usCounties");
+        PopData = db.collection("countyPop");
     }
 );
 
@@ -178,7 +179,10 @@ module.exports = {
 
                 return res.render("coronaPage/corona", {data: countyData});
             })
+            .catch((err)=>{});
         }else{
+            let stateData = {};
+
             CoronaCounty.aggregate([
                 {$match: {state: state}},
                 {$group: {
@@ -198,7 +202,22 @@ module.exports = {
                     newDeaths: 1
                 }}
             ]).toArray()
-            .then((stateData)=>{
+            .then((response)=>{
+                stateData = response;
+                console.log("got data");
+                return PopData.aggregate([
+                    {$match: {
+                        STNAME: state,
+                        CTYNAME: state
+                    }},
+                    {$project: {
+                        _id: 0,
+                        population: "$POPESTIMATE2019"
+                    }}
+                ]).toArray()
+            .then((response)=>{
+                console.log("got population");
+                console.log(response);
                 if(stateData.length === 0){
                     return res.redirect("/corona/us");
                 }
@@ -207,8 +226,12 @@ module.exports = {
                     stateData[i].newDeaths -= stateData[i-1].newDeaths;
                 }
 
-                return res.render("coronaPage/corona", {data: stateData});
+                return res.render("coronaPage/corona", {data: stateData, population: response});
             })
+
+                
+            })
+            .catch((err)=>{});
         }
     },
 
