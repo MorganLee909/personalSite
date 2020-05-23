@@ -23,6 +23,12 @@ let createStates = ()=>{
         newState.children[4].innerText = `${newState.infectionRate.toFixed(4)}%`;
         newState.children[5].innerText = `${newState.mortality.toFixed(4)}%`;
 
+        if(governors[data.states[i].name] === "rep"){
+            newState.classList = "republican";
+        }else if(governors[data.states[i].name] === "dem"){
+            newState.classList = "democrat";
+        }
+
         states.push(newState);
     }
 }
@@ -101,6 +107,60 @@ let populateStates = (category)=>{
     }
 
     stateSort = category;
+}
+
+let governors = {
+    Alabama: "rep",
+    Alaska: "rep",
+    Arizona: "rep",
+    Arkansas: "rep",
+    California: "dem",
+    Colorado: "dem",
+    Connecticut: "dem",
+    Delaware: "dem",
+    Florida: "rep",
+    Georgia: "rep",
+    Hawaii: "dem",
+    Idaho: "rep",
+    Illinois: "dem",
+    Indiana: "rep",
+    Iowa: "rep",
+    Kansas: "dem",
+    Kentucky: "dem",
+    Louisiana: "dem",
+    Maine: "dem",
+    Maryland: "rep",
+    Massachusetts: "rep",
+    Michigan: "dem",
+    Minnesota: "dem",
+    Mississippi: "rep",
+    Missouri: "rep",
+    Montana: "dem",
+    Nebraska: "rep",
+    Nevada: "dem",
+    "New Hampshire": "rep",
+    "New Jersey": "dem",
+    "New Mexico": "dem",
+    "New York": "dem",
+    "North Carolina": "dem",
+    "North Dakota": "rep",
+    Ohio: "rep",
+    Oklahoma: "rep",
+    Oregon: "dem",
+    Pennsylvania: "dem",
+    "Rhode Island": "dem",
+    "South Carolina": "rep",
+    "South Dakota": "rep",
+    Tennessee: "rep",
+    Texas: "rep",
+    Utah: "rep",
+    Vermont: "rep",
+    Virginia: "dem",
+    Washington: "dem",
+    "West Virginia": "rep",
+    Wisconsin: "dem",
+    Wyoming: "rep",
+    "District of Columbia": "dem"
 }
 
 createStates();

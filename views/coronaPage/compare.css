@@ -30,3 +30,11 @@ th:hover{
 td{
     max-width: 200px;
 }
+
+.republican{
+    background: rgba(255, 0, 0, 0.2);
+}
+
+.democrat{
+    background: rgba(38, 0, 255, 0.2);
+}
