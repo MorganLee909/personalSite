@@ -71,9 +71,9 @@ let populateCountries = (category)=>{
     }else{
         countries.sort((a, b)=>{
             if(b[category] > a[category]){
-                return -1;
+                return 1;
             }
-            return 1;
+            return -1;
         });
     }
 
@@ -96,9 +96,9 @@ let populateStates = (category)=>{
     }else{
         states.sort((a, b)=>{
             if(b[category] > a[category]){
-                return -1;
+                return 1;
             }
-            return 1;
+            return -1;
         });
     }
 
