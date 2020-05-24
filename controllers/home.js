@@ -328,16 +328,21 @@ module.exports = {
                     date: "$date"
                 },
                 totalCases: {$sum: "$cases"},
-                totalDeaths: {$sum: "$deaths"}
+                totalDeaths: {$sum: "$deaths"},
             }},
-            {$project: {
-                _id: 0,
-                name: "$_id.state",
-                date: {$toDate: "$_id.date"},
-                totalCases: 1,
-                totalDeaths: 1
-            }}
-        ]).toArray();
+            {$group: {
+                _id: {
+                    state: "$_id.state",
+                },
+                doc: {$max: {
+                    date: {$toDate: "$_id.date"}, 
+                    name: "$_id.state", 
+                    totalCases: {$sum: "$totalCases"},
+                    totalDeaths: {$sum: "$totalDeaths"}
+                }},
+            }},
+            {$replaceRoot: {newRoot: "$doc"}}
+          ]).toArray();
 
         let populationData = PopData.aggregate([
             {$match: {
@@ -352,42 +357,25 @@ module.exports = {
 
         Promise.all([countryData, stateData, populationData])
             .then((response)=>{
-                let states = [];
-
+                console.log(response[1][0]);
                 for(let i = 0; i < response[1].length; i++){
-                    let exists = false;
-                    for(let j = 0; j < states.length; j++){
-                        if(states[j].name === response[1][i].name){
-                            if(states[j].date < response[1][i].date){
-                                states[j] = response[1][i];
-                            }
-                            exists = true;
-                        }
-                    }
-
-                    if(!exists){
-                        states.push(response[1][i]);
-                    }
-                }
-
-                for(let i = 0; i < states.length; i++){
                     let isMatch = false;
                     for(let j = 0; j < response[2].length; j++){
-                        if(states[i].name === response[2][j].STNAME){
-                            states[i].population = response[2][j].POPESTIMATE2019;
+                        if(response[1][i].name === response[2][j].STNAME){
+                            response[1][i].population = response[2][j].POPESTIMATE2019;
                             isMatch = true;
                         }
                     }
 
                     if(!isMatch){
-                        states.splice(i, 1);
+                        response[1].splice(i, 1);
                         i--;
                     }
                 }
 
                 let data = {
                     countries: response[0],
-                    states: states,
+                    states: response[1],
                 }
 
                 return res.render("coronaPage/compare", {data: data});
