@@ -309,7 +309,7 @@ module.exports = {
                 _id: "$countriesAndTerritories",
                 totalCases: {$sum: "$cases"},
                 totalDeaths: {$sum: "$deaths"},
-                population: {$avg: "$popData2018"}
+                population: {$avg: "$popData2019"}
             }},
             {$project: {
                 _id: 0,
