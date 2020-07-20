@@ -103,7 +103,7 @@ module.exports = {
                     },
                     cases: {$sum: "$cases"},
                     deaths: {$sum: "$deaths"},
-                    population: {$avg: "$popData2018"}
+                    population: {$avg: "$popData2019"}
                 }},
                 {$sort: {
                     "_id.year": 1,
@@ -152,7 +152,6 @@ module.exports = {
             }
         }
 
-        console.log(county);
         if(county){
             let countyData = {}
             CoronaCounty.aggregate([
@@ -357,7 +356,6 @@ module.exports = {
 
         Promise.all([countryData, stateData, populationData])
             .then((response)=>{
-                console.log(response[1][0]);
                 for(let i = 0; i < response[1].length; i++){
                     let isMatch = false;
                     for(let j = 0; j < response[2].length; j++){
