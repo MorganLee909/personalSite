@@ -52,6 +52,12 @@ canvas{
             display: flex;
         }
 
+    #rightHead{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
 .horizontal{
     display: flex;
     justify-content: space-between;

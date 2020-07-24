@@ -50,7 +50,26 @@
                 <a href="/corona/compare">Compare countries/states</a>
             </div>
 
-            <div></div>
+            <div id="rightHead">
+                <h1>Graph</h1>
+
+                <div id="checks">
+                    <input id="newCaseCheck" name="newCaseCheck" onclick="updateGraph()" type="checkbox" checked>
+                    <label for="newCaseCheck">New Cases</label>
+                    <br>
+
+                    <input id="newDeathCheck" name="newDeathCheck" onclick="updateGraph()" type="checkbox" checked>
+                    <label for="newDeathCheck">New Deaths</label>
+                    <br>
+
+                    <input id="totalCaseCheck" name="totalCaseCheck" onclick="updateGraph()" type="checkbox">
+                    <label for="totalCaseCheck">Total Cases</label>
+                    <br>
+
+                    <input id="totalDeathCheck" name="totalDeathCheck" onclick="updateGraph()" type="checkbox">
+                    <label for="totalDeathCheck">Total Deaths</label>
+                </div>
+            </div>
         </div>
 
         <div class="horizontal">
