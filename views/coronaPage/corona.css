@@ -6,6 +6,8 @@ body{
 
 h1{
     margin: 10px;
+    text-align: center;
+    text-decoration: underline;
 }
 
 h2{
@@ -22,6 +24,33 @@ canvas{
     height: 75vh;
     width: 78vw;
 }
+
+#head{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+    #head > div{
+        flex-basis: 100px;
+        flex-grow: 1;
+    }
+
+    #leftHead{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #mainHead{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        #usSearch{
+            display: flex;
+        }
 
 .horizontal{
     display: flex;

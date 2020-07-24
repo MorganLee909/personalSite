@@ -1,7 +1,7 @@
 let totalDeaths, totalCases, sevenDayAvg, thirtyDayAvg;
 
 for(let i = 0; i < data.length; i++){
-    data[i].date = new Date(data[i].date);
+    data[i].date = new Date(data[i].date.slice(0, data[i].date.length - 2));
 
     if(!window.location.href.includes("us/")){
         data[i].date.setDate(data[i].date.getDate() - 1);
@@ -53,11 +53,11 @@ let createHeader = ()=>{
     document.querySelector("#dateHeader").innerText = latestDate.toDateString();
 }
 
-let newCasesData = ()=>{
+let newCasesData = (data)=>{
     document.querySelector("#newCases").innerText = data[data.length-1].newCases;
 }
 
-let totalCasesData = ()=>{
+let totalCasesData = (data)=>{
     let total = 0;
     for(let i = 0; i < data.length; i++){
         total += data[i].newCases;
@@ -66,7 +66,7 @@ let totalCasesData = ()=>{
     totalCases = total;
 }
 
-let average7DayData = ()=>{
+let average7DayData = (data)=>{
     let element = document.querySelector("#newCaseAverage7");
     let day = new Date(data[data.length-1].date);
     let sum = 0;
@@ -87,7 +87,7 @@ let average7DayData = ()=>{
     element.innerText = Math.round(sevenDayAvg);
 }
 
-let average30DayData = ()=>{
+let average30DayData = (data)=>{
     let element = document.querySelector("#newCaseAverage30");
     let day = new Date(data[data.length-1].date);
     let sum = 0;
@@ -108,7 +108,7 @@ let average30DayData = ()=>{
     element.innerText = Math.round(thirtyDayAvg);
 }
 
-let totalDeathsData = ()=>{
+let totalDeathsData = (data)=>{
     let total = 0;
 
     for(let i = 0; i < data.length; i++){
@@ -119,11 +119,11 @@ let totalDeathsData = ()=>{
     totalDeaths = total;
 }
 
-let newDeathsData = ()=>{
+let newDeathsData = (data)=>{
     document.querySelector("#newDeaths").innerText = data[data.length-1].newDeaths;
 }
 
-let infectionRateData = ()=>{
+let infectionRateData = (data)=>{
     if(window.location.href.includes("us/")){
         document.querySelector("#infectionRate").innerText = `${((totalCases / population) * 100).toFixed(4)}%`;
     }else{
@@ -131,11 +131,11 @@ let infectionRateData = ()=>{
     }  
 }
 
-let caseFatalityData = ()=>{
+let caseFatalityData = (data)=>{
     document.querySelector("#caseFatality").innerText = `${((totalDeaths / totalCases) * 100).toFixed(4)}%`;
 }
 
-let mortalityData = ()=>{
+let mortalityData = (data)=>{
     if(window.location.href.includes("us/")){
         document.querySelector("#mortality").innerText = `${((totalDeaths / population) * 100).toFixed(4)}%`;
     }else{
@@ -143,7 +143,7 @@ let mortalityData = ()=>{
     }
 }
 
-let previousDayAnal = ()=>{
+let previousDayAnal = (data)=>{
     let percent = ((data[data.length-1].newCases - data[data.length-2].newCases) / data[data.length-2].newCases) * 100;
     let element = document.querySelector("#percentYesterday");
 
@@ -158,7 +158,7 @@ let previousDayAnal = ()=>{
     }
 }
 
-let sevenDayAnal = ()=>{
+let sevenDayAnal = (data)=>{
     let percent = ((data[data.length-1].newCases - sevenDayAvg) / sevenDayAvg) * 100;
     let element = document.querySelector("#percent7Day");
 
@@ -173,7 +173,7 @@ let sevenDayAnal = ()=>{
     }
 }
 
-let thirtyDayAnal = ()=>{
+let thirtyDayAnal = (data)=>{
     let percent = ((data[data.length-1].newCases - thirtyDayAvg) / thirtyDayAvg) * 100;
     let element = document.querySelector("#percent30Day");
 
@@ -188,7 +188,7 @@ let thirtyDayAnal = ()=>{
     }
 }
 
-let sevenThirtyAnal = ()=>{
+let sevenThirtyAnal = (data)=>{
     let percent = ((sevenDayAvg - thirtyDayAvg) / thirtyDayAvg) * 100;
     let element = document.querySelector("#percentAverages");
 
@@ -204,7 +204,7 @@ let sevenThirtyAnal = ()=>{
 }
 
 //Graph stuff
-let getDates = ()=>{
+let getDates = (data)=>{
     let arr = [];
     let checkDate = new Date(data[0].date.getFullYear(), data[0].date.getMonth(), data[0].date.getDate());
 
@@ -223,7 +223,7 @@ let getDates = ()=>{
     return arr;
 }
 
-let getNewCases = ()=>{
+let getNewCases = (data)=>{
     let arr = []
     let checkDate = new Date(data[0].date.getFullYear(), data[0].date.getMonth(), data[0].date.getDate());
 
@@ -243,7 +243,7 @@ let getNewCases = ()=>{
     return arr;
 }
 
-let getNewDeaths = ()=>{
+let getNewDeaths = (data)=>{
     let arr = []
     let checkDate = new Date(data[0].date.getFullYear(), data[0].date.getMonth(), data[0].date.getDate());
 
@@ -263,19 +263,19 @@ let getNewDeaths = ()=>{
     return arr;
 }
 
-let graph = ()=>{
-    let dates = getDates();
+let graph = (data)=>{
+    let dates = getDates(data);
 
     let newDeaths = {
         x: dates,
-        y: getNewDeaths(),
+        y: getNewDeaths(data),
         mode: "lines+markers",
         name: "New Deaths"
     }
 
     let newCases = {
         x: dates,
-        y: getNewCases(),
+        y: getNewCases(data),
         mode: "lines+markers",
         name: "New Cases"
     }
@@ -285,24 +285,24 @@ let graph = ()=>{
     Plotly.newPlot("graph", graphData);
 }
 
-createHeader();
-newCasesData();
-totalCasesData();
-average7DayData();
-average30DayData();
-totalDeathsData();
-newDeathsData();
-infectionRateData();
-caseFatalityData();
-mortalityData();
-previousDayAnal();
-sevenDayAnal();
-thirtyDayAnal();
-sevenThirtyAnal();
-graph();
+createHeader(data);
+newCasesData(data);
+totalCasesData(data);
+average7DayData(data);
+average30DayData(data);
+totalDeathsData(data);
+newDeathsData(data);
+infectionRateData(data);
+caseFatalityData(data);
+mortalityData(data);
+previousDayAnal(data);
+sevenDayAnal(data);
+thirtyDayAnal(data);
+sevenThirtyAnal(data);
+graph(data);
 
 //US data form submission
-let getUSData = function(){
+let getUSData = ()=>{
     event.preventDefault();
 
     let state = document.querySelector("#state").value;
@@ -317,4 +317,35 @@ let getUSData = function(){
     let form = document.querySelector("#usSearch");
     form.action = `/corona/us/${state}${county}`;
     form.submit();
+}
+
+let getHistoricalData = ()=>{
+    let date = new Date(`${document.getElementById("historical").value}T00:00`);
+    let newData = [];
+
+    for(let i = 0; i < data.length; i++){
+        newData.push(data[i]);
+        console.log(date);
+        console.log(data[i].date);
+        console.log(date >= data[i].date);
+        if(date <= data[i].date){
+            break;
+        }
+    }
+
+    createHeader(newData);
+    newCasesData(newData);
+    totalCasesData(newData);
+    average7DayData(newData);
+    average30DayData(newData);
+    totalDeathsData(newData);
+    newDeathsData(newData);
+    infectionRateData(newData);
+    caseFatalityData(newData);
+    mortalityData(newData);
+    previousDayAnal(newData);
+    sevenDayAnal(newData);
+    thirtyDayAnal(newData);
+    sevenThirtyAnal(newData);
+    graph(newData);
 }
