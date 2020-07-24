@@ -44,7 +44,8 @@ let createHeader = ()=>{
             case "russia": displayLocation = "Russia"; break;
             case "ukraine": displayLocation = "Ukraine"; break;
             case "kazakhstan": displayLocation = "Kazakhstan"; break;
-            case "sweden": displayLocation= "Sweden"; break;
+            case "sweden": displayLocation = "Sweden"; break;
+            case "italy": displayLocation = "Italy"; break;
             default: displayLocation = "the world";
         }
 

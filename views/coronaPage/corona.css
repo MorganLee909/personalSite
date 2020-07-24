@@ -27,19 +27,18 @@ canvas{
 
 #head{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
 }
-
-    #head > div{
-        flex-basis: 100px;
-        flex-grow: 1;
-    }
 
     #leftHead{
         display: flex;
         flex-direction: column;
         align-items: center;
+        border: 1px solid black;
+        padding: 25px;
+        flex-basis: 250px;
+        flex-grow: 0;
     }
 
     #mainHead{
@@ -48,14 +47,29 @@ canvas{
         align-items: center;
     }
 
-        #usSearch{
+        #formBox{
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid black;
         }
+
+            #usSearch{
+                display: flex;
+            }
+
+                #usSearch label{
+                    display: flex;
+                }
 
     #rightHead{
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 25px;
+        border: 1px solid black;
+        flex-basis: 250px;
+        flex-grow: 0;
     }
 
 .horizontal{
@@ -67,7 +81,6 @@ canvas{
     .stats{
         display: flex;
         flex-direction: column;
-        align-items: left;
         padding: 10px;
         max-width: 25vw;
     }
