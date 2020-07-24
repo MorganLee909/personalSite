@@ -15,13 +15,15 @@ let createStates = ()=>{
         newState.population = data.states[i].population;
         newState.totalCases = data.states[i].totalCases;
         newState.totalDeaths = data.states[i].totalDeaths;
+        newState.caseFatality = (data.states[i].totalDeaths / data.states[i].totalCases) * 100;
 
         newState.children[0].innerText = data.states[i].name;
         newState.children[1].innerText = data.states[i].population;
         newState.children[2].innerText = data.states[i].totalCases;
         newState.children[3].innerText = data.states[i].totalDeaths;
         newState.children[4].innerText = `${newState.infectionRate.toFixed(4)}%`;
-        newState.children[5].innerText = `${newState.mortality.toFixed(4)}%`;
+        newState.children[5].innerText = `${newState.caseFatality.toFixed(4)}%`;
+        newState.children[6].innerText = `${newState.mortality.toFixed(4)}%`;
 
         if(governors[data.states[i].name] === "rep"){
             newState.classList = "republican";
@@ -46,13 +48,15 @@ let createCountries = ()=>{
             newCountry.population = data.countries[i].population;
             newCountry.totalCases = data.countries[i].totalCases;
             newCountry.totalDeaths = data.countries[i].totalDeaths;
+            newCountry.caseFatality = (data.countries[i].totalDeaths / data.countries[i].totalCases) * 100;
 
             newCountry.children[0].innerText = data.countries[i].name.replace(/_/g, " ");
             newCountry.children[1].innerText = data.countries[i].population;
             newCountry.children[2].innerText = data.countries[i].totalCases;
             newCountry.children[3].innerText = data.countries[i].totalDeaths;
             newCountry.children[4].innerText = `${newCountry.infectionRate.toFixed(4)}%`;
-            newCountry.children[5].innerText = `${newCountry.mortality.toFixed(4)}%`;
+            newCountry.children[5].innerText = `${newCountry.caseFatality.toFixed(4)}%`;
+            newCountry.children[6].innerText = `${newCountry.mortality.toFixed(4)}%`;
 
             countries.push(newCountry);
         }

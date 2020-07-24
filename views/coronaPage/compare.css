@@ -13,9 +13,11 @@ body, html{
 }
 
 table, th, td{
+    border-collapse: collapse;
     border: 1px solid black;
     padding: 5px;
     text-align: center;
+    font-size: 14px;
 }
 
 th{
@@ -37,4 +39,8 @@ td{
 
 .democrat{
     background: rgba(38, 0, 255, 0.2);
+}
+
+#countryList tr:nth-child(even){
+    background: rgba(153, 204, 255, 0.5);
 }
