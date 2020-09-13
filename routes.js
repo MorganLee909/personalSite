@@ -14,5 +14,4 @@ module.exports = function(app){
     app.get("/corona/compare", home.coronaCompare);
     app.get("/corona/us/*", home.coronaUS);
     app.get("/corona*", home.corona);
-    
 }

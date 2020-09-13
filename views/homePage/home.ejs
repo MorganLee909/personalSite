@@ -7,76 +7,123 @@
         <link rel="stylesheet" href="/homePage/home.css">
     </head>
     <body>
-        <header-tag></header-tag>
+        <h1>Lee Morgan</h1>
 
-        <div id="landingStrand">
-            <a href="/bio">
-                <div class="card">
-                    <h1>Bio</h1>
-                    <img src="../shared/images/lee.jpeg" alt="Lee Morgan">
-                </div>
-            </a>
-            
-            <a href="/resume">
-                <div class="card" >
-                    <h1>Resume</h1> 
-                    <img src="../shared/images/resume.jpeg" alt="Resume">
-                </div>
-            </a>
+        <div class="content">
+            <div class="section">
+                <header>ABOUT ME</header>
 
-            <a>
-                <div class="card" onclick="projectsObj.display()">
-                    <h1>Projects</h1> 
-                    <img src="../shared/images/jeopardy.png" alt="Projects">
-                </div>
-            </a>
+                <ul>
+                    <a href="/resume">
+                        <h3>Resume</h3>
+                    </a>
+
+                    <a href="/bio">
+                        <h3>Bio</h3>
+                    </a>
+                    <a href="https://github.com/MorganLee909">
+                        <h3>GitHub</h3>
+
+                        <img src="../shared/images/githubLogo.png" alt="GitHub Logo">
+                    </a>
+                    <a href="https://www.linkedin.com/in/lee-morgan-79575b1b/">
+                        <h3>LinkedIn</h3>
+
+                        <img src="../shared/images/linkedinLogo.png" alt="LinkedIn Logo">
+                    </a>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <header>PERSONAL PROJECTS</header>
+
+                <ul>
+                    <a href="https://thesubline.com">
+                        <h3>The Subline</h3>
+
+                        <div class="info">
+                            <img src="../shared/images/subline.png" alt="Subline Logo">
+
+                            <p>A website to help restaurants prevent waste use data and machine learning</p>
+                        </div>
+                    </a>
+
+                    <a href="/jeopardy">
+                        <h3>Jeopardy (EFL)</h3>
+
+                        <div class="info">
+                            <img src="../shared/images/jeopardy.png" alt="Jeopardy">
+
+                            <p>A Jeopardy game created primarily for learners of English</p>
+                        </div>
+                        
+                    </a>
+
+                    <a href="/sudoku">
+                        <h3>Sudoku Solver</h3>
+
+                        <div class="info">
+                            <img src="../shared/images/sudoku.png" alt="Sudoku">
+
+                            <p>Stuck on a particulary difficult game of sudoku?  Enter any sudoku puzzle and have it solved immediately</p>
+                        </div>
+                    </a>
+
+                    <a href="/birthdayparadox">
+                        <h3>The Birthday Paradox</h3>
+
+                        <div class="info">
+                            <img src="../shared/images/birthday.jpg" alt="Birthday Paradox">
+
+                            <p>An demonstration of the counterintuitive birthday paradox</p>
+                        </div>
+                    </a>
+
+                    <a href="/corona">
+                        <h3>CCP Corona Virus</h3>
+
+                        <div class="info">
+                            <img src="../shared/images/coronaVirus.jpeg" alt="Corona Virus">
+
+                            <p>A display and analysis of all the data concerning cases and deaths from the Corona Virus from across the world</p>
+                        </div>
+                    </a>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <header>LIST OF INTERESTING WEBSITES</header>
+
+                <ul>
+                    <a href="https://cs-online.club/en/servers">
+                        <h3>CS:GO in the browser</h3>
+
+                        <p>A website where you can play CS:GO in the browser with other people online</p>
+                    </a>
+
+                    <a href="https://driveandlisten.herokuapp.com">
+                        <h3>Drive and Listen</h3>
+
+                        <p>Pretend to be driving your car and listening to the radio.  Watch cars driving down the road all over the world while listening to local radio stations.</p>
+                    </a>
+
+                    <a href="https://www.ekzhang.com/game-of-life">
+                        <h3>Conway's Game of Life</h3>
+
+                        <p>Play around and experiment with different situations in Conway's Game of Life</p>
+                    </a>
+
+                    <a href="https://librivox.org">
+                        <h3>LibriVox</h3>
+
+                        <p>Free public domain audiobooks.  Listen to books for free, or volunteer your time to read them for others to listen to.</p>
+                    </a>
+                </ul>
+            </div>
         </div>
-
-        <div id="projectsStrand">
-            <a href="http://thesubline.com" target="_blank">
-                <div class="card">
-                    <h1>The Subline</h1> 
-                    <img src="../shared/images/subline.png" alt="The Subline">
-                    <p>A restaurant inventory management web application used by restaurants to track their inventory, sales, waste and find trends.  Site entirely created by myself.</p>
-                </div>
-            </a>
-
-            <a href="/jeopardy">
-                <div class="card">
-                    <h1>Jeopardy</h1> 
-                    <img src="../shared/images/resume.jpeg" alt="Resume">
-                    <p>A Jeopardy game for ESL students.  Primarily created for speaking clubs</p>
-                </div>
-            </a>
-
-            <a href="/sudoku">
-                <div class="card">
-                    <h1>Sudoku Solver</h1>
-                    <img src="../shared/images/sudoku.png" alt="Sudoku">
-                    <p>Ruin the fun of sudoku forever!  Enter any sudoku puzzle into this and it will solve it immediately!  Seriously, any puzzle.  I challenge you to find one that it can't solve...</p>
-                </div>
-            </a>
-
-            <a href="/birthdayparadox">
-                <div class="card">
-                    <h1>The Birthday Paradox</h1>
-                    <img src="../shared/images/birthday.jpg" alt="Birthday Paradox">
-                    <p>A simple representation of the birthday Paradox.</p>
-                </div>
-            </a>
-
-            <a href="/corona">
-                <div class="card">
-                    <h1>CCP Corona Virus</h1>
-                    <img src="../shared/images/coronaVirus.jpeg" alt="CCP Corona Virus">
-                    <p>Some Statistics about the CCP Corona Virus</p>
-                </div>
-            </a>
-        </div>
-
-        <script src="/shared/header.js"></script>
-        <script src="/homePage/landing.js"></script>
-        <script src="/homePage/projects.js"></script>
-        <script src="/homePage/controller.js"></script>
     </body>
 </html>
