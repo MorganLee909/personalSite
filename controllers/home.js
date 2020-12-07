@@ -2,7 +2,6 @@ const JeopardySet = require("../models/jeopardySet");
 const MongoClient = require("mongodb").MongoClient;
 
 let Corona, CoronaCounty, PopData;
-
 MongoClient.connect(
     process.env.PERSONAL_SITE, 
     {
@@ -244,6 +243,43 @@ module.exports = {
             })
             .catch((err)=>{});
         }
+    },
+
+    coronaData: function(req, res){
+        let now = new Date();
+        let then = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+
+        console.time("thing");
+        CoronaCounty.aggregate([
+            {$addFields: {
+                date: {$toDate: "$date"}
+            }},
+            {$match: {
+                date: {$gte: then},
+            }},
+            {$group: {
+                _id: {
+                    state: "$state",
+                    date: "$date"
+                },
+                newCases: {$sum: "$cases"},
+                newDeaths: {$sum: "$deaths"}
+            }},
+            {$sort: {date: 1}},
+            {$project: {
+                state: "$_id.state",
+                date: "$_id.date",
+                newCases: 1,
+                newDeaths: 1,
+                _id: 0
+            }}
+        ]).toArray()
+            .then((response)=>{
+                return res.json(response);
+            })
+            .catch((err)=>{});
+
+        
     },
 
     //GET - Renders the resume page
