@@ -15,5 +15,4 @@ module.exports = function(app){
     app.get("/corona/us/*", home.coronaUS);
     app.get("/corona/json", home.coronaData);
     app.get("/corona*", home.corona);
-    
 }
