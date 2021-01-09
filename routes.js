@@ -19,4 +19,7 @@ module.exports = function(app){
 
     //FINANCE
     app.get("/finance", finance.enter);
+    app.post("/finance/register", finance.register);
+    app.post("/finance/login", finance.login);
+    app.get("/finance/dashboard", finance.dashboard);
 }

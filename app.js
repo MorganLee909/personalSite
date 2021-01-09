@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const compression = require("compression");
+const session = require("cookie-session");
 const https = require("https");
 const fs = require("fs");
 
@@ -22,6 +23,12 @@ if(process.env.NODE_ENV === "production"){
     }, app);
 }
 
+app.use(session({
+    secret: "jibberty jabberty go fuck yourself",
+    cookie: {secure: true},
+    saveUninitialized: true,
+    resave: false
+}));
 app.use(express.static(__dirname + "/views"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
