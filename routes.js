@@ -1,4 +1,5 @@
 const home = require("./controllers/home.js");
+const finance = require("./controllers/finance.js");
 
 module.exports = function(app){
     app.get("/", home.renderMain);
@@ -15,4 +16,7 @@ module.exports = function(app){
     app.get("/corona/us/*", home.coronaUS);
     app.get("/corona/json", home.coronaData);
     app.get("/corona*", home.corona);
+
+    //FINANCE
+    app.get("/finance", finance.enter);
 }
