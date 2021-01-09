@@ -9,16 +9,18 @@ const app = express();
 mongoose.connect(process.env.PERSONAL_SITE, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.set("view engine", "ejs");
+
+const httpsServer = {};
 if(process.env.NODE_ENV === "production"){
     app.get('*', (req, res) => {
         res.redirect('https://' + req.headers.host + req.url);
     });
-}
 
-const httpsServer = https.createServer({
-    key: fs.readFileSync("/etc/letsencrypt/live/www.leemorgan.io/privkey.pem", "utf8"),
-    cert: fs.readFileSync("/etc/letsencrypt/live/www.leemorgan.io/fullchain.pem", "utf8")
-}, app);
+    httpsServer = https.createServer({
+        key: fs.readFileSync("/etc/letsencrypt/live/www.leemorgan.io/privkey.pem", "utf8"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/www.leemorgan.io/fullchain.pem", "utf8")
+    }, app);
+}
 
 app.use(express.static(__dirname + "/views"));
 app.use(express.urlencoded({extended: true}));
