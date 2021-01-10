@@ -5,7 +5,7 @@ controller = {
         let pages = document.querySelectorAll(".page");
 
         for(let i = 0; i < pages.length; i++){
-            page.style.display = "none";
+            pages[i].style.display = "none";
         }
 
         document.getElementById(page).style.display = "flex";

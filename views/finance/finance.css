@@ -1,3 +1,8 @@
+body, html{
+    height: 100vh;
+    width: 100vw;
+}
+
 form{
     display: flex;
     flex-direction: column;
@@ -7,10 +12,22 @@ form{
         margin: 5px 0;
     }
 
+.page{
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+/*
+CREATE ACCOUNT PAGE
+*/
+#createAccountPage{
+    justify-content: center;
+    align-items: center;
+}
+
 #logReg{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
 }

@@ -2,7 +2,6 @@ const User = require("../classes/user.js");
 
 const homePage = {
     display: function(){
-        console.log(state.user === undefined);
         if(state.user === undefined){
             let from = new Date();
             from.setDate(0);
@@ -17,9 +16,8 @@ const homePage = {
             })
                 .then(response => response.json())
                 .then((response)=>{
-                    console.log(response);
                     if(response.accounts.length === 0){
-                        controller.openPage("createAccountPage")
+                        controller.openPage("createAccountPage");
                     }else{
                         state.user = new User(
                             response._id,
@@ -30,14 +28,10 @@ const homePage = {
                         state.homePage.newData = true;
                     };
                 })
-                .catch((err)=>{
-                    console.log(err);
-                });
+                .catch((err)=>{});
         }
 
-        if(state.homePage.newData === true){
-            console.log("populating");
-        }
+        if(state.homePage.newData === true){}
     }
 }
 
