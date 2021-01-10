@@ -1,12 +1,7 @@
 const homePage = require("./pages/home.js");
 
-const User = require("./classes/user.js");
-const Account = require("./classes/account.js");
-const Transaction = require("./classes/transaction.js");
-const Item = require("./classes/item.js");
-
 controller = {
-    changePage: function(page){
+    openPage: function(page){
         let pages = document.querySelectorAll(".page");
 
         for(let i = 0; i < pages.length; i++){
@@ -24,10 +19,9 @@ controller = {
 }
 
 state = {
-    user: {},
+    user: undefined,
     homePage: {
-        isPopulated: false,
-        newData: false
+        newData: true
     }
 }
 

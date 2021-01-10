@@ -1,4 +1,4 @@
-const isSanitary = require("./validator.js");
+const isSanitary = require("./validator.js").isSanitary;
 
 const mongoose = require("mongoose");
 

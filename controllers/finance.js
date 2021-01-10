@@ -1,4 +1,6 @@
 const User = require("../models/user.js");
+const Account = require("../models/account.js");
+const Transaction = require("../models/transaction.js");
 
 const bcrypt = require("bcryptjs");
 
@@ -25,7 +27,8 @@ module.exports = {
 
                 let newUser = new User({
                     email: email,
-                    password: hash
+                    password: hash,
+                    accounts: []
                 });
 
                 return newUser.save();
@@ -66,5 +69,49 @@ module.exports = {
         }
 
         return res.render("finance/dashboard");
+    },
+
+    getUser: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        let responseUser = {};
+        User.findOne({_id: req.session.user}, {
+            email: 0,
+            password: 0
+        })
+            .then((user)=>{
+                responseUser = user;
+
+                if(user.accounts.length === 0){
+                    throw "no account";
+                }
+                
+                return Account.findOne({_id: user.accounts[0]}, {user: 0});
+            })
+            .then((account)=>{
+                responseUser.account = account;
+
+                const from = new Date(req.body.from);
+                const to = new Date(req.body.to);
+
+                return Transaction.find({
+                    account: account._id,
+                    date: {$gte: from, $lt: to}
+                });
+            })
+            .then((transactions)=>{
+                responseUser.account.transactions = transactions;
+
+                return res.json(responseUser);
+            })
+            .catch((err)=>{
+                if(err === "no account"){
+                    return res.json(responseUser);
+                }
+
+                return res.json("ERROR: UNABLE TO GET USER");
+            });
     }
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "browserify ./views/finance/js/dashboard.js -o ./views/finance/bundle.js",
+    "bundle": "watchify ./views/finance/js/dashboard.js -o ./views/finance/bundle.js",
     "dev": "npm run bundle | nodemon app.js"
   },
   "repository": {
