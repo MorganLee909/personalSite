@@ -61,6 +61,10 @@ module.exports = {
     },
 
     dashboard: function(req, res){
-        console.log("this is the dashboard");
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        return res.render("finance/dashboard");
     }
 }
