@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "PASSWORD IS REQUIRED"]
-    }
+    },
+    accounts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Account"
+    }]
 });
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model("User", userSchema);
