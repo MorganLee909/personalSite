@@ -1,4 +1,9 @@
-const homePage = require("./home.js");
+const homePage = require("./pages/home.js");
+
+const User = require("./classes/user.js");
+const Account = require("./classes/account.js");
+const Transaction = require("./classes/transaction.js");
+const Item = require("./classes/item.js");
 
 controller = {
     changePage: function(page){
@@ -19,6 +24,7 @@ controller = {
 }
 
 state = {
+    user: {},
     homePage: {
         isPopulated: false,
         newData: false

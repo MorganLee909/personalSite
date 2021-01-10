@@ -2,7 +2,7 @@ const isSanitary = require("./validator.js").isSanitary;
 
 const mongoose = require("mongoose");
 
-const accountScema = new mongoose.Schema({
+const accountSchema = new mongoose.Schema({
     name: {
         type: "String",
         required: [true, "NAME MUST BE PROVIDED FOR ACCOUNT"],
