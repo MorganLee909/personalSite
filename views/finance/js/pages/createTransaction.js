@@ -61,9 +61,7 @@ let createTransaction = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{
-                console.log(err);
-            });
+            .catch((err)=>{});
     }
 }
 

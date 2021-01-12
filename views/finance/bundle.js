@@ -54,7 +54,7 @@ class Account{
             transaction.items
         ));
 
-        state.homePage.newDate === true;
+        state.homePage.newData = true;
     }
 }
 
@@ -322,9 +322,7 @@ let createTransaction = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{
-                console.log(err);
-            });
+            .catch((err)=>{});
     }
 }
 
@@ -364,9 +362,7 @@ const homePage = {
                         this.populateData();
                     }
                 })
-                .catch((err)=>{
-                    console.log(err);
-                });
+                .catch((err)=>{});
 
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};

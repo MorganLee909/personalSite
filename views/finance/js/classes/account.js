@@ -53,7 +53,7 @@ class Account{
             transaction.items
         ));
 
-        state.homePage.newDate === true;
+        state.homePage.newData = true;
     }
 }
 
