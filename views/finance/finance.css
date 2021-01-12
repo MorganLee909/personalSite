@@ -12,11 +12,47 @@ form{
         margin: 5px 0;
     }
 
+td{
+    border: 1px solid black;
+    padding: 5px;
+    width: 175px;
+}
+
+    
+
+tr{
+    cursor: pointer;
+}
+
+    tr:nth-child(even){
+        background: lightgray;
+    }
+
+    tr:hover{
+        background: gray;
+    }
+
 .page{
     height: 100%;
     width: 100%;
     display: flex;
 }
+
+/*
+HOME PAGE
+*/
+#homePage{
+    flex-direction: column;
+    align-items: center;
+}
+
+    .homeButtons{
+        display: flex;
+        margin-bottom: 25px;
+    }
+        .homeButtons > *{
+            margin: 5px;
+        }
 
 /*
 CREATE ACCOUNT PAGE

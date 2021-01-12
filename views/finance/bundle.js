@@ -91,6 +91,10 @@ class Transaction{
         }
     }
 
+    get category(){
+        return this._category;
+    }
+
     get location(){
         return this._location;
     }
@@ -178,40 +182,6 @@ class User{
 
 module.exports = User;
 },{"./account.js":1}],5:[function(require,module,exports){
-class Transaction extends HTMLElement{
-    static get observedAttributes(){
-        return ["date", "amount", "location"];
-    }
-
-    constructor(){
-        super();
-        this._shadow = this.attachShadow({mode: "open"});
-        
-        this._shadow.innerHTML = `
-            <p></p>
-            <p></p>
-            <p></p>
-        `;
-    }
-
-    attributeChangedCallback(name, oldValue, newValue){
-        switch(name){
-            case "date":
-                this._shadow.children[0].innerText = newValue;
-                break;
-            case "amount": 
-                this._shadow.children[1].innerText = newValue;
-                break;
-            case "location":
-                this._shadow.children[2].innerText = newValue;
-        }
-    }
-}
-
-customElements.define("transaction-comp", Transaction);
-},{}],6:[function(require,module,exports){
-require("./components/transaction.js");
-
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
@@ -251,7 +221,7 @@ state = {
 }
 
 homePage.display();
-},{"./components/transaction.js":5,"./pages/createAccount.js":7,"./pages/createTransaction.js":8,"./pages/home.js":9}],7:[function(require,module,exports){
+},{"./pages/createAccount.js":6,"./pages/createTransaction.js":7,"./pages/home.js":8}],6:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -288,7 +258,7 @@ const createAccount = {
 }
 
 module.exports = createAccount;
-},{"../classes/account":1}],8:[function(require,module,exports){
+},{"../classes/account":1}],7:[function(require,module,exports){
 let createTransaction = {
     display: function(){
         document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
@@ -359,7 +329,7 @@ let createTransaction = {
 }
 
 module.exports = createTransaction;
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -406,17 +376,32 @@ const homePage = {
     },
 
     populateData: function(){
-        let transactions = document.getElementById("transactions");
+        let transactions = document.getElementById("transactionsBody");
         while(transactions.children.length > 0){
             transactions.removeChild(transactions.firstChild);
         }
 
         for(let i = 0; i < state.user.account.transactions.length; i++){
-            let transaction = document.createElement("transaction-comp");
-            transaction.setAttribute("date", state.user.account.transactions[i].dateString());
-            transaction.setAttribute("amount", state.user.account.transactions[i].amountString());
-            transaction.setAttribute("location", state.user.account.transactions[i].location);
-            transactions.appendChild(transaction);
+            let tr = document.createElement("tr");
+            tr.classList.add("transaction");
+
+            let date = document.createElement("td");
+            date.innerText = state.user.account.transactions[i].dateString();
+            tr.appendChild(date);
+
+            let category = document.createElement("td");
+            category.innerText = state.user.account.transactions[i].category;
+            tr.appendChild(category);
+
+            let location = document.createElement("td");
+            location.innerText = state.user.account.transactions[i].location;
+            tr.appendChild(location);
+
+            let amount = document.createElement("td");
+            amount.innerText = state.user.account.transactions[i].amountString();
+            tr.appendChild(amount);
+
+            transactions.appendChild(tr);
         }
 
         state.homePage.newData = false;
@@ -424,4 +409,4 @@ const homePage = {
 }
 
 module.exports = homePage;
-},{"../classes/user.js":4}]},{},[6]);
+},{"../classes/user.js":4}]},{},[5]);

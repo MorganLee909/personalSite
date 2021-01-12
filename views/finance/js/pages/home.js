@@ -44,17 +44,32 @@ const homePage = {
     },
 
     populateData: function(){
-        let transactions = document.getElementById("transactions");
+        let transactions = document.getElementById("transactionsBody");
         while(transactions.children.length > 0){
             transactions.removeChild(transactions.firstChild);
         }
 
         for(let i = 0; i < state.user.account.transactions.length; i++){
-            let transaction = document.createElement("transaction-comp");
-            transaction.setAttribute("date", state.user.account.transactions[i].dateString());
-            transaction.setAttribute("amount", state.user.account.transactions[i].amountString());
-            transaction.setAttribute("location", state.user.account.transactions[i].location);
-            transactions.appendChild(transaction);
+            let tr = document.createElement("tr");
+            tr.classList.add("transaction");
+
+            let date = document.createElement("td");
+            date.innerText = state.user.account.transactions[i].dateString();
+            tr.appendChild(date);
+
+            let category = document.createElement("td");
+            category.innerText = state.user.account.transactions[i].category;
+            tr.appendChild(category);
+
+            let location = document.createElement("td");
+            location.innerText = state.user.account.transactions[i].location;
+            tr.appendChild(location);
+
+            let amount = document.createElement("td");
+            amount.innerText = state.user.account.transactions[i].amountString();
+            tr.appendChild(amount);
+
+            transactions.appendChild(tr);
         }
 
         state.homePage.newData = false;

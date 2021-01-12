@@ -19,6 +19,10 @@ class Transaction{
         }
     }
 
+    get category(){
+        return this._category;
+    }
+
     get location(){
         return this._location;
     }

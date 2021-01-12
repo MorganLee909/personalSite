@@ -7,23 +7,31 @@ class Transaction extends HTMLElement{
         super();
         this._shadow = this.attachShadow({mode: "open"});
         
-        this._shadow.innerHTML = `
-            <p></p>
-            <p></p>
-            <p></p>
-        `;
+        let tr = document.createElement("tr");
+        tr.classList.add("transaction");
+        tr.innerHTML = `
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        `
+        this._shadow.appendChild(tr);
     }
 
     attributeChangedCallback(name, oldValue, newValue){
         switch(name){
             case "date":
-                this._shadow.children[0].innerText = newValue;
+                this._shadow.children[0].children[0].innerText = newValue;
                 break;
-            case "amount": 
-                this._shadow.children[1].innerText = newValue;
+            case "category":
+                this._shadow.children[0].children[1].innerText = newValue;
                 break;
             case "location":
-                this._shadow.children[2].innerText = newValue;
+                this._shadow.children[0].children[2].innerText = newValue;
+                break;
+            case "amount": 
+                this._shadow.children[0].children[3].innerText = newValue;
+                break;
         }
     }
 }
