@@ -39,6 +39,12 @@ class Account{
         return this._categories;
     }
 
+    addCategory(category){
+        this._categories.push(category);
+
+        state.homePage.newData = true;
+    }
+
     get transactions(){
         return this._transactions;
     }
@@ -222,6 +228,7 @@ require("./components/backButton.js");
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
+const createCategoryPage = require("./pages/createCategory.js");
 
 controller = {
     openPage: function(page){
@@ -243,6 +250,8 @@ controller = {
             case "createTransactionPage":
                 createTransactionPage.display();
                 break;
+            case "createCategoryPage":
+                createCategoryPage.display();
         }
     }
 }
@@ -258,7 +267,7 @@ state = {
 }
 
 homePage.display();
-},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createTransaction.js":8,"./pages/home.js":9}],7:[function(require,module,exports){
+},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createCategory.js":8,"./pages/createTransaction.js":9,"./pages/home.js":10}],7:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -296,6 +305,38 @@ const createAccount = {
 
 module.exports = createAccount;
 },{"../classes/account":1}],8:[function(require,module,exports){
+let createCategory = {
+    display: function(){
+        document.getElementById("createCategoryForm").onsubmit = ()=>{this.submit()};
+    },
+
+    submit: function(){
+        event.preventDefault();
+
+        let data = {
+            account: state.user.account.id,
+            name: document.getElementById("createCategoryName").value
+        };
+
+        fetch("/finance/category", {
+            method: "post", 
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then((response)=>{
+                state.user.account.addCategory(data.name);
+
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{});
+    }
+}
+
+module.exports = createCategory;
+},{}],9:[function(require,module,exports){
 let createTransaction = {
     display: function(){
         document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
@@ -364,7 +405,7 @@ let createTransaction = {
 }
 
 module.exports = createTransaction;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -403,6 +444,7 @@ const homePage = {
 
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
+            document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
         }else if(state.homePage.newData === true){
             this.populateData();
         }

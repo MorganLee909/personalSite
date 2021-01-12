@@ -3,6 +3,7 @@ require("./components/backButton.js");
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
+const createCategoryPage = require("./pages/createCategory.js");
 
 controller = {
     openPage: function(page){
@@ -24,6 +25,8 @@ controller = {
             case "createTransactionPage":
                 createTransactionPage.display();
                 break;
+            case "createCategoryPage":
+                createCategoryPage.display();
         }
     }
 }

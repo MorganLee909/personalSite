@@ -76,6 +76,14 @@ CREATE TRANSACTION PAGE
     align-items: center;
 }
 
+/*
+CREATE CATEGORY PAGE
+*/
+#createCategoryPage{
+    justify-content: center;
+    align-items: center;
+}
+
 #logReg{
     display: flex;
     justify-content: space-around;

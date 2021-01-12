@@ -38,6 +38,12 @@ class Account{
         return this._categories;
     }
 
+    addCategory(category){
+        this._categories.push(category);
+
+        state.homePage.newData = true;
+    }
+
     get transactions(){
         return this._transactions;
     }
