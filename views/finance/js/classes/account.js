@@ -38,6 +38,10 @@ class Account{
         return this._categories;
     }
 
+    get transactions(){
+        return this._transactions;
+    }
+
     addTransaction(transaction){
         this._transactions.push(new Transaction(
             transaction._id,

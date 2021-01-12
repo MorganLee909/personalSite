@@ -18,6 +18,14 @@ class Transaction{
             ));
         }
     }
+
+    get date(){
+        return this._date;
+    }
+
+    get amount(){
+        return parseFloat((this._amount / 100).toFixed(2));
+    }
 }
 
 module.exports = Transaction;

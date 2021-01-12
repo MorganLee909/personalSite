@@ -1,3 +1,5 @@
+require("./components/transaction.js");
+
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");

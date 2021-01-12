@@ -15,7 +15,7 @@ const homePage = {
                 body: JSON.stringify({from: from, to: new Date()})
             })
                 .then(response => response.json())
-                .then((response)=>{
+                .then(async (response)=>{
                     state.user = new User(
                         response._id,
                         response.accounts,
@@ -27,7 +27,9 @@ const homePage = {
                     if(response.accounts.length === 0){
                         controller.openPage("createAccountPage");
                     }else{
-                        state.user.changeAccount(state.user.accounts[0]);
+                        await state.user.changeAccount(state.user.accounts[0]);
+
+                        this.populateData();
                     }
                 })
                 .catch((err)=>{
@@ -36,9 +38,25 @@ const homePage = {
 
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
+        }else if(state.homePage.newData === true){
+            this.populateData();
+        }
+    },
+
+    populateData: function(){
+        let transactions = document.getElementById("transactions");
+        while(transactions.children.length > 0){
+            transactions.removeChild(transactions.firstChild);
         }
 
-        if(state.homePage.newData === true){}
+        for(let i = 0; i < state.user.account.transactions.length; i++){
+            let transaction = document.createElement("transaction-comp");
+            transaction.setAttribute("date", state.user.account.transactions[i].date);
+            transaction.setAttribute("amount", state.user.account.transactions[i].amount);
+            transactions.appendChild(transaction);
+        }
+
+        state.homePage.newData = false;
     }
 }
 

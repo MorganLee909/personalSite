@@ -37,7 +37,7 @@ class User{
     */
     changeAccount(account){
         if(typeof(account) === "string"){
-            fetch(`/finance/account/${account}`)
+            return fetch(`/finance/account/${account}`)
                 .then(response => response.json())
                 .then((response)=>{
                     this._account = new Account(

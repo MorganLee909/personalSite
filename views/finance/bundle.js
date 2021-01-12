@@ -39,6 +39,10 @@ class Account{
         return this._categories;
     }
 
+    get transactions(){
+        return this._transactions;
+    }
+
     addTransaction(transaction){
         this._transactions.push(new Transaction(
             transaction._id,
@@ -86,6 +90,14 @@ class Transaction{
             ));
         }
     }
+
+    get date(){
+        return this._date;
+    }
+
+    get amount(){
+        return parseFloat((this._amount / 100).toFixed(2));
+    }
 }
 
 module.exports = Transaction;
@@ -129,7 +141,7 @@ class User{
     */
     changeAccount(account){
         if(typeof(account) === "string"){
-            fetch(`/finance/account/${account}`)
+            return fetch(`/finance/account/${account}`)
                 .then(response => response.json())
                 .then((response)=>{
                     this._account = new Account(
@@ -156,6 +168,37 @@ class User{
 
 module.exports = User;
 },{"./account.js":1}],5:[function(require,module,exports){
+class Transaction extends HTMLElement{
+    static get observedAttributes(){
+        return ["date", "amount"];
+    }
+
+    constructor(){
+        super();
+        this._shadow = this.attachShadow({mode: "open"});
+        
+        this._shadow.innerHTML = `
+            <p></p>
+            <p></p>
+        `;
+    }
+
+    attributeChangedCallback(name, oldValue, newValue){
+        switch(name){
+            case "date":
+                this._shadow.children[0].innerText = newValue;
+                break;
+            case "amount": 
+                this._shadow.children[1].innerText = newValue;
+                break;
+        }
+    }
+}
+
+customElements.define("transaction-comp", Transaction);
+},{}],6:[function(require,module,exports){
+require("./components/transaction.js");
+
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
@@ -195,7 +238,7 @@ state = {
 }
 
 homePage.display();
-},{"./pages/createAccount.js":6,"./pages/createTransaction.js":7,"./pages/home.js":8}],6:[function(require,module,exports){
+},{"./components/transaction.js":5,"./pages/createAccount.js":7,"./pages/createTransaction.js":8,"./pages/home.js":9}],7:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -232,7 +275,7 @@ const createAccount = {
 }
 
 module.exports = createAccount;
-},{"../classes/account":1}],7:[function(require,module,exports){
+},{"../classes/account":1}],8:[function(require,module,exports){
 let createTransaction = {
     display: function(){
         document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
@@ -303,7 +346,7 @@ let createTransaction = {
 }
 
 module.exports = createTransaction;
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -321,7 +364,7 @@ const homePage = {
                 body: JSON.stringify({from: from, to: new Date()})
             })
                 .then(response => response.json())
-                .then((response)=>{
+                .then(async (response)=>{
                     state.user = new User(
                         response._id,
                         response.accounts,
@@ -333,7 +376,9 @@ const homePage = {
                     if(response.accounts.length === 0){
                         controller.openPage("createAccountPage");
                     }else{
-                        state.user.changeAccount(state.user.accounts[0]);
+                        await state.user.changeAccount(state.user.accounts[0]);
+
+                        this.populateData();
                     }
                 })
                 .catch((err)=>{
@@ -342,11 +387,27 @@ const homePage = {
 
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
+        }else if(state.homePage.newData === true){
+            this.populateData();
+        }
+    },
+
+    populateData: function(){
+        let transactions = document.getElementById("transactions");
+        while(transactions.children.length > 0){
+            transactions.removeChild(transactions.firstChild);
         }
 
-        if(state.homePage.newData === true){}
+        for(let i = 0; i < state.user.account.transactions.length; i++){
+            let transaction = document.createElement("transaction-comp");
+            transaction.setAttribute("date", state.user.account.transactions[i].date);
+            transaction.setAttribute("amount", state.user.account.transactions[i].amount);
+            transactions.appendChild(transaction);
+        }
+
+        state.homePage.newData = false;
     }
 }
 
 module.exports = homePage;
-},{"../classes/user.js":4}]},{},[5]);
+},{"../classes/user.js":4}]},{},[6]);
