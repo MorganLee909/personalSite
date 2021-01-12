@@ -56,6 +56,10 @@ class Account{
 
         state.homePage.newData = true;
     }
+
+    sortTransactions(property){
+        this._transactions.sort((a, b) => (a[property] > b[property]) ? -1 : 1);
+    }
 }
 
 module.exports = Account;
@@ -95,8 +99,16 @@ class Transaction{
         return this._category;
     }
 
+    get amount(){
+        return parseFloat((this._amount / 100).toFixed(2));
+    }
+
     get location(){
         return this._location;
+    }
+
+    get date(){
+        return this._date;
     }
 
     dateString(){
@@ -376,6 +388,8 @@ const homePage = {
         while(transactions.children.length > 0){
             transactions.removeChild(transactions.firstChild);
         }
+
+        state.user.account.sortTransactions("date");
 
         for(let i = 0; i < state.user.account.transactions.length; i++){
             let tr = document.createElement("tr");

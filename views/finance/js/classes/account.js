@@ -55,6 +55,10 @@ class Account{
 
         state.homePage.newData = true;
     }
+
+    sortTransactions(property){
+        this._transactions.sort((a, b) => (a[property] > b[property]) ? -1 : 1);
+    }
 }
 
 module.exports = Account;

@@ -47,6 +47,8 @@ const homePage = {
             transactions.removeChild(transactions.firstChild);
         }
 
+        state.user.account.sortTransactions("date");
+
         for(let i = 0; i < state.user.account.transactions.length; i++){
             let tr = document.createElement("tr");
             tr.classList.add("transaction");

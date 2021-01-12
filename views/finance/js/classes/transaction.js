@@ -23,8 +23,16 @@ class Transaction{
         return this._category;
     }
 
+    get amount(){
+        return parseFloat((this._amount / 100).toFixed(2));
+    }
+
     get location(){
         return this._location;
+    }
+
+    get date(){
+        return this._date;
     }
 
     dateString(){
