@@ -194,6 +194,31 @@ class User{
 
 module.exports = User;
 },{"./account.js":1}],5:[function(require,module,exports){
+class BackButton extends HTMLElement{
+    constructor(){
+        super();
+        this._shadow = this.attachShadow({mode: "open"});
+
+        let button = document.createElement("button");
+        button.onclick = ()=>{controller.openPage("homePage")};
+        button.classList.add("backButton");
+
+        button.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 8 8 12 12 16"></polyline>
+                <line x1="16" y1="12" x2="8" y2="12"></line>
+            </svg>
+        `;
+
+        this._shadow.appendChild(button);
+    }
+}
+
+customElements.define("back-button", BackButton);
+},{}],6:[function(require,module,exports){
+require("./components/backButton.js");
+
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
@@ -233,7 +258,7 @@ state = {
 }
 
 homePage.display();
-},{"./pages/createAccount.js":6,"./pages/createTransaction.js":7,"./pages/home.js":8}],6:[function(require,module,exports){
+},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createTransaction.js":8,"./pages/home.js":9}],7:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -270,7 +295,7 @@ const createAccount = {
 }
 
 module.exports = createAccount;
-},{"../classes/account":1}],7:[function(require,module,exports){
+},{"../classes/account":1}],8:[function(require,module,exports){
 let createTransaction = {
     display: function(){
         document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
@@ -339,7 +364,7 @@ let createTransaction = {
 }
 
 module.exports = createTransaction;
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -419,4 +444,4 @@ const homePage = {
 }
 
 module.exports = homePage;
-},{"../classes/user.js":4}]},{},[5]);
+},{"../classes/user.js":4}]},{},[6]);
