@@ -1,6 +1,6 @@
 class Transaction extends HTMLElement{
     static get observedAttributes(){
-        return ["date", "amount"];
+        return ["date", "amount", "location"];
     }
 
     constructor(){
@@ -8,6 +8,7 @@ class Transaction extends HTMLElement{
         this._shadow = this.attachShadow({mode: "open"});
         
         this._shadow.innerHTML = `
+            <p></p>
             <p></p>
             <p></p>
         `;
@@ -21,6 +22,8 @@ class Transaction extends HTMLElement{
             case "amount": 
                 this._shadow.children[1].innerText = newValue;
                 break;
+            case "location":
+                this._shadow.children[2].innerText = newValue;
         }
     }
 }

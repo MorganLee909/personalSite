@@ -51,8 +51,9 @@ const homePage = {
 
         for(let i = 0; i < state.user.account.transactions.length; i++){
             let transaction = document.createElement("transaction-comp");
-            transaction.setAttribute("date", state.user.account.transactions[i].date);
-            transaction.setAttribute("amount", state.user.account.transactions[i].amount);
+            transaction.setAttribute("date", state.user.account.transactions[i].dateString());
+            transaction.setAttribute("amount", state.user.account.transactions[i].amountString());
+            transaction.setAttribute("location", state.user.account.transactions[i].location);
             transactions.appendChild(transaction);
         }
 

@@ -19,12 +19,22 @@ class Transaction{
         }
     }
 
-    get date(){
-        return this._date;
+    get location(){
+        return this._location;
     }
 
-    get amount(){
-        return parseFloat((this._amount / 100).toFixed(2));
+    dateString(){
+        const options = {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }
+
+        return this._date.toLocaleDateString("en-US", options);
+    }
+
+    amountString(){
+        return `$${(this._amount / 100).toFixed(2)}`;
     }
 }
 

@@ -91,12 +91,22 @@ class Transaction{
         }
     }
 
-    get date(){
-        return this._date;
+    get location(){
+        return this._location;
     }
 
-    get amount(){
-        return parseFloat((this._amount / 100).toFixed(2));
+    dateString(){
+        const options = {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }
+
+        return this._date.toLocaleDateString("en-US", options);
+    }
+
+    amountString(){
+        return `$${(this._amount / 100).toFixed(2)}`;
     }
 }
 
@@ -170,7 +180,7 @@ module.exports = User;
 },{"./account.js":1}],5:[function(require,module,exports){
 class Transaction extends HTMLElement{
     static get observedAttributes(){
-        return ["date", "amount"];
+        return ["date", "amount", "location"];
     }
 
     constructor(){
@@ -178,6 +188,7 @@ class Transaction extends HTMLElement{
         this._shadow = this.attachShadow({mode: "open"});
         
         this._shadow.innerHTML = `
+            <p></p>
             <p></p>
             <p></p>
         `;
@@ -191,6 +202,8 @@ class Transaction extends HTMLElement{
             case "amount": 
                 this._shadow.children[1].innerText = newValue;
                 break;
+            case "location":
+                this._shadow.children[2].innerText = newValue;
         }
     }
 }
@@ -400,8 +413,9 @@ const homePage = {
 
         for(let i = 0; i < state.user.account.transactions.length; i++){
             let transaction = document.createElement("transaction-comp");
-            transaction.setAttribute("date", state.user.account.transactions[i].date);
-            transaction.setAttribute("amount", state.user.account.transactions[i].amount);
+            transaction.setAttribute("date", state.user.account.transactions[i].dateString());
+            transaction.setAttribute("amount", state.user.account.transactions[i].amountString());
+            transaction.setAttribute("location", state.user.account.transactions[i].location);
             transactions.appendChild(transaction);
         }
 
