@@ -19,6 +19,10 @@ class User{
         }
     }
 
+    get account(){
+        return this._account;
+    }
+
     /*
     Adds an account to the users list of accounts
     id: String (id of the account to add)
@@ -33,10 +37,28 @@ class User{
     */
     changeAccount(account){
         if(typeof(account) === "string"){
-            //fetch
+            fetch(`/finance/account/${account}`)
+                .then(response => response.json())
+                .then((response)=>{
+                    this._account = new Account(
+                        response.account._id,
+                        response.account.name,
+                        response.account.bills,
+                        response.account.income,
+                        response.account.categories,
+                        response.transactions
+                    );
+
+                    state.homePage.newData = true;
+                })
+                .catch((err)=>{});
         }else{
             this._account = account;
         }
+    }
+
+    get accounts(){
+        return this._accounts;
     }
 }
 

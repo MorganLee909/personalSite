@@ -21,6 +21,36 @@ class Account{
             ));
         }
     }
+
+    get id(){
+        return this._id;
+    }
+
+    get bills(){
+        return this._bills;
+    }
+
+    get income(){
+        return this._income;
+    }
+
+    get categories(){
+        return this._categories;
+    }
+
+    addTransaction(transaction){
+        this._transactions.push(new Transaction(
+            transaction._id,
+            transaction.category,
+            transaction.amount,
+            transaction.location,
+            new Date(transaction.date),
+            transaction.note,
+            transaction.items
+        ));
+
+        state.homePage.newDate === true;
+    }
 }
 
 module.exports = Account;

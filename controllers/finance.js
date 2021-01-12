@@ -143,5 +143,88 @@ module.exports = {
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO CREATE NEW ACCOUNT");
             });
+    },
+
+    /*
+    POST: create a new transaction
+    req.body = {
+        account: String (id of associated account),
+        category: String,
+        amount: Number,
+        location: String,
+        date: Date,
+        note: String
+    }
+    */
+    createTransaction: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        User.findOne({_id: req.session.user})
+            .then((user)=>{
+                let exists = false;
+                for(let i = 0; i < user.accounts.length; i++){
+                    if(user.accounts[i].toString() === req.body.account){
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists === false){
+                    return res.redirect("/finance/dashboard");
+                }
+
+                let transaction = new Transaction({
+                    account: req.body.account,
+                    category: req.body.category,
+                    amount: req.body.amount,
+                    location: req.body.location,
+                    date: new Date(req.body.date),
+                    note: req.body.note
+                });
+
+                return transaction.save();
+            })
+            .then((transaction)=>{
+                return res.json(transaction);
+            })
+            .catch((err)=>{});
+    },
+
+    getAccount: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        let getAccount = {};
+        User.findOne({_id: req.session.user})
+            .then((user)=>{
+                let exists = false;
+                for(let i = 0; i < user.accounts.length; i++){
+                    if(user.accounts[i].toString() === req.params.id){
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists === false){
+                    return res.redirect("/finance/dashboard");
+                }
+
+                return Account.findOne({_id: req.params.id});
+            })
+            .then((account)=>{
+                getAccount = account;
+
+                return Transaction.find({account: account._id});
+            })
+            .then((transactions)=>{
+                return res.json({
+                    account: getAccount,
+                    transactions: transactions
+                });
+            })
+            .catch((err)=>{
+                return res.json("ERROR: UNABLE TO GET ACCOUNT DATA");
+            });
     }
 }

@@ -1,5 +1,6 @@
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
+const createTransactionPage = require("./pages/createTransaction.js");
 
 controller = {
     openPage: function(page){
@@ -18,6 +19,9 @@ controller = {
             case "createAccountPage":
                 createAccountPage.display();
                 break;
+            case "createTransactionPage":
+                createTransactionPage.display();
+                break;
         }
     }
 }
@@ -26,6 +30,9 @@ state = {
     user: null,
     homePage: {
         newData: true
+    },
+    createTransactionPage: {
+        newCategories: true
     }
 }
 

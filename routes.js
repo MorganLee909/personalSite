@@ -24,4 +24,6 @@ module.exports = function(app){
     app.get("/finance/dashboard", finance.dashboard);
     app.post("/finance/user", finance.getUser);
     app.post("/finance/account", finance.createAccount);
+    app.post("/finance/transaction", finance.createTransaction);
+    app.get("/finance/account/:id", finance.getAccount);
 }

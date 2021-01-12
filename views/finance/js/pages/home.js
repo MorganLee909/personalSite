@@ -15,7 +15,7 @@ const homePage = {
                 body: JSON.stringify({from: from, to: new Date()})
             })
                 .then(response => response.json())
-                .then((response)=>{                      
+                .then((response)=>{
                     state.user = new User(
                         response._id,
                         response.accounts,
@@ -26,11 +26,16 @@ const homePage = {
 
                     if(response.accounts.length === 0){
                         controller.openPage("createAccountPage");
+                    }else{
+                        state.user.changeAccount(state.user.accounts[0]);
                     }
                 })
-                .catch((err)=>{});
+                .catch((err)=>{
+                    console.log(err);
+                });
 
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
+            document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
         }
 
         if(state.homePage.newData === true){}

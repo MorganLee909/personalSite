@@ -22,6 +22,36 @@ class Account{
             ));
         }
     }
+
+    get id(){
+        return this._id;
+    }
+
+    get bills(){
+        return this._bills;
+    }
+
+    get income(){
+        return this._income;
+    }
+
+    get categories(){
+        return this._categories;
+    }
+
+    addTransaction(transaction){
+        this._transactions.push(new Transaction(
+            transaction._id,
+            transaction.category,
+            transaction.amount,
+            transaction.location,
+            new Date(transaction.date),
+            transaction.note,
+            transaction.items
+        ));
+
+        state.homePage.newDate === true;
+    }
 }
 
 module.exports = Account;
@@ -81,6 +111,10 @@ class User{
         }
     }
 
+    get account(){
+        return this._account;
+    }
+
     /*
     Adds an account to the users list of accounts
     id: String (id of the account to add)
@@ -95,10 +129,28 @@ class User{
     */
     changeAccount(account){
         if(typeof(account) === "string"){
-            //fetch
+            fetch(`/finance/account/${account}`)
+                .then(response => response.json())
+                .then((response)=>{
+                    this._account = new Account(
+                        response.account._id,
+                        response.account.name,
+                        response.account.bills,
+                        response.account.income,
+                        response.account.categories,
+                        response.transactions
+                    );
+
+                    state.homePage.newData = true;
+                })
+                .catch((err)=>{});
         }else{
             this._account = account;
         }
+    }
+
+    get accounts(){
+        return this._accounts;
     }
 }
 
@@ -106,6 +158,7 @@ module.exports = User;
 },{"./account.js":1}],5:[function(require,module,exports){
 const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
+const createTransactionPage = require("./pages/createTransaction.js");
 
 controller = {
     openPage: function(page){
@@ -124,6 +177,9 @@ controller = {
             case "createAccountPage":
                 createAccountPage.display();
                 break;
+            case "createTransactionPage":
+                createTransactionPage.display();
+                break;
         }
     }
 }
@@ -132,11 +188,14 @@ state = {
     user: null,
     homePage: {
         newData: true
+    },
+    createTransactionPage: {
+        newCategories: true
     }
 }
 
 homePage.display();
-},{"./pages/createAccount.js":6,"./pages/home.js":7}],6:[function(require,module,exports){
+},{"./pages/createAccount.js":6,"./pages/createTransaction.js":7,"./pages/home.js":8}],6:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -174,6 +233,77 @@ const createAccount = {
 
 module.exports = createAccount;
 },{"../classes/account":1}],7:[function(require,module,exports){
+let createTransaction = {
+    display: function(){
+        document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
+        document.getElementById("createTransactionAccount");
+
+        if(state.createTransactionPage.newCategories === true){
+            let selector = document.getElementById("createTransactionCategory");
+            while(selector.children.length > 0){
+                selector.removeChild(selector.firstChild);
+            }
+
+            for(let i = 0; i < state.user.account.bills.length; i++){
+                let option = document.createElement("option");
+                option.innerText = state.user.account.bills[i].name;
+                option.value = state.user.account.bills[i].name;
+                selector.appendChild(option);
+            }
+
+            for(let i = 0; i < state.user.account.income.length; i++){
+                let option = document.createElement("option");
+                option.innerText = state.user.account.income[i].name;
+                option.value = state.user.account.income[i].name;
+                selector.appendChild(option);
+            }
+
+            for(let i = 0; i < state.user.account.categories.length; i++){
+                let option = document.createElement("option");
+                option.innerText = state.user.account.categories[i];
+                option.value = state.user.account.categories[i];
+                selector.appendChild(option);
+            }
+
+            state.createTransactionPage.newCategories === false;
+        }
+    },
+
+    submit: function(){
+        event.preventDefault();
+
+        let data = {
+            account: state.user.account.id,
+            category: document.getElementById("createTransactionCategory").value,
+            amount: document.getElementById("createTransactionAmount").value,
+            location: document.getElementById("createTransactionLocation").value,
+            date: document.getElementById("createTransactionDate").valueAsDate,
+            note: document.getElementById("createTransactionNote").value
+        }
+
+        data.amount *= 100;
+
+        fetch("/finance/transaction", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then((response)=>{
+                state.user.account.addTransaction(response);
+
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{
+                console.log(err);
+            });
+    }
+}
+
+module.exports = createTransaction;
+},{}],8:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -191,7 +321,7 @@ const homePage = {
                 body: JSON.stringify({from: from, to: new Date()})
             })
                 .then(response => response.json())
-                .then((response)=>{                      
+                .then((response)=>{
                     state.user = new User(
                         response._id,
                         response.accounts,
@@ -202,11 +332,16 @@ const homePage = {
 
                     if(response.accounts.length === 0){
                         controller.openPage("createAccountPage");
+                    }else{
+                        state.user.changeAccount(state.user.accounts[0]);
                     }
                 })
-                .catch((err)=>{});
+                .catch((err)=>{
+                    console.log(err);
+                });
 
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
+            document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
         }
 
         if(state.homePage.newData === true){}
