@@ -113,5 +113,35 @@ module.exports = {
 
                 return res.json("ERROR: UNABLE TO GET USER");
             });
+    },
+
+    createAccount: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        let account = new Account({
+            name: req.body.name,
+            user: req.session.user,
+            bills: [],
+            income: [],
+            categories: ["discretionary"]
+        });
+
+        account.save()
+            .then((account)=>{
+                return User.findOne({_id: req.session.user});
+            })
+            .then((user)=>{
+                user.accounts.push(account);
+
+                return user.save();
+            })
+            .then((user)=>{
+                return res.json(account);
+            })
+            .catch((err)=>{
+                return res.json("ERROR: UNABLE TO CREATE NEW ACCOUNT");
+            });
     }
 }

@@ -1,4 +1,5 @@
 const homePage = require("./pages/home.js");
+const createAccountPage = require("./pages/createAccount.js");
 
 controller = {
     openPage: function(page){
@@ -14,12 +15,15 @@ controller = {
             case "homePage":
                 homePage.display();
                 break;
+            case "createAccountPage":
+                createAccountPage.display();
+                break;
         }
     }
 }
 
 state = {
-    user: undefined,
+    user: null,
     homePage: {
         newData: true
     }
