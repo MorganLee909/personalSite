@@ -27,6 +27,10 @@ class Transaction{
         return parseFloat((this._amount / 100).toFixed(2));
     }
 
+    amountString(){
+        return `$${(this._amount / 100).toFixed(2)}`;
+    }
+
     get location(){
         return this._location;
     }
@@ -35,18 +39,30 @@ class Transaction{
         return this._date;
     }
 
-    dateString(){
-        const options = {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
+    dateString(size){
+        let options = {};
+
+        if(size === "long"){
+            options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                weekday: "long"
+            }
+        }else if(size === "short"){
+            options = {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            }
         }
+        
 
         return this._date.toLocaleDateString("en-US", options);
     }
 
-    amountString(){
-        return `$${(this._amount / 100).toFixed(2)}`;
+    get note(){
+        return this._note;
     }
 }
 

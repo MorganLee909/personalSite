@@ -56,10 +56,11 @@ const homePage = {
 
         for(let i = 0; i < state.user.account.transactions.length; i++){
             let tr = document.createElement("tr");
+            tr.onclick = ()=>{controller.openPage("transactionPage", state.user.account.transactions[i])};
             tr.classList.add("transaction");
 
             let date = document.createElement("td");
-            date.innerText = state.user.account.transactions[i].dateString();
+            date.innerText = state.user.account.transactions[i].dateString("short");
             tr.appendChild(date);
 
             let category = document.createElement("td");

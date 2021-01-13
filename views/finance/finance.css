@@ -115,3 +115,24 @@ CREATE INCOME PAGE
     justify-content: center;
     align-items: center;
 }
+
+/*
+TRANSACTION PAGE
+*/
+#transactionPage{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+    #transactionPage label{
+        color: gray;
+        font-size: 12px;
+        text-align: center;
+        margin: 10px;
+    }
+
+    #transactionPage p{
+        font-size: 25px;
+        color: black;
+    }

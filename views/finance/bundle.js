@@ -174,6 +174,10 @@ class Transaction{
         return parseFloat((this._amount / 100).toFixed(2));
     }
 
+    amountString(){
+        return `$${(this._amount / 100).toFixed(2)}`;
+    }
+
     get location(){
         return this._location;
     }
@@ -182,18 +186,30 @@ class Transaction{
         return this._date;
     }
 
-    dateString(){
-        const options = {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
+    dateString(size){
+        let options = {};
+
+        if(size === "long"){
+            options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                weekday: "long"
+            }
+        }else if(size === "short"){
+            options = {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            }
         }
+        
 
         return this._date.toLocaleDateString("en-US", options);
     }
 
-    amountString(){
-        return `$${(this._amount / 100).toFixed(2)}`;
+    get note(){
+        return this._note;
     }
 }
 
@@ -296,9 +312,10 @@ const createTransactionPage = require("./pages/createTransaction.js");
 const createCategoryPage = require("./pages/createCategory.js");
 const createBillPage = require("./pages/createBill.js");
 const createIncomePage = require("./pages/createIncome.js");
+const transactionPage = require("./pages/transaction.js");
 
 controller = {
-    openPage: function(page){
+    openPage: function(page, data){
         let pages = document.querySelectorAll(".page");
 
         for(let i = 0; i < pages.length; i++){
@@ -326,6 +343,9 @@ controller = {
             case "createIncomePage":
                 createIncomePage.display();
                 break;
+            case "transactionPage":
+                transactionPage.display(data);
+                break;
         }
     }
 }
@@ -341,7 +361,7 @@ state = {
 }
 
 homePage.display();
-},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createBill.js":8,"./pages/createCategory.js":9,"./pages/createIncome.js":10,"./pages/createTransaction.js":11,"./pages/home.js":12}],7:[function(require,module,exports){
+},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createBill.js":8,"./pages/createCategory.js":9,"./pages/createIncome.js":10,"./pages/createTransaction.js":11,"./pages/home.js":12,"./pages/transaction.js":13}],7:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -616,10 +636,11 @@ const homePage = {
 
         for(let i = 0; i < state.user.account.transactions.length; i++){
             let tr = document.createElement("tr");
+            tr.onclick = ()=>{controller.openPage("transactionPage", state.user.account.transactions[i])};
             tr.classList.add("transaction");
 
             let date = document.createElement("td");
-            date.innerText = state.user.account.transactions[i].dateString();
+            date.innerText = state.user.account.transactions[i].dateString("short");
             tr.appendChild(date);
 
             let category = document.createElement("td");
@@ -649,4 +670,16 @@ const homePage = {
 }
 
 module.exports = homePage;
-},{"../classes/user.js":4}]},{},[6]);
+},{"../classes/user.js":4}],13:[function(require,module,exports){
+let transaction = {
+    display: function(transaction){
+        document.getElementById("transactionDate").innerText = transaction.dateString("long");
+        document.getElementById("transactionLocation").innerText = transaction.location;
+        document.getElementById("transactionCategory").innerText = transaction.category;
+        document.getElementById("transactionAmount").innerText = transaction.amountString();
+        document.getElementById("transactionNote").innerText = transaction.note;
+    }
+}
+
+module.exports = transaction;
+},{}]},{},[6]);

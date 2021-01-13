@@ -6,9 +6,10 @@ const createTransactionPage = require("./pages/createTransaction.js");
 const createCategoryPage = require("./pages/createCategory.js");
 const createBillPage = require("./pages/createBill.js");
 const createIncomePage = require("./pages/createIncome.js");
+const transactionPage = require("./pages/transaction.js");
 
 controller = {
-    openPage: function(page){
+    openPage: function(page, data){
         let pages = document.querySelectorAll(".page");
 
         for(let i = 0; i < pages.length; i++){
@@ -35,6 +36,9 @@ controller = {
                 break;
             case "createIncomePage":
                 createIncomePage.display();
+                break;
+            case "transactionPage":
+                transactionPage.display(data);
                 break;
         }
     }
