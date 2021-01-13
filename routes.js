@@ -12,10 +12,10 @@ module.exports = function(app){
     app.post("/jeopardy/question/create", home.createQuestion);
     app.post("/jeopardy/questions", home.getQuestions);
 
-    app.get("/corona/compare", home.coronaCompare);
-    app.get("/corona/us/*", home.coronaUS);
-    app.get("/corona/json", home.coronaData);
-    app.get("/corona*", home.corona);
+    // app.get("/corona/compare", home.coronaCompare);
+    // app.get("/corona/us/*", home.coronaUS);
+    // app.get("/corona/json", home.coronaData);
+    // app.get("/corona*", home.corona);
 
     //FINANCE
     app.get("/finance", finance.enter);

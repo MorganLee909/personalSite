@@ -7,7 +7,7 @@ const fs = require("fs");
 
 const app = express();
 
-mongoose.connect(process.env.PERSONAL_SITE, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.PERSONAL_DB, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.set("view engine", "ejs");
 
