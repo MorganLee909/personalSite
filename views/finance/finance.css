@@ -60,6 +60,16 @@ HOME PAGE
             margin: 5px;
         }
 
+    #homeContent{
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .horLabel{
+        display: flex;
+    }
+
 /*
 CREATE ACCOUNT PAGE
 */

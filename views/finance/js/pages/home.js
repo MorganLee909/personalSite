@@ -29,7 +29,8 @@ const homePage = {
                     }else{
                         await state.user.changeAccount(state.user.accounts[0]);
 
-                        this.populateData();
+                        this.populateTransactions();
+                        this.populateStats();
                     }
                 })
                 .catch((err)=>{});
@@ -40,11 +41,12 @@ const homePage = {
             document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};
             document.getElementById("createIncomeBtn").onclick = ()=>{controller.openPage("createIncomePage")};
         }else if(state.homePage.newData === true){
-            this.populateData();
+            this.populateTransactions();
+            this.populateStats();
         }
     },
 
-    populateData: function(){
+    populateTransactions: function(){
         let transactions = document.getElementById("transactionsBody");
         while(transactions.children.length > 0){
             transactions.removeChild(transactions.firstChild);
@@ -76,6 +78,13 @@ const homePage = {
         }
 
         state.homePage.newData = false;
+    },
+
+    populateStats: function(){
+        document.getElementById("totalDiscretionary").innerText = state.user.account.discretionary();
+        document.getElementById("remainingDiscretionary").innerText = state.user.account.remainingDiscretionary();
+        document.getElementById("totalIncome").innerText = state.user.account.incomeTotal();
+        document.getElementById("totalBills").innerText = state.user.account.billTotal();
     }
 }
 

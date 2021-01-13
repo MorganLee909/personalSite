@@ -83,6 +83,53 @@ class Account{
     sortTransactions(property){
         this._transactions.sort((a, b) => (a[property] > b[property]) ? -1 : 1);
     }
+
+    discretionary(){
+        let bills = 0;
+        let income = 0;
+
+        for(let i = 0; i < this._bills.length; i++){
+            bills += this._bills[i].amount;
+        }
+
+        for(let i = 0; i < this._income.length; i++){
+            income += this._income[i].amount;
+        }
+
+        return parseFloat(((income - bills) / 100).toFixed(2));
+    }
+
+    remainingDiscretionary(){
+        let discretionary = this.discretionary();
+
+        for(let i = 0; i < this._transactions.length; i++){
+            if(this._transactions[i].category === "Discretionary"){
+                discretionary -= this._transactions[i].amount;
+            }
+        }
+
+        return discretionary;
+    }
+
+    incomeTotal(){
+        let income = 0;
+
+        for(let i = 0; i < this._income.length; i++){
+            income += this._income[i].amount;
+        }
+
+        return parseFloat((income / 100).toFixed(2));
+    }
+
+    billTotal(){
+        let bills = 0;
+
+        for(let i = 0; i < this._bills.length; i++){
+            bills += this._bills[i].amount;
+        }
+
+        return parseFloat((bills / 100).toFixed(2));
+    }
 }
 
 module.exports = Account;

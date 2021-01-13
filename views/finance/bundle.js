@@ -84,6 +84,53 @@ class Account{
     sortTransactions(property){
         this._transactions.sort((a, b) => (a[property] > b[property]) ? -1 : 1);
     }
+
+    discretionary(){
+        let bills = 0;
+        let income = 0;
+
+        for(let i = 0; i < this._bills.length; i++){
+            bills += this._bills[i].amount;
+        }
+
+        for(let i = 0; i < this._income.length; i++){
+            income += this._income[i].amount;
+        }
+
+        return parseFloat(((income - bills) / 100).toFixed(2));
+    }
+
+    remainingDiscretionary(){
+        let discretionary = this.discretionary();
+
+        for(let i = 0; i < this._transactions.length; i++){
+            if(this._transactions[i].category === "Discretionary"){
+                discretionary -= this._transactions[i].amount;
+            }
+        }
+
+        return discretionary;
+    }
+
+    incomeTotal(){
+        let income = 0;
+
+        for(let i = 0; i < this._income.length; i++){
+            income += this._income[i].amount;
+        }
+
+        return parseFloat((income / 100).toFixed(2));
+    }
+
+    billTotal(){
+        let bills = 0;
+
+        for(let i = 0; i < this._bills.length; i++){
+            bills += this._bills[i].amount;
+        }
+
+        return parseFloat((bills / 100).toFixed(2));
+    }
 }
 
 module.exports = Account;
@@ -542,7 +589,8 @@ const homePage = {
                     }else{
                         await state.user.changeAccount(state.user.accounts[0]);
 
-                        this.populateData();
+                        this.populateTransactions();
+                        this.populateStats();
                     }
                 })
                 .catch((err)=>{});
@@ -553,11 +601,12 @@ const homePage = {
             document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};
             document.getElementById("createIncomeBtn").onclick = ()=>{controller.openPage("createIncomePage")};
         }else if(state.homePage.newData === true){
-            this.populateData();
+            this.populateTransactions();
+            this.populateStats();
         }
     },
 
-    populateData: function(){
+    populateTransactions: function(){
         let transactions = document.getElementById("transactionsBody");
         while(transactions.children.length > 0){
             transactions.removeChild(transactions.firstChild);
@@ -589,6 +638,13 @@ const homePage = {
         }
 
         state.homePage.newData = false;
+    },
+
+    populateStats: function(){
+        document.getElementById("totalDiscretionary").innerText = state.user.account.discretionary();
+        document.getElementById("remainingDiscretionary").innerText = state.user.account.remainingDiscretionary();
+        document.getElementById("totalIncome").innerText = state.user.account.incomeTotal();
+        document.getElementById("totalBills").innerText = state.user.account.billTotal();
     }
 }
 
