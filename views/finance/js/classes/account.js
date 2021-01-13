@@ -80,6 +80,17 @@ class Account{
         state.homePage.newData = true;
     }
 
+    removeTransaction(id){
+        for(let i = 0; i < this._transactions.length; i++){
+            if(this._transactions[i].id === id){
+                this._transactions.splice(i, 1);
+                break;
+            }
+        }
+
+        state.homePage.newData = true;
+    }
+
     sortTransactions(property){
         this._transactions.sort((a, b) => (a[property] > b[property]) ? -1 : 1);
     }

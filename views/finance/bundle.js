@@ -81,6 +81,17 @@ class Account{
         state.homePage.newData = true;
     }
 
+    removeTransaction(id){
+        for(let i = 0; i < this._transactions.length; i++){
+            if(this._transactions[i].id === id){
+                this._transactions.splice(i, 1);
+                break;
+            }
+        }
+
+        state.homePage.newData = true;
+    }
+
     sortTransactions(property){
         this._transactions.sort((a, b) => (a[property] > b[property]) ? -1 : 1);
     }
@@ -164,6 +175,10 @@ class Transaction{
                 items[i].amount
             ));
         }
+    }
+
+    get id(){
+        return this._id;
     }
 
     get category(){
@@ -678,6 +693,22 @@ let transaction = {
         document.getElementById("transactionCategory").innerText = transaction.category;
         document.getElementById("transactionAmount").innerText = transaction.amountString();
         document.getElementById("transactionNote").innerText = transaction.note;
+
+        document.getElementById("deleteTransaction").onclick = ()=>{this.delete(transaction)};
+    },
+
+    delete: function(transaction){
+        fetch(`/finance/transaction/${transaction.id}`, {method: "delete"})
+            .then(response => response.json())
+            .then((response)=>{
+                if(typeof(response) === "string"){
+                    throw response;
+                }
+
+                state.user.account.removeTransaction(transaction.id);
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{});
     }
 }
 

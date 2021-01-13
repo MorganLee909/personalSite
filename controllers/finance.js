@@ -125,7 +125,7 @@ module.exports = {
             user: req.session.user,
             bills: [],
             income: [],
-            categories: ["discretionary"]
+            categories: ["Discretionary"]
         });
 
         account.save()
@@ -331,6 +331,28 @@ module.exports = {
             })
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO SAVE NEW INCOME");
+            });
+    },
+
+    deleteTransaction: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        Transaction.findOne({_id: req.params.id})
+            .populate("account")
+            .then((transaction)=>{
+                if(transaction.account.user.toString() !== req.session.user){
+                    throw "YOU DO NOT HAVE PERMISSION TO DO THAT";
+                }
+
+                return Transaction.deleteOne({_id: req.params.id})
+            })
+            .then(()=>{
+                return res.json({});
+            })
+            .catch((err)=>{
+                return res.json("ERROR: UNABLE TO DELETE TRANSACTION");
             });
     }
 }

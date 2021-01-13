@@ -136,3 +136,9 @@ TRANSACTION PAGE
         font-size: 25px;
         color: black;
     }
+
+    #transactionPage button{
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
