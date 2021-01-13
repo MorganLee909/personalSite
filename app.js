@@ -11,11 +11,16 @@ mongoose.connect(process.env.PERSONAL_DB, {useNewUrlParser: true, useUnifiedTopo
 
 app.set("view engine", "ejs");
 
-const httpsServer = {};
+let httpsServer = {};
+let forceHttps = ()=>{};
 if(process.env.NODE_ENV === "production"){
-    app.get('*', (req, res) => {
-        res.redirect('https://' + req.headers.host + req.url);
-    });
+    forceHttps = (req, res, next)=>{
+        if(req.secure){
+            next();
+        }else{
+            res.redirect(`https://${req.headers.host}${req.url}`);
+        }
+    }
 
     httpsServer = https.createServer({
         key: fs.readFileSync("/etc/letsencrypt/live/www.leemorgan.io/privkey.pem", "utf8"),
@@ -29,6 +34,7 @@ app.use(session({
     saveUninitialized: true,
     resave: false
 }));
+app.use(forceHttps);
 app.use(express.static(__dirname + "/views"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -37,7 +43,7 @@ app.use(compression());
 require("./routes")(app);
 
 if(process.env.NODE_ENV === "production"){
-    httpsServer.listen(process.env.PORT, ()=>{});
-}else{
-    app.listen(process.env.PORT, ()=>{});
+    httpsServer.listen(process.env.HTTPS_PORT, ()=>{});
 }
+
+app.listen(process.env.PORT, ()=>{});
