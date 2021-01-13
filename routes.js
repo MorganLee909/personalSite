@@ -27,4 +27,5 @@ module.exports = function(app){
     app.post("/finance/transaction", finance.createTransaction);
     app.get("/finance/account/:id", finance.getAccount);
     app.post("/finance/category", finance.createCategory);
+    app.post("/finance/bill", finance.createBill);
 }

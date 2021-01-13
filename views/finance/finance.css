@@ -89,3 +89,11 @@ CREATE CATEGORY PAGE
     justify-content: space-around;
     align-items: center;
 }
+
+/*
+CREATE BILL PAGE
+*/
+#createBillPage{
+    justify-content: center;
+    align-items: center;
+}

@@ -31,6 +31,15 @@ class Account{
         return this._bills;
     }
 
+    addBill(name, amount){
+        this._bills.push({
+            name: name,
+            amount: amount
+        });
+
+        state.homePage.newData = true;
+    }
+
     get income(){
         return this._income;
     }
@@ -229,6 +238,7 @@ const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
 const createCategoryPage = require("./pages/createCategory.js");
+const createBillPage = require("./pages/createBill.js");
 
 controller = {
     openPage: function(page){
@@ -252,6 +262,10 @@ controller = {
                 break;
             case "createCategoryPage":
                 createCategoryPage.display();
+                break;
+            case "createBillPage":
+                createBillPage.display();
+                break;
         }
     }
 }
@@ -267,7 +281,7 @@ state = {
 }
 
 homePage.display();
-},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createCategory.js":8,"./pages/createTransaction.js":9,"./pages/home.js":10}],7:[function(require,module,exports){
+},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createBill.js":8,"./pages/createCategory.js":9,"./pages/createTransaction.js":10,"./pages/home.js":11}],7:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -305,6 +319,45 @@ const createAccount = {
 
 module.exports = createAccount;
 },{"../classes/account":1}],8:[function(require,module,exports){
+let createBill = {
+    display: function(){
+        document.getElementById("createBillForm").onsubmit = ()=>{this.submit()};
+    },
+
+    submit: function(){
+        event.preventDefault();
+
+        let data = {
+            account: state.user.account.id,
+            name: document.getElementById("createBillName").value,
+            amount: document.getElementById("createBillAmount").value
+        }
+
+        data.amount = parseInt(data.amount * 100);
+
+        fetch("/finance/bill", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then((response)=>{
+                if(typeof(response) === "string"){
+                    throw response;
+                }
+
+                state.user.account.addBill(data.name, data.amount);
+
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{});
+    }
+}
+
+module.exports = createBill;
+},{}],9:[function(require,module,exports){
 let createCategory = {
     display: function(){
         document.getElementById("createCategoryForm").onsubmit = ()=>{this.submit()};
@@ -336,7 +389,7 @@ let createCategory = {
 }
 
 module.exports = createCategory;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 let createTransaction = {
     display: function(){
         document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
@@ -405,7 +458,7 @@ let createTransaction = {
 }
 
 module.exports = createTransaction;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -445,7 +498,7 @@ const homePage = {
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
             document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
-        }else if(state.homePage.newData === true){
+            document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};        }else if(state.homePage.newData === true){
             this.populateData();
         }
     },

@@ -4,6 +4,7 @@ const homePage = require("./pages/home.js");
 const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
 const createCategoryPage = require("./pages/createCategory.js");
+const createBillPage = require("./pages/createBill.js");
 
 controller = {
     openPage: function(page){
@@ -27,6 +28,10 @@ controller = {
                 break;
             case "createCategoryPage":
                 createCategoryPage.display();
+                break;
+            case "createBillPage":
+                createBillPage.display();
+                break;
         }
     }
 }

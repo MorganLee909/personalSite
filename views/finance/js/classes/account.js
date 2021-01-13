@@ -30,6 +30,15 @@ class Account{
         return this._bills;
     }
 
+    addBill(name, amount){
+        this._bills.push({
+            name: name,
+            amount: amount
+        });
+
+        state.homePage.newData = true;
+    }
+
     get income(){
         return this._income;
     }

@@ -260,5 +260,41 @@ module.exports = {
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO CREATE NEW CATEGORY");
             });
+    },
+
+    createBill: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        User.findOne({_id: req.session.user})
+            .then((user)=>{
+                let exists = false;
+                for(let i = 0; i < user.accounts.length; i++){
+                    if(user.accounts[i].toString() === req.body.account){
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists === false){
+                    return res.redirect("/finance/dashboard");
+                }
+
+                return Account.findOne({_id: req.body.account});
+            })
+            .then((account)=>{
+                account.bills.push({
+                    name: req.body.name,
+                    amount: req.body.amount
+                });
+
+                return account.save();
+            })
+            .then((account)=>{
+                return res.json({});
+            })
+            .catch((err)=>{
+                return res.json("ERROR: UNABLE TO SAVE NEW BILL");
+            });
     }
 }
