@@ -44,6 +44,15 @@ class Account{
         return this._income;
     }
 
+    addIncome(name, amount){
+        this._income.push({
+            name: name,
+            amount: amount
+        });
+
+        state.homePage.newData = true;
+    }
+
     get categories(){
         return this._categories;
     }
@@ -239,6 +248,7 @@ const createAccountPage = require("./pages/createAccount.js");
 const createTransactionPage = require("./pages/createTransaction.js");
 const createCategoryPage = require("./pages/createCategory.js");
 const createBillPage = require("./pages/createBill.js");
+const createIncomePage = require("./pages/createIncome.js");
 
 controller = {
     openPage: function(page){
@@ -266,6 +276,9 @@ controller = {
             case "createBillPage":
                 createBillPage.display();
                 break;
+            case "createIncomePage":
+                createIncomePage.display();
+                break;
         }
     }
 }
@@ -281,7 +294,7 @@ state = {
 }
 
 homePage.display();
-},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createBill.js":8,"./pages/createCategory.js":9,"./pages/createTransaction.js":10,"./pages/home.js":11}],7:[function(require,module,exports){
+},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createBill.js":8,"./pages/createCategory.js":9,"./pages/createIncome.js":10,"./pages/createTransaction.js":11,"./pages/home.js":12}],7:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -390,6 +403,45 @@ let createCategory = {
 
 module.exports = createCategory;
 },{}],10:[function(require,module,exports){
+let createIncome = {
+    display: function(){
+        document.getElementById("createIncomeForm").onsubmit = ()=>{this.submit()};
+    },
+
+    submit: function(){
+        event.preventDefault();
+
+        let data = {
+            account: state.user.account.id,
+            name: document.getElementById("createIncomeName").value,
+            amount: document.getElementById("createIncomeAmount").value
+        }
+
+        data.amount = parseInt(data.amount * 100);
+
+        fetch("/finance/income", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then((response)=>{
+                if(typeof(response) === "string"){
+                    throw response;
+                }
+
+                state.user.account.addIncome(data.name, data.amount);
+
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{});
+    }
+}
+
+module.exports = createIncome;
+},{}],11:[function(require,module,exports){
 let createTransaction = {
     display: function(){
         document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
@@ -458,7 +510,7 @@ let createTransaction = {
 }
 
 module.exports = createTransaction;
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -498,7 +550,9 @@ const homePage = {
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
             document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
-            document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};        }else if(state.homePage.newData === true){
+            document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};
+            document.getElementById("createIncomeBtn").onclick = ()=>{controller.openPage("createIncomePage")};
+        }else if(state.homePage.newData === true){
             this.populateData();
         }
     },

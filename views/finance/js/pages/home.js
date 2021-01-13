@@ -37,7 +37,9 @@ const homePage = {
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
             document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
-            document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};        }else if(state.homePage.newData === true){
+            document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};
+            document.getElementById("createIncomeBtn").onclick = ()=>{controller.openPage("createIncomePage")};
+        }else if(state.homePage.newData === true){
             this.populateData();
         }
     },

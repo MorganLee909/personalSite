@@ -97,3 +97,11 @@ CREATE BILL PAGE
     justify-content: center;
     align-items: center;
 }
+
+/*
+CREATE INCOME PAGE
+*/
+#createIncomePage{
+    justify-content: center;
+    align-items: center;
+}

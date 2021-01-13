@@ -171,7 +171,7 @@ module.exports = {
                     }
                 }
                 if(exists === false){
-                    return res.redirect("/finance/dashboard");
+                    throw exists;
                 }
 
                 let transaction = new Transaction({
@@ -207,7 +207,7 @@ module.exports = {
                     }
                 }
                 if(exists === false){
-                    return res.redirect("/finance/dashboard");
+                    throw exists;
                 }
 
                 return Account.findOne({_id: req.params.id});
@@ -243,7 +243,7 @@ module.exports = {
                     }
                 }
                 if(exists === false){
-                    return res.redirect("/finance/dashboard");
+                    throw exists;
                 }
 
 
@@ -277,7 +277,7 @@ module.exports = {
                     }
                 }
                 if(exists === false){
-                    return res.redirect("/finance/dashboard");
+                    throw exists;
                 }
 
                 return Account.findOne({_id: req.body.account});
@@ -295,6 +295,42 @@ module.exports = {
             })
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO SAVE NEW BILL");
+            });
+    },
+
+    createIncome: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        User.findOne({_id: req.session.user})
+            .then((user)=>{
+                let exists = false;
+                for(let i = 0; i < user.accounts.length; i++){
+                    if(user.accounts[i].toString() === req.body.account){
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists === false){
+                    throw exists;
+                }
+
+                return Account.findOne({_id: req.body.account});
+            })
+            .then((account)=>{
+                account.income.push({
+                    name: req.body.name,
+                    amount: req.body.amount
+                });
+
+                return account.save();
+            })
+            .then((account)=>{
+                return res.json({});
+            })
+            .catch((err)=>{
+                return res.json("ERROR: UNABLE TO SAVE NEW INCOME");
             });
     }
 }

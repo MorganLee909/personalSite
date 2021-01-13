@@ -43,6 +43,15 @@ class Account{
         return this._income;
     }
 
+    addIncome(name, amount){
+        this._income.push({
+            name: name,
+            amount: amount
+        });
+
+        state.homePage.newData = true;
+    }
+
     get categories(){
         return this._categories;
     }
