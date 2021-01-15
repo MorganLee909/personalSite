@@ -30,4 +30,5 @@ module.exports = function(app){
     app.post("/finance/bill", finance.createBill);
     app.post("/finance/income", finance.createIncome);
     app.delete("/finance/transaction/:id", finance.deleteTransaction);
+    app.delete("/finance/category/:account/:name/:type", finance.deleteCategory);
 }

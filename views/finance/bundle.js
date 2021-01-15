@@ -89,6 +89,32 @@ class Account{
         return this._transactions;
     }
 
+    removeCategory(name, type){
+        switch(type){
+            case "category":
+                this._categories.splice(this._categories.indexOf(name), 1);
+                break;
+            case "income":
+                for(let i = 0; i < this._income.length; i++){
+                    if(name === this._income[i].name){
+                        this._income.splice(i, 1);
+                        break;
+                    }
+                }
+                break;
+            case "bills":
+                for(let i = 0; i < this._bills.length; i++){
+                    if(name === this._bills[i].name){
+                        this._bills.splice(i, 1);
+                        break;
+                    }
+                }
+                break;
+        }
+
+        state.homePage.newData = true;
+    }
+
     addTransaction(transaction){
         this._transactions.push(new Transaction(
             transaction._id,
@@ -756,7 +782,7 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
-            remove.onclick = ()=>{this.removeCategory(state.user.account.income[i])};
+            remove.onclick = ()=>{this.removeCategory(state.user.account.income[i], "income")};
             tr.appendChild(remove);
         }
     },
@@ -803,13 +829,21 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
-            remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i])};
+            remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i], "bills")};
             tr.appendChild(remove);
         }
     },
 
-    removeCategory: function(thing){
-        console.log(thing.name);
+    removeCategory: function(thing, type){
+        fetch(`/finance/category/${state.user.account.id}/${thing.name}/${type}`, {
+            method: "delete"
+        })
+            .then(response => response.json())
+            .then((response)=>{
+                state.user.account.removeCategory(thing.name, type);
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{});
     }
 }
 

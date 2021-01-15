@@ -89,11 +89,11 @@ HOME PAGE
                 text-align: center;
             }
 
-            #incomeBody tr td:nth-child(4n){
+            .subTd:nth-child(4n){
                 cursor: pointer;
             }
             
-                #incomeBody tr td:nth-child(4n):hover{
+                .subTd:nth-child(4n):hover{
                     box-shadow: 0 0 5px gray;
                 }
 

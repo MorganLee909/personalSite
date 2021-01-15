@@ -354,5 +354,46 @@ module.exports = {
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO DELETE TRANSACTION");
             });
+    },
+
+    deleteCategory: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        Account.findOne({_id: req.params.account})
+            .then((account)=>{
+                if(account.user.toString() !== req.session.user){
+                    throw "YOU DO NOT HAVE PERMISSION TO DO THAT";
+                }
+
+                switch(req.params.type){
+                    case "category":
+                        account.categories.splice(account.categories.indexOf(req.params.name));
+                        break;
+                    case "income":
+                        for(let i = 0; i < account.income.length; i++){
+                            if(account.income[i].name === req.params.name){
+                                account.income.splice(i, 1);
+                                break;
+                            }
+                        }
+                        break;
+                    case "bills":
+                        for(let i = 0; i < account.bills.length; i++){
+                            if(account.bills[i].name === req.params.name){
+                                account.bills.splice(i, 1);
+                                break;
+                            }
+                        }
+                        break;
+                }
+
+                return account.save();
+            })
+            .then((account)=>{
+                return res.json({});
+            })
+            .catch((err)=>{console.log(err)});
     }
 }

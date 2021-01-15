@@ -139,7 +139,7 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
-            remove.onclick = ()=>{this.removeCategory(state.user.account.income[i])};
+            remove.onclick = ()=>{this.removeCategory(state.user.account.income[i], "income")};
             tr.appendChild(remove);
         }
     },
@@ -186,13 +186,21 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
-            remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i])};
+            remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i], "bills")};
             tr.appendChild(remove);
         }
     },
 
-    removeCategory: function(thing){
-        console.log(thing.name);
+    removeCategory: function(thing, type){
+        fetch(`/finance/category/${state.user.account.id}/${thing.name}/${type}`, {
+            method: "delete"
+        })
+            .then(response => response.json())
+            .then((response)=>{
+                state.user.account.removeCategory(thing.name, type);
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{});
     }
 }
 
