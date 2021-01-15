@@ -1,4 +1,6 @@
 <div id="homePage" class="page">
+    <h1 id="title"></h1>
+
     <div class="homeButtons">
         <button id="createAccountBtn">Create Account</button>
 
@@ -12,7 +14,9 @@
     </div>
 
     <div id="homeContent">
-        <div>
+        <div id="incomeAndBills">
+            <h2>Income</h2>
+            
             <table id="incomeTable">
                 <thead>
                     <tr>
@@ -26,17 +30,21 @@
             </table>
         </div>
         
-        <table id="transactions">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Location</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody id="transactionsBody"></tbody>
-        </table>
+        <div id="transactions">
+            <h2>Transactions</h2>
+            
+            <table id="transactions">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsBody"></tbody>
+            </table>
+        </div>
 
         <div>
             <label class="horLabel">Total Discretionary: $

@@ -26,6 +26,10 @@ class Account{
         return this._id;
     }
 
+    get name(){
+        return this._name;
+    }
+
     get bills(){
         return this._bills;
     }

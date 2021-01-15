@@ -27,6 +27,10 @@ class Account{
         return this._id;
     }
 
+    get name(){
+        return this._name;
+    }
+
     get bills(){
         return this._bills;
     }
@@ -687,6 +691,7 @@ const homePage = {
         document.getElementById("remainingDiscretionary").innerText = state.user.account.remainingDiscretionary();
         document.getElementById("totalIncome").innerText = state.user.account.incomeTotal();
         document.getElementById("totalBills").innerText = state.user.account.billTotal();
+        document.getElementById("title").innerText = `${state.user.account.name} Account`;
     },
 
     populateIncome: function(){
@@ -695,10 +700,10 @@ const homePage = {
 
         for(let i = 0; i < state.user.account.income.length; i++){
             //Check if already paid first
-            let isPaid = "no";
+            let isPaid = "No";
             for(let j = 0; j < state.user.account.transactions.length; j++){
                 if(state.user.account.transactions[j].category === state.user.account.income[i].name){
-                    isPaid = "yes";
+                    isPaid = "Yes";
                 }
             }
 
