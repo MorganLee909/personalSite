@@ -26,6 +26,8 @@ if(process.env.NODE_ENV === "production"){
         key: fs.readFileSync("/etc/letsencrypt/live/www.leemorgan.io/privkey.pem", "utf8"),
         cert: fs.readFileSync("/etc/letsencrypt/live/www.leemorgan.io/fullchain.pem", "utf8")
     }, app);
+
+    app.use(forceHttps);
 }
 
 app.use(session({
@@ -34,7 +36,7 @@ app.use(session({
     saveUninitialized: true,
     resave: false
 }));
-app.use(forceHttps);
+
 app.use(express.static(__dirname + "/views"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
