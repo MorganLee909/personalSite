@@ -1,28 +1,66 @@
 <div id="homePage" class="page">
+    <h1 id="title"></h1>
+
     <div class="homeButtons">
-        <button id="createAccountBtn">Create Account</button>
+        <button id="createAccountBtn">Create New Bank Account</button>
 
-        <button id="createTransactionBtn">Create Transaction</button>
+        <button id="createTransactionBtn">New Transaction</button>
 
-        <button id="createCategoryBtn">Create Category</button>
+        <button id="createCategoryBtn">Add a Category</button>
 
-        <button id="createBillBtn">Create Bill</button>
+        <button id="createBillBtn">Add a Bill</button>
 
-        <button id="createIncomeBtn">Create Income</button>
+        <button id="createIncomeBtn">Add an Income Source</button>
+
+        <select id="accountSelector"></select>
     </div>
 
     <div id="homeContent">
-        <table id="transactions">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Location</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody id="transactionsBody"></tbody>
-        </table>
+        <div id="incomeAndBills">
+            <h2>Income</h2>
+
+            <table id="incomeTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Recieved?</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody id="incomeBody"></tbody>
+            </table>
+
+            <h2>Bills</h2>
+
+            <table id="billTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Paid?</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody id="billsBody"></tbody>
+            </table>
+        </div>
+        
+        <div id="transactions">
+            <h2>Transactions</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsBody"></tbody>
+            </table>
+        </div>
 
         <div>
             <label class="horLabel">Total Discretionary: $

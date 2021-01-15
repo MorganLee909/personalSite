@@ -14,23 +14,14 @@ form{
         margin: 5px 0;
     }
 
-td{
-    border: 1px solid black;
-    padding: 5px;
-    width: 175px;
+/* Tables */
+th{
+    border-bottom: 1px solid black;
 }
 
-tbody tr{
-    cursor: pointer;
+tbody tr:nth-child(even){
+    background: lightgray;
 }
-
-    tbody tr:nth-child(even){
-        background: lightgray;
-    }
-
-    tbody tr:hover{
-        background: gray;
-    }
 
 back-button{
     position: fixed;
@@ -54,7 +45,6 @@ HOME PAGE
 
     .homeButtons{
         display: flex;
-        margin-bottom: 25px;
     }
         .homeButtons > *{
             margin: 5px;
@@ -65,6 +55,47 @@ HOME PAGE
         justify-content: space-around;
         width: 100%;
     }
+
+        #transactions{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .transaction{
+                cursor: pointer;
+            }
+
+                .transaction:hover{
+                    background: gray;
+                }
+
+            .mainTd{
+                padding: 5px;
+                width: 175px;
+            }
+
+        
+
+        #incomeAndBills{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .subTd{
+                /* padding: 5px; */
+                width: 50px;
+                text-align: center;
+            }
+
+            .subTd:nth-child(4n){
+                cursor: pointer;
+            }
+            
+                .subTd:nth-child(4n):hover{
+                    box-shadow: 0 0 5px gray;
+                }
 
     .horLabel{
         display: flex;

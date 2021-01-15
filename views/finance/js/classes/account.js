@@ -26,8 +26,21 @@ class Account{
         return this._id;
     }
 
+    get name(){
+        return this._name;
+    }
+
     get bills(){
-        return this._bills;
+        let data = [];
+
+        for(let i = 0; i < this._bills.length; i++){
+            data.push({
+                name: this._bills[i].name,
+                amount: parseFloat((this._bills[i].amount / 100).toFixed(2))
+            });
+        }
+
+        return data;
     }
 
     addBill(name, amount){
@@ -40,7 +53,16 @@ class Account{
     }
 
     get income(){
-        return this._income;
+        let data = [];
+
+        for(let i = 0; i < this._income.length; i++){
+            data.push({
+                name: this._income[i].name,
+                amount: parseFloat((this._income[i].amount / 100).toFixed(2))
+            });
+        }
+
+        return data;
     }
 
     addIncome(name, amount){
@@ -64,6 +86,32 @@ class Account{
 
     get transactions(){
         return this._transactions;
+    }
+
+    removeCategory(name, type){
+        switch(type){
+            case "category":
+                this._categories.splice(this._categories.indexOf(name), 1);
+                break;
+            case "income":
+                for(let i = 0; i < this._income.length; i++){
+                    if(name === this._income[i].name){
+                        this._income.splice(i, 1);
+                        break;
+                    }
+                }
+                break;
+            case "bills":
+                for(let i = 0; i < this._bills.length; i++){
+                    if(name === this._bills[i].name){
+                        this._bills.splice(i, 1);
+                        break;
+                    }
+                }
+                break;
+        }
+
+        state.homePage.newData = true;
     }
 
     addTransaction(transaction){
