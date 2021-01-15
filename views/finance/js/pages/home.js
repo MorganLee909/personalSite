@@ -172,6 +172,7 @@ const homePage = {
 
     populateBills: function(){
         let tbody = document.getElementById("billsBody");
+        
 
         while(tbody.children.length > 0){
             tbody.removeChild(tbody.firstChild);
@@ -180,7 +181,7 @@ const homePage = {
         for(let i = 0; i < state.user.account.bills.length; i++){
             //Check if already paid first
             let isPaid = "No";
-            for(let j = 0; j < state.user.account.bills.length; j++){
+            for(let j = 0; j < state.user.account.transactions.length; j++){
                 if(state.user.account.transactions[j].category === state.user.account.bills[i].name){
                     isPaid = "Yes";
                 }
