@@ -81,23 +81,37 @@ module.exports = {
             email: 0,
             password: 0
         })
+            .populate("accounts")
             .then((user)=>{
-                responseUser = user;
-
                 if(user.accounts.length === 0){
                     throw "no account";
                 }
-                
-                return Account.findOne({_id: user.accounts[0]}, {user: 0});
-            })
-            .then((account)=>{
-                responseUser.account = account;
 
+                responseUser = {
+                    _id: user._id,
+                    accounts: [],
+                    account: {
+                        _id: user.accounts[0]._id,
+                        name: user.accounts[0].name,
+                        bills: user.accounts[0].bills,
+                        income: user.accounts[0].income,
+                        categories: user.accounts[0].categories,
+                        transactions: []
+                    }
+                }
+
+                for(let i = 0; i < user.accounts.length; i++){
+                    responseUser.accounts.push({
+                        id: user.accounts[i]._id,
+                        name: user.accounts[i].name
+                    });
+                }
+                
                 const from = new Date(req.body.from);
                 const to = new Date(req.body.to);
 
                 return Transaction.find({
-                    account: account._id,
+                    account: user.accounts[0]._id,
                     date: {$gte: from, $lt: to}
                 });
             })
@@ -394,6 +408,6 @@ module.exports = {
             .then((account)=>{
                 return res.json({});
             })
-            .catch((err)=>{console.log(err)});
+            .catch((err)=>{});
     }
 }

@@ -50,6 +50,7 @@ class User{
                     );
 
                     state.homePage.newData = true;
+                    controller.openPage("homePage");
                 })
                 .catch((err)=>{});
         }else{

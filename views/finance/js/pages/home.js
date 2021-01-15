@@ -27,8 +27,6 @@ const homePage = {
                     if(response.accounts.length === 0){
                         controller.openPage("createAccountPage");
                     }else{
-                        await state.user.changeAccount(state.user.accounts[0]);
-
                         this.populateTransactions();
                         this.populateStats();
                         this.populateIncome();
@@ -95,6 +93,34 @@ const homePage = {
         document.getElementById("totalIncome").innerText = state.user.account.incomeTotal();
         document.getElementById("totalBills").innerText = state.user.account.billTotal();
         document.getElementById("title").innerText = `${state.user.account.name} Account`;
+
+        //add accounts to selector
+        let selector = document.getElementById("accountSelector");
+        selector.onchange = ()=>{state.user.changeAccount(selector.value)};
+
+        if(state.user.accounts.length <= 1){
+            selector.style.display = "none";
+        }else{
+            while(selector.children.length > 0){
+                selector.removeChild(selector.firstChild);
+            }
+
+            let option = document.createElement("option");
+            option.innerText = "Accounts";
+            option.selected = true;
+            option.disabled = true;
+            selector.appendChild(option);
+
+            for(let i = 0; i < state.user.accounts.length; i++){
+                if(state.user.accounts[i].id !== state.user.account.id){
+                    let option = document.createElement("option");
+                    option.innerText = state.user.accounts[i].name;
+                    option.value = state.user.accounts[i].id;
+    
+                    selector.appendChild(option);
+                }
+            }
+        }
     },
 
     populateIncome: function(){
