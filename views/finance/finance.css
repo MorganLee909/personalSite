@@ -14,23 +14,14 @@ form{
         margin: 5px 0;
     }
 
-td{
-    border: 1px solid black;
-    padding: 5px;
-    width: 175px;
+/* Tables */
+th{
+    border-bottom: 1px solid black;
 }
 
-tbody tr{
-    cursor: pointer;
+tbody tr:nth-child(even){
+    background: lightgray;
 }
-
-    tbody tr:nth-child(even){
-        background: lightgray;
-    }
-
-    tbody tr:hover{
-        background: gray;
-    }
 
 back-button{
     position: fixed;
@@ -65,6 +56,25 @@ HOME PAGE
         justify-content: space-around;
         width: 100%;
     }
+
+        .transaction{
+            cursor: pointer;
+        }
+
+            .transaction:hover{
+                background: gray;
+            }
+
+        .mainTd{
+            padding: 5px;
+            width: 175px;
+        }
+
+        .subTd{
+            padding: 5px;
+            width: 50px;
+            text-align: center;
+        }
 
     .horLabel{
         display: flex;

@@ -31,6 +31,7 @@ const homePage = {
 
                         this.populateTransactions();
                         this.populateStats();
+                        this.populateIncome();
                     }
                 })
                 .catch((err)=>{});
@@ -43,6 +44,7 @@ const homePage = {
         }else if(state.homePage.newData === true){
             this.populateTransactions();
             this.populateStats();
+            this.populateIncome();
         }
     },
 
@@ -61,18 +63,22 @@ const homePage = {
 
             let date = document.createElement("td");
             date.innerText = state.user.account.transactions[i].dateString("short");
+            date.classList.add("mainTd");
             tr.appendChild(date);
 
             let category = document.createElement("td");
             category.innerText = state.user.account.transactions[i].category;
+            category.classList.add("mainTd");
             tr.appendChild(category);
 
             let location = document.createElement("td");
             location.innerText = state.user.account.transactions[i].location;
+            location.classList.add("mainTd");
             tr.appendChild(location);
 
             let amount = document.createElement("td");
             amount.innerText = state.user.account.transactions[i].amountString();
+            amount.classList.add("mainTd");
             tr.appendChild(amount);
 
             transactions.appendChild(tr);
@@ -86,6 +92,54 @@ const homePage = {
         document.getElementById("remainingDiscretionary").innerText = state.user.account.remainingDiscretionary();
         document.getElementById("totalIncome").innerText = state.user.account.incomeTotal();
         document.getElementById("totalBills").innerText = state.user.account.billTotal();
+    },
+
+    populateIncome: function(){
+        let tbody = document.getElementById("incomeBody");
+        console.log("things");
+
+        for(let i = 0; i < state.user.account.income.length; i++){
+            //Check if already paid first
+            let isPaid = "no";
+            for(let j = 0; j < state.user.account.transactions.length; j++){
+                if(state.user.account.transactions[j].category === state.user.account.income[i].name){
+                    isPaid = "yes";
+                }
+            }
+
+            let tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            let name = document.createElement("td");
+            name.innerText = state.user.account.income[i].name;
+            name.classList.add("subTd");
+            tr.appendChild(name);
+
+            let amount = document.createElement("td");
+            amount.innerText = state.user.account.income[i].amount;
+            amount.classList.add("subTd");
+            tr.appendChild(amount);
+
+            let paid = document.createElement("td");
+            paid.innerText = isPaid;
+            paid.classList.add("subTd");
+            tr.appendChild(paid);
+
+            let remove = document.createElement("td");
+            remove.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            `;
+            remove.classList.add("subTd");
+            remove.onclick = ()=>{this.removeCategory(state.user.account.income[i])};
+            tr.appendChild(remove);
+        }
+    },
+
+    removeCategory: function(thing){
+        console.log(thing.name);
     }
 }
 
