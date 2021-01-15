@@ -31,7 +31,16 @@ class Account{
     }
 
     get bills(){
-        return this._bills;
+        let data = [];
+
+        for(let i = 0; i < this._bills.length; i++){
+            data.push({
+                name: this._bills[i].name,
+                amount: parseFloat((this._bills[i].amount / 100).toFixed(2))
+            });
+        }
+
+        return data;
     }
 
     addBill(name, amount){
@@ -44,7 +53,16 @@ class Account{
     }
 
     get income(){
-        return this._income;
+        let data = [];
+
+        for(let i = 0; i < this._income.length; i++){
+            data.push({
+                name: this._income[i].name,
+                amount: parseFloat((this._income[i].amount / 100).toFixed(2))
+            });
+        }
+
+        return data;
     }
 
     addIncome(name, amount){

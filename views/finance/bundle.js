@@ -32,7 +32,16 @@ class Account{
     }
 
     get bills(){
-        return this._bills;
+        let data = [];
+
+        for(let i = 0; i < this._bills.length; i++){
+            data.push({
+                name: this._bills[i].name,
+                amount: parseFloat((this._bills[i].amount / 100).toFixed(2))
+            });
+        }
+
+        return data;
     }
 
     addBill(name, amount){
@@ -45,7 +54,16 @@ class Account{
     }
 
     get income(){
-        return this._income;
+        let data = [];
+
+        for(let i = 0; i < this._income.length; i++){
+            data.push({
+                name: this._income[i].name,
+                amount: parseFloat((this._income[i].amount / 100).toFixed(2))
+            });
+        }
+
+        return data;
     }
 
     addIncome(name, amount){
@@ -631,6 +649,7 @@ const homePage = {
                         this.populateTransactions();
                         this.populateStats();
                         this.populateIncome();
+                        this.populateBills();
                     }
                 })
                 .catch((err)=>{});
@@ -644,6 +663,7 @@ const homePage = {
             this.populateTransactions();
             this.populateStats();
             this.populateIncome();
+            this.populateBills();
         }
     },
 
@@ -696,10 +716,13 @@ const homePage = {
 
     populateIncome: function(){
         let tbody = document.getElementById("incomeBody");
-        console.log("things");
+
+        while(tbody.children.length > 0){
+            tbody.removeChild(tbody.firstChild);
+        }
 
         for(let i = 0; i < state.user.account.income.length; i++){
-            //Check if already paid first
+            //Check if already recieved first
             let isPaid = "No";
             for(let j = 0; j < state.user.account.transactions.length; j++){
                 if(state.user.account.transactions[j].category === state.user.account.income[i].name){
@@ -716,7 +739,7 @@ const homePage = {
             tr.appendChild(name);
 
             let amount = document.createElement("td");
-            amount.innerText = state.user.account.income[i].amount;
+            amount.innerText = `$${state.user.account.income[i].amount.toFixed(2)}`;
             amount.classList.add("subTd");
             tr.appendChild(amount);
 
@@ -734,6 +757,53 @@ const homePage = {
             `;
             remove.classList.add("subTd");
             remove.onclick = ()=>{this.removeCategory(state.user.account.income[i])};
+            tr.appendChild(remove);
+        }
+    },
+
+    populateBills: function(){
+        let tbody = document.getElementById("billsBody");
+
+        while(tbody.children.length > 0){
+            tbody.removeChild(tbody.firstChild);
+        }
+
+        for(let i = 0; i < state.user.account.bills.length; i++){
+            //Check if already paid first
+            let isPaid = "No";
+            for(let j = 0; j < state.user.account.bills.length; j++){
+                if(state.user.account.transactions[j].category === state.user.account.bills[i].name){
+                    isPaid = "Yes";
+                }
+            }
+
+            let tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            let name = document.createElement("td");
+            name.innerText = state.user.account.bills[i].name;
+            name.classList.add("subTd");
+            tr.appendChild(name);
+
+            let amount = document.createElement("td");
+            amount.innerText = `$${state.user.account.bills[i].amount.toFixed(2)}`;
+            amount.classList.add("subTd");
+            tr.appendChild(amount);
+
+            let paid = document.createElement("td");
+            paid.innerText = isPaid;
+            paid.classList.add("subTd");
+            tr.appendChild(paid);
+
+            let remove = document.createElement("td");
+            remove.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            `;
+            remove.classList.add("subTd");
+            remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i])};
             tr.appendChild(remove);
         }
     },
