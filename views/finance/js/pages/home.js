@@ -243,14 +243,22 @@ const homePage = {
     },
 
     deleteAccount: function(){
+        console.log(state.user.account.id);
+        console.log(state.user.accounts);
         fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
             .then(response => response.json())
             .then((response)=>{
-                state.user.accounts.splice(state.user.accounts.indexOf(state.user.account.id), 1);
+                for(let i = 0; i < state.user.accounts.length; i++){
+                    if(state.user.accounts[i].id === state.user.account.id){
+                        state.user.accounts.splice(i, 1);
+                    }
+                }
                 state.user.account = {};
+                
                 if(state.user.accounts.length === 0){
                     controller.openPage("createAccountPage");
                 }else{
+                    console.log(state.user.accounts[0].id);
                     state.user.changeAccount(state.user.accounts[0].id);
                 }
             })
