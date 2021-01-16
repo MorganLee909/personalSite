@@ -764,6 +764,8 @@ const homePage = {
         if(state.user.accounts.length <= 1){
             selector.style.display = "none";
         }else{
+            selector.style.display = "block";
+
             while(selector.children.length > 0){
                 selector.removeChild(selector.firstChild);
             }
