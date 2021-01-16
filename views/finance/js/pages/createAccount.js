@@ -17,7 +17,11 @@ const createAccount = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.addAccount(response._id);
+                state.user.addAccount({
+                    id: response._id,
+                    name: response.name
+                });
+                
                 state.user.changeAccount(new Account(
                     response._id,
                     response.name,
