@@ -284,19 +284,34 @@ module.exports = {
             return res.redirect("/finance/enter");
         }
 
-        if(req.session.user !== req.params.id){
-            return res.json("YOU DO NOT HAVE PERMISSION TO DO THAT");
-        }
+        User.findOne({_id: req.session.user})
+            .then((user)=>{
+                let exists = false;
+                for(let i = 0; i < user.accounts.length; i++){
+                    if(user.accounts[i].toString() === req.params.id){
+                        user.account.splice(i, 1);
+                        exists = true;
+                        break;
+                    }
+                }
 
-        console.log(req.params.id);
-        let account = Account.deleteOne({_id: req.params.id});
-        let transactions = Transaction.deleteMany({account: req.params.id});
+                if(exists === false){
+                    throw "YOU DO NOT HAVE PERMISSION TO DO THAT";
+                }
 
-        Promise.all([account, transactions])
+                console.log(req.params.id);
+                let userSave = user.save();
+                let account = Account.deleteOne({_id: req.params.id});
+                let transactions = Transaction.deleteMany({account: req.params.id});
+
+                return Promise.all([account, transactions, userSave]);
+            })
             .then((response)=>{
                 return res.json({});
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                console.log(err);
+            });
     },
 
     createCategory: function(req, res){

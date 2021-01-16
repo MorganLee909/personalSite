@@ -888,9 +888,11 @@ const homePage = {
     },
 
     deleteAccount: function(){
+        console.log("deleting");
         fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
             .then(response => response.json())
             .then((response)=>{
+                console.log(response);
                 state.user.accounts.splice(state.user.accounts.indexOf(state.user.account.id), 1);
                 state.user.account = {};
                 if(state.user.accounts.length === 0){
