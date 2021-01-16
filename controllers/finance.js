@@ -84,21 +84,10 @@ module.exports = {
         })
             .populate("accounts")
             .then((user)=>{
-                if(user.accounts.length === 0){
-                    throw "no account";
-                }
-
                 responseUser = {
                     _id: user._id,
                     accounts: [],
-                    account: {
-                        _id: user.accounts[0]._id,
-                        name: user.accounts[0].name,
-                        bills: user.accounts[0].bills,
-                        income: user.accounts[0].income,
-                        categories: user.accounts[0].categories,
-                        transactions: []
-                    }
+                    account: {}
                 }
 
                 for(let i = 0; i < user.accounts.length; i++){
@@ -107,30 +96,47 @@ module.exports = {
                         name: user.accounts[i].name
                     });
                 }
-                
-                const from = new Date(req.body.from);
-                const to = new Date(req.body.to);
 
-                let transactions = Transaction.find({
-                    account: user.accounts[0]._id,
-                    date: {$gte: from, $lt: to}
-                });
+                if(user.accounts.length >= 1){
+                    responseUser.account = {
+                        _id: user.accounts[0]._id,
+                        name: user.accounts[0].name,
+                        bills: user.accounts[0].bills,
+                        income: user.accounts[0].income,
+                        categories: user.accounts[0].categories,
+                        transactions: []
+                    };
 
-                let balance = Transaction.aggregate([
-                    {$match: {
-                        account: user.accounts[0]._id
-                    }},
-                    {$group: {
-                        _id: "$account",
-                        balance: {$sum: "$amount"}
-                    }}
-                ]);
+                    const from = new Date(req.body.from);
+                    const to = new Date(req.body.to);
 
-                return Promise.all([transactions, balance]);
+                    let transactions = Transaction.find({
+                        account: user.accounts[0]._id,
+                        date: {$gte: from, $lt: to}
+                    });
+
+                    let balance = Transaction.aggregate([
+                        {$match: {
+                            account: user.accounts[0]._id
+                        }},
+                        {$group: {
+                            _id: "$account",
+                            balance: {$sum: "$amount"}
+                        }}
+                    ]);
+
+                    return Promise.all([transactions, balance]);
+                }
+
+                throw "no account";
             })
             .then((response)=>{
                 responseUser.account.transactions = response[0];
-                responseUser.account.balance = response[1][0].balance;
+                if(response[1].length >= 1){
+                    responseUser.account.balance = response[1][0].balance;
+                }else{
+                    responseUser.account.balance = 0;
+                }
 
                 return res.json(responseUser);
             })
@@ -289,7 +295,7 @@ module.exports = {
                 let exists = false;
                 for(let i = 0; i < user.accounts.length; i++){
                     if(user.accounts[i].toString() === req.params.id){
-                        user.account.splice(i, 1);
+                        user.accounts.splice(i, 1);
                         exists = true;
                         break;
                     }
@@ -299,7 +305,6 @@ module.exports = {
                     throw "YOU DO NOT HAVE PERMISSION TO DO THAT";
                 }
 
-                console.log(req.params.id);
                 let userSave = user.save();
                 let account = Account.deleteOne({_id: req.params.id});
                 let transactions = Transaction.deleteMany({account: req.params.id});
@@ -309,9 +314,7 @@ module.exports = {
             .then((response)=>{
                 return res.json({});
             })
-            .catch((err)=>{
-                console.log(err);
-            });
+            .catch((err)=>{});
     },
 
     createCategory: function(req, res){

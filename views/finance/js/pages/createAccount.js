@@ -24,6 +24,7 @@ const createAccount = {
                     response.bills,
                     response.income,
                     response.categories,
+                    0,
                     []
                 ));
 

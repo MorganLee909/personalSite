@@ -15,18 +15,23 @@ const homePage = {
                 body: JSON.stringify({from: from, to: new Date()})
             })
                 .then(response => response.json())
-                .then(async (response)=>{
-                    state.user = new User(
-                        response._id,
-                        response.accounts,
-                        response.account
-                    );
-
+                .then(async (response)=>{                    
                     state.homePage.newData = true;
 
                     if(response.accounts.length === 0){
+                        state.user = new User(
+                            response._id,
+                            response.accounts
+                        );
+
                         controller.openPage("createAccountPage");
                     }else{
+                        state.user = new User(
+                            response._id,
+                            response.accounts,
+                            response.account
+                        );
+
                         this.populateTransactions();
                         this.populateStats();
                         this.populateIncome();
@@ -236,17 +241,15 @@ const homePage = {
     },
 
     deleteAccount: function(){
-        console.log("deleting");
         fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
             .then(response => response.json())
             .then((response)=>{
-                console.log(response);
                 state.user.accounts.splice(state.user.accounts.indexOf(state.user.account.id), 1);
                 state.user.account = {};
                 if(state.user.accounts.length === 0){
                     controller.openPage("createAccountPage");
                 }else{
-                    state.user.changeAccount(state.user.accounts[0]);
+                    state.user.changeAccount(state.user.accounts[0].id);
                 }
             })
             .catch((err)=>{});
