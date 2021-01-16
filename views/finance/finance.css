@@ -43,6 +43,15 @@ HOME PAGE
     align-items: center;
 }
 
+    #deleteAccount{
+        position: fixed;
+        top: 25px;
+        left: 25px;
+        background: red;
+        color: white;
+        padding: 5px;
+    }
+
     .homeButtons{
         display: flex;
     }

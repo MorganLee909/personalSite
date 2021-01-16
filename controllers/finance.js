@@ -1,6 +1,7 @@
 const User = require("../models/user.js");
 const Account = require("../models/account.js");
 const Transaction = require("../models/transaction.js");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const bcrypt = require("bcryptjs");
 
@@ -110,13 +111,26 @@ module.exports = {
                 const from = new Date(req.body.from);
                 const to = new Date(req.body.to);
 
-                return Transaction.find({
+                let transactions = Transaction.find({
                     account: user.accounts[0]._id,
                     date: {$gte: from, $lt: to}
                 });
+
+                let balance = Transaction.aggregate([
+                    {$match: {
+                        account: user.accounts[0]._id
+                    }},
+                    {$group: {
+                        _id: "$account",
+                        balance: {$sum: "$amount"}
+                    }}
+                ]);
+
+                return Promise.all([transactions, balance]);
             })
-            .then((transactions)=>{
-                responseUser.account.transactions = transactions;
+            .then((response)=>{
+                responseUser.account.transactions = response[0];
+                responseUser.account.balance = response[1][0].balance;
 
                 return res.json(responseUser);
             })
@@ -210,7 +224,7 @@ module.exports = {
             return res.redirect("/finance/enter");
         }
 
-        let getAccount = {};
+        let data = {};
         User.findOne({_id: req.session.user})
             .then((user)=>{
                 let exists = false;
@@ -224,18 +238,40 @@ module.exports = {
                     throw exists;
                 }
 
-                return Account.findOne({_id: req.params.id});
-            })
-            .then((account)=>{
-                getAccount = account;
+                let account = Account.findOne({_id: req.params.id});
 
-                return Transaction.find({account: account._id});
+                let transactions = Transaction.find({account: req.params.id});
+
+                let balance = Transaction.aggregate([
+                    {$match: {
+                        account: new ObjectId(req.params.id)
+                    }},
+                    {$group: {
+                        _id: "$account",
+                        balance: {$sum: "$amount"}
+                    }}
+                ]);
+
+                return Promise.all([account, transactions, balance]);
             })
-            .then((transactions)=>{
-                return res.json({
-                    account: getAccount,
-                    transactions: transactions
-                });
+            .then((response)=>{
+                data = {
+                    account: {
+                        categories: response[0].categories,
+                        name: response[0].name,
+                        user: response[0].user,
+                        bills: response[0].bills,
+                        income: response[0].income
+                    },
+                    transactions: response[1]
+                }
+                
+                data.account.balance = 0;
+                if(response[2].length > 0){
+                    data.account.balance = response[2][0].balance;
+                }
+
+                return res.json(data);
             })
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO GET ACCOUNT DATA");

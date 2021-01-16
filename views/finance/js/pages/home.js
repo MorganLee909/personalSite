@@ -35,6 +35,7 @@ const homePage = {
                 })
                 .catch((err)=>{});
 
+            document.getElementById("deleteAccount").onclick = ()=>{this.deleteAccount()};
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
             document.getElementById("createTransactionBtn").onclick = ()=>{controller.openPage("createTransactionPage")};
             document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
@@ -88,11 +89,15 @@ const homePage = {
     },
 
     populateStats: function(){
+        document.getElementById("balance").innerText = `BALANCE: $${state.user.account.balance}`;
+
+        let now = new Date();
         document.getElementById("totalDiscretionary").innerText = state.user.account.discretionary();
         document.getElementById("remainingDiscretionary").innerText = state.user.account.remainingDiscretionary();
         document.getElementById("totalIncome").innerText = state.user.account.incomeTotal();
         document.getElementById("totalBills").innerText = state.user.account.billTotal();
         document.getElementById("title").innerText = `${state.user.account.name} Account`;
+        document.getElementById("monthLabel").innerText = now.toLocaleDateString("en-US", {month: "long"});
 
         //add accounts to selector
         let selector = document.getElementById("accountSelector");
@@ -226,6 +231,21 @@ const homePage = {
             .then((response)=>{
                 state.user.account.removeCategory(thing.name, type);
                 controller.openPage("homePage");
+            })
+            .catch((err)=>{});
+    },
+
+    deleteAccount: function(){
+        fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
+            .then(response => response.json())
+            .then((response)=>{
+                state.user.accounts.splice(state.user.accounts.indexOf(state.user.account.id), 1);
+                state.user.account = {};
+                if(state.user.accounts.length === 0){
+                    controller.openPage("createAccountPage");
+                }else{
+                    state.user.changeAccount(state.user.accounts[0]);
+                }
             })
             .catch((err)=>{});
     }

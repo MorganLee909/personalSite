@@ -14,6 +14,7 @@ class User{
                 account.bills,
                 account.income,
                 account.categories,
+                account.balance,
                 account.transactions
             );
         }
@@ -46,6 +47,7 @@ class User{
                         response.account.bills,
                         response.account.income,
                         response.account.categories,
+                        response.account.balance,
                         response.transactions
                     );
 

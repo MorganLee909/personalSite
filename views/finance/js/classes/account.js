@@ -1,12 +1,13 @@
 const Transaction = require("./transaction.js");
 
 class Account{
-    constructor(id, name, bills, income, categories, transactions){
+    constructor(id, name, bills, income, categories, balance, transactions){
         this._id = id
         this._name = name;
         this._bills = bills;
         this._income = income;
         this._categories = categories;
+        this._balance = balance;
         this._transactions = [];
 
         for(let i = 0; i < transactions.length; i++){
@@ -112,6 +113,10 @@ class Account{
         }
 
         state.homePage.newData = true;
+    }
+
+    get balance(){
+        return parseFloat((this._balance / 100).toFixed(2));
     }
 
     addTransaction(transaction){
