@@ -257,6 +257,7 @@ module.exports = {
             .then((response)=>{
                 data = {
                     account: {
+                        _id: response[0]._id,
                         categories: response[0].categories,
                         name: response[0].name,
                         user: response[0].user,
@@ -276,6 +277,26 @@ module.exports = {
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO GET ACCOUNT DATA");
             });
+    },
+
+    deleteAccount: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance/enter");
+        }
+
+        if(req.session.user !== req.params.id){
+            return res.json("YOU DO NOT HAVE PERMISSION TO DO THAT");
+        }
+
+        console.log(req.params.id);
+        let account = Account.deleteOne({_id: req.params.id});
+        let transactions = Transaction.deleteMany({account: req.params.id});
+
+        Promise.all([account, transactions])
+            .then((response)=>{
+                return res.json({});
+            })
+            .catch((err)=>{});
     },
 
     createCategory: function(req, res){
