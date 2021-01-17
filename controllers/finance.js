@@ -12,7 +12,7 @@ module.exports = {
 
     register: function(req, res){
         if(req.body.password !== req.body.confirmPassword){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         const email = req.body.email.toLowerCase();
@@ -39,7 +39,7 @@ module.exports = {
                 return res.redirect("/finance/dashboard");
             })
             .catch((err)=>{
-                return res.redirect("/finance/enter");
+                return res.redirect("/finance");
             });
     },
 
@@ -47,12 +47,12 @@ module.exports = {
         User.findOne({email: req.body.email.toLowerCase()})
             .then((user)=>{
                 if(user === null){
-                    return res.redirect("/finance/enter");
+                    return res.redirect("/finance");
                 }
 
                 bcrypt.compare(req.body.password, user.password, (err, result)=>{
                     if(result === false){
-                        return res.redirect("/finance/enter");
+                        return res.redirect("/finance");
                     }
 
                     req.session.user = user._id;
@@ -66,7 +66,7 @@ module.exports = {
 
     dashboard: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         return res.render("finance/dashboard");
@@ -74,7 +74,7 @@ module.exports = {
 
     getUser: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         let responseUser = {};
@@ -151,7 +151,7 @@ module.exports = {
 
     createAccount: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         let account = new Account({
@@ -192,7 +192,7 @@ module.exports = {
     */
     createTransaction: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         User.findOne({_id: req.session.user})
@@ -227,7 +227,7 @@ module.exports = {
 
     getAccount: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         let data = {};
@@ -287,7 +287,7 @@ module.exports = {
 
     deleteAccount: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         User.findOne({_id: req.session.user})
@@ -319,7 +319,7 @@ module.exports = {
 
     createCategory: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         User.findOne({_id: req.session.user})
@@ -353,7 +353,7 @@ module.exports = {
 
     createBill: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         User.findOne({_id: req.session.user})
@@ -389,7 +389,7 @@ module.exports = {
 
     createIncome: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         User.findOne({_id: req.session.user})
@@ -425,7 +425,7 @@ module.exports = {
 
     deleteTransaction: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         Transaction.findOne({_id: req.params.id})
@@ -447,7 +447,7 @@ module.exports = {
 
     deleteCategory: function(req, res){
         if(req.session.user === undefined){
-            return res.redirect("/finance/enter");
+            return res.redirect("/finance");
         }
 
         Account.findOne({_id: req.params.account})
