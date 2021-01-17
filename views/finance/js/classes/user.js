@@ -41,7 +41,6 @@ class User{
             return fetch(`/finance/account/${account}`)
                 .then(response => response.json())
                 .then((response)=>{
-                    // console.log(response);
                     this._account = new Account(
                         response.account._id,
                         response.account.name,
@@ -55,7 +54,7 @@ class User{
                     state.homePage.newData = true;
                     controller.openPage("homePage");
                 })
-                .catch((err)=>{console.log(err)});
+                .catch((err)=>{});
         }else{
             this._account = account;
         }

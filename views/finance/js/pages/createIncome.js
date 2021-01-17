@@ -5,7 +5,6 @@ let createIncome = {
 
     submit: function(){
         event.preventDefault();
-        console.log("something");
 
         let data = {
             account: state.user.account.id,
@@ -14,7 +13,6 @@ let createIncome = {
         }
 
         data.amount = parseInt(data.amount * 100);
-        console.log(data);
 
         fetch("/finance/income", {
             method: "post",

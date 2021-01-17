@@ -243,8 +243,6 @@ const homePage = {
     },
 
     deleteAccount: function(){
-        console.log(state.user.account.id);
-        console.log(state.user.accounts);
         fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
             .then(response => response.json())
             .then((response)=>{
@@ -258,7 +256,6 @@ const homePage = {
                 if(state.user.accounts.length === 0){
                     controller.openPage("createAccountPage");
                 }else{
-                    console.log(state.user.accounts[0].id);
                     state.user.changeAccount(state.user.accounts[0].id);
                 }
             })

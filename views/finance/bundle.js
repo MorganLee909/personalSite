@@ -326,7 +326,6 @@ class User{
             return fetch(`/finance/account/${account}`)
                 .then(response => response.json())
                 .then((response)=>{
-                    // console.log(response);
                     this._account = new Account(
                         response.account._id,
                         response.account.name,
@@ -340,7 +339,7 @@ class User{
                     state.homePage.newData = true;
                     controller.openPage("homePage");
                 })
-                .catch((err)=>{console.log(err)});
+                .catch((err)=>{});
         }else{
             this._account = account;
         }
@@ -555,7 +554,6 @@ let createIncome = {
 
     submit: function(){
         event.preventDefault();
-        console.log("something");
 
         let data = {
             account: state.user.account.id,
@@ -564,7 +562,6 @@ let createIncome = {
         }
 
         data.amount = parseInt(data.amount * 100);
-        console.log(data);
 
         fetch("/finance/income", {
             method: "post",
@@ -903,8 +900,6 @@ const homePage = {
     },
 
     deleteAccount: function(){
-        console.log(state.user.account.id);
-        console.log(state.user.accounts);
         fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
             .then(response => response.json())
             .then((response)=>{
@@ -918,7 +913,6 @@ const homePage = {
                 if(state.user.accounts.length === 0){
                     controller.openPage("createAccountPage");
                 }else{
-                    console.log(state.user.accounts[0].id);
                     state.user.changeAccount(state.user.accounts[0].id);
                 }
             })
