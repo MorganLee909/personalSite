@@ -391,6 +391,7 @@ module.exports = {
         if(req.session.user === undefined){
             return res.redirect("/finance");
         }
+        console.log(req.body);
 
         User.findOne({_id: req.session.user})
             .then((user)=>{
