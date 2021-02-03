@@ -143,6 +143,15 @@ class Account{
             transaction.items
         ));
 
+        let amount = transaction.amount;
+        for(let i = 0; i < state.user.account.income.length; i++){
+            if(transaction.category === state.user.account.income[i].name){
+                amount = -amount;
+            }
+        }
+
+        this._balance += -amount;
+
         state.homePage.newData = true;
     }
 
