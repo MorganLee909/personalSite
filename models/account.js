@@ -36,13 +36,33 @@ const accountSchema = new mongoose.Schema({
             required: [true, "NAME OF THE INCOME IS REQUIRED"],
             validate: {
                 validator: isSanitary,
-                message: "INCOME NAME CONTAINS ILLEGA CHARACTERS"
+                message: "INCOME NAME CONTAINS ILLEGAL CHARACTERS"
             }
         },
         amount: {
             type: Number,
             required: [true, "AMOUNT OF THE INCOME IS REQUIRED"],
             min: [0, "INCOMES MUST CONTAIN A NON-NEGATIVE NUMBER"]
+        }
+    }],
+    allowances: [{
+        name: {
+            type: String,
+            required: [true, "NAME OF ALLOWANCE IS REQUIRED"],
+            validate: {
+                validator: isSanitary,
+                message: "ALLOWANCE NAME CONTAINS ILLEGAL CHARACTERS"
+            },
+        },
+        amount: {
+            type: Number,
+            required: false,
+            min: 0
+        },
+        percent: {
+            type: Number,
+            required: false,
+            min: 0
         }
     }],
     categories: [String]

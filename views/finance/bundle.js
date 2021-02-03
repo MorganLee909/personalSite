@@ -77,11 +77,11 @@ class Account{
         state.homePage.newData = true;
     }
 
-    addAllowances(name, amount, percent){
+    addAllowance(name, amount, percent){
         let allowance = {
             name: name
         }
-
+        
         (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
 
         this._allowances.push(allowance);
@@ -495,7 +495,7 @@ module.exports = createAccount;
 },{"../classes/account":1}],8:[function(require,module,exports){
 let createAllowance = {
     display: function(){
-        document.getElementById("createAllowanceForm").onsubmit = ()=>{this.onsubmit()};
+        document.getElementById("createAllowanceForm").onsubmit = ()=>{this.submit()};
     },
 
     submit: function(){
@@ -505,7 +505,8 @@ let createAllowance = {
         let percent = document.getElementById("createAllowancePercent").value;
 
         let data = {
-            name: document.getElementById("createAllowanceName").value
+            name: document.getElementById("createAllowanceName").value,
+            account: state.user.account.id
         }
 
         if(amount !== ""){
@@ -535,9 +536,7 @@ let createAllowance = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{
-                console.log(err);
-            });
+            .catch((err)=>{});
     }
 }
 

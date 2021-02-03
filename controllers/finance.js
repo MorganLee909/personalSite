@@ -103,6 +103,7 @@ module.exports = {
                         name: user.accounts[0].name,
                         bills: user.accounts[0].bills,
                         income: user.accounts[0].income,
+                        allowances: user.accounts[0].allowances,
                         categories: user.accounts[0].categories,
                         transactions: []
                     };
@@ -420,6 +421,44 @@ module.exports = {
             })
             .catch((err)=>{
                 return res.json("ERROR: UNABLE TO SAVE NEW INCOME");
+            });
+    },
+
+    createAllowance: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance");
+        }
+
+        let newAllowance = {}
+        User.findOne({_id: req.session.user})
+            .then((user)=>{
+                let exists = false;
+                for(let i = 0; i < user.accounts.length; i++){
+                    if(user.accounts[i].toString() === req.body.account){
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists === false){
+                    throw exists;
+                }
+
+                return Account.findOne({_id: req.body.account})
+            })
+            .then((account)=>{
+                newAllowance.name = req.body.name;
+
+                (req.body.amount === undefined) ? newAllowance.percent = req.body.percent : newAllowance.amount = req.body.amount;
+
+                account.allowances.push(newAllowance);
+                
+                return account.save();
+            })
+            .then((account)=>{
+                return res.json(newAllowance);
+            })
+            .catch((err)=>{
+                return res.json("ERROR: UNABLE TO SAVE NEW ALLOWANCE");
             });
     },
 

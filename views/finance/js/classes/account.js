@@ -76,11 +76,11 @@ class Account{
         state.homePage.newData = true;
     }
 
-    addAllowances(name, amount, percent){
+    addAllowance(name, amount, percent){
         let allowance = {
             name: name
         }
-
+        
         (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
 
         this._allowances.push(allowance);

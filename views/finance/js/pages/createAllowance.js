@@ -1,6 +1,6 @@
 let createAllowance = {
     display: function(){
-        document.getElementById("createAllowanceForm").onsubmit = ()=>{this.onsubmit()};
+        document.getElementById("createAllowanceForm").onsubmit = ()=>{this.submit()};
     },
 
     submit: function(){
@@ -10,7 +10,8 @@ let createAllowance = {
         let percent = document.getElementById("createAllowancePercent").value;
 
         let data = {
-            name: document.getElementById("createAllowanceName").value
+            name: document.getElementById("createAllowanceName").value,
+            account: state.user.account.id
         }
 
         if(amount !== ""){
@@ -40,9 +41,7 @@ let createAllowance = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{
-                console.log(err);
-            });
+            .catch((err)=>{});
     }
 }
 
