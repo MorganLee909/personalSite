@@ -7,6 +7,7 @@ const createCategoryPage = require("./pages/createCategory.js");
 const createBillPage = require("./pages/createBill.js");
 const createIncomePage = require("./pages/createIncome.js");
 const transactionPage = require("./pages/transaction.js");
+const createAllowancePage = require("./pages/createAllowance.js");
 
 controller = {
     openPage: function(page, data){
@@ -37,6 +38,8 @@ controller = {
             case "createIncomePage":
                 createIncomePage.display();
                 break;
+            case "createAllowancePage":
+                createAllowancePage.display();
             case "transactionPage":
                 transactionPage.display(data);
                 break;

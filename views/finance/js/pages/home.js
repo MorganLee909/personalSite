@@ -46,6 +46,7 @@ const homePage = {
             document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
             document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};
             document.getElementById("createIncomeBtn").onclick = ()=>{controller.openPage("createIncomePage")};
+            document.getElementById("createAllowanceBtn").onclick = ()=>{controller.openPage("createAllowancePage")};
         }else if(state.homePage.newData === true){
             this.populateTransactions();
             this.populateStats();

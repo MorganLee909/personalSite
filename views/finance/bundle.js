@@ -384,6 +384,7 @@ const createCategoryPage = require("./pages/createCategory.js");
 const createBillPage = require("./pages/createBill.js");
 const createIncomePage = require("./pages/createIncome.js");
 const transactionPage = require("./pages/transaction.js");
+const createAllowancePage = require("./pages/createAllowance.js");
 
 controller = {
     openPage: function(page, data){
@@ -414,6 +415,8 @@ controller = {
             case "createIncomePage":
                 createIncomePage.display();
                 break;
+            case "createAllowancePage":
+                createAllowancePage.display();
             case "transactionPage":
                 transactionPage.display(data);
                 break;
@@ -432,7 +435,7 @@ state = {
 }
 
 homePage.display();
-},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createBill.js":8,"./pages/createCategory.js":9,"./pages/createIncome.js":10,"./pages/createTransaction.js":11,"./pages/home.js":12,"./pages/transaction.js":13}],7:[function(require,module,exports){
+},{"./components/backButton.js":5,"./pages/createAccount.js":7,"./pages/createAllowance.js":8,"./pages/createBill.js":9,"./pages/createCategory.js":10,"./pages/createIncome.js":11,"./pages/createTransaction.js":12,"./pages/home.js":13,"./pages/transaction.js":14}],7:[function(require,module,exports){
 const Account = require("../classes/account");
 
 const createAccount = {
@@ -476,6 +479,56 @@ const createAccount = {
 
 module.exports = createAccount;
 },{"../classes/account":1}],8:[function(require,module,exports){
+let createAllowance = {
+    display: function(){
+        document.getElementById("createAllowanceForm").onsubmit = ()=>{this.onsubmit()};
+    },
+
+    submit: function(){
+        event.preventDefault();
+
+        let amount = document.getElementById("createAllowanceAmount").value;
+        let percent = document.getElementById("createAllowancePercent").value;
+
+        let data = {
+            name: document.getElementById("createAllowanceName").value
+        }
+
+        if(amount !== ""){
+            if(percent !== ""){
+                return;
+            }
+
+            data.amount = amount;
+        }else{
+            data.percent = percent;
+        }
+
+        fetch("/finance/allowance", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then((response)=>{
+                if(typeof(response) === "string"){
+                    throw response;
+                }
+
+                state.user.account.addAllowance(data.name, data.amount, data.percent);
+
+                controller.openPage("homePage");
+            })
+            .catch((err)=>{
+                console.log(err);
+            });
+    }
+}
+
+module.exports = createAllowance;
+},{}],9:[function(require,module,exports){
 let createBill = {
     display: function(){
         document.getElementById("createBillForm").onsubmit = ()=>{this.submit()};
@@ -514,7 +567,7 @@ let createBill = {
 }
 
 module.exports = createBill;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 let createCategory = {
     display: function(){
         document.getElementById("createCategoryForm").onsubmit = ()=>{this.submit()};
@@ -546,7 +599,7 @@ let createCategory = {
 }
 
 module.exports = createCategory;
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 let createIncome = {
     display: function(){
         document.getElementById("createIncomeForm").onsubmit = ()=>{this.submit()};
@@ -585,7 +638,7 @@ let createIncome = {
 }
 
 module.exports = createIncome;
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 let createTransaction = {
     display: function(){
         document.getElementById("createTransactionForm").onsubmit = ()=>{this.submit()};
@@ -654,7 +707,7 @@ let createTransaction = {
 }
 
 module.exports = createTransaction;
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 const User = require("../classes/user.js");
 
 const homePage = {
@@ -703,6 +756,7 @@ const homePage = {
             document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
             document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};
             document.getElementById("createIncomeBtn").onclick = ()=>{controller.openPage("createIncomePage")};
+            document.getElementById("createAllowanceBtn").onclick = ()=>{controller.openPage("createAllowancePage")};
         }else if(state.homePage.newData === true){
             this.populateTransactions();
             this.populateStats();
@@ -921,7 +975,7 @@ const homePage = {
 }
 
 module.exports = homePage;
-},{"../classes/user.js":4}],13:[function(require,module,exports){
+},{"../classes/user.js":4}],14:[function(require,module,exports){
 let transaction = {
     display: function(transaction){
         document.getElementById("transactionDate").innerText = transaction.dateString("long");
