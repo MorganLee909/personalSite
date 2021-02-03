@@ -40,6 +40,7 @@ controller = {
                 break;
             case "createAllowancePage":
                 createAllowancePage.display();
+                break;
             case "transactionPage":
                 transactionPage.display(data);
                 break;

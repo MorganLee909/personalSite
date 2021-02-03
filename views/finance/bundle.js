@@ -2,11 +2,12 @@
 const Transaction = require("./transaction.js");
 
 class Account{
-    constructor(id, name, bills, income, categories, balance, transactions){
+    constructor(id, name, bills, income, allowances, categories, balance, transactions){
         this._id = id
         this._name = name;
         this._bills = bills;
         this._income = income;
+        this._allowances = allowances;
         this._categories = categories;
         this._balance = balance;
         this._transactions = [];
@@ -73,6 +74,17 @@ class Account{
             amount: amount
         });
 
+        state.homePage.newData = true;
+    }
+
+    addAllowances(name, amount, percent){
+        let allowance = {
+            name: name
+        }
+
+        (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
+
+        this._allowances.push(allowance);
         state.homePage.newData = true;
     }
 
@@ -298,6 +310,7 @@ class User{
                 account.name,
                 account.bills,
                 account.income,
+                account.allowances,
                 account.categories,
                 account.balance,
                 account.transactions
@@ -417,6 +430,7 @@ controller = {
                 break;
             case "createAllowancePage":
                 createAllowancePage.display();
+                break;
             case "transactionPage":
                 transactionPage.display(data);
                 break;

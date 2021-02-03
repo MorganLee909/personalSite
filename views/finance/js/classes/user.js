@@ -13,6 +13,7 @@ class User{
                 account.name,
                 account.bills,
                 account.income,
+                account.allowances,
                 account.categories,
                 account.balance,
                 account.transactions
