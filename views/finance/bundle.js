@@ -84,7 +84,7 @@ class Account{
     addAllowance(name, amount, percent){
         let allowance = {
             name: name
-        };
+        }
         
         (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
 
@@ -508,6 +508,7 @@ const createAccount = {
                 state.user.changeAccount(new Account(
                     response._id,
                     response.name,
+                    response.balance,
                     response.bills,
                     response.income,
                     response.categories,
@@ -518,7 +519,7 @@ const createAccount = {
                 state.homePage.newData = true;
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{console.log(err)});
     }
 }
 

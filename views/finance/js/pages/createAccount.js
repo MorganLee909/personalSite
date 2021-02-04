@@ -25,6 +25,7 @@ const createAccount = {
                 state.user.changeAccount(new Account(
                     response._id,
                     response.name,
+                    response.balance,
                     response.bills,
                     response.income,
                     response.categories,
@@ -35,7 +36,7 @@ const createAccount = {
                 state.homePage.newData = true;
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{console.log(err)});
     }
 }
 
