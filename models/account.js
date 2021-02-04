@@ -15,6 +15,10 @@ const accountSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
+    balance: {
+        type: Number,
+        required: [true, "EVERY ACCOUNT MUST HAVE A BALANCE"],
+    },
     bills: [{
         name: {
             type: String,
@@ -26,7 +30,7 @@ const accountSchema = new mongoose.Schema({
         },
         amount: {
             type: Number,
-            required: [true, "AMOUT OF THE BILL IS REQUIRED"],
+            required: [true, "AMOUNT OF THE BILL IS REQUIRED"],
             min: [0, "BILLS MUST CONTAIN A NON-NEGATIVE NUMBER"]
         }
     }],
