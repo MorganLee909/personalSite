@@ -83,7 +83,7 @@ class Account{
     addAllowance(name, amount, percent){
         let allowance = {
             name: name
-        }
+        };
         
         (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
 

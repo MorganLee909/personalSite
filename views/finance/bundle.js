@@ -84,7 +84,7 @@ class Account{
     addAllowance(name, amount, percent){
         let allowance = {
             name: name
-        }
+        };
         
         (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
 
@@ -1011,11 +1011,13 @@ const homePage = {
             tr.appendChild(name);
 
             let amount = document.createElement("td");
+            let amountValue = 0;
             if(state.user.account.allowances[i].amount === undefined){
-                amount.innerText = `$${(incomeTotal * (state.user.account.allowances[i].percent / 100)).toFixed(2)}`;
+                amountValue = (incomeTotal * (state.user.account.allowances[i].percent / 100));
             }else{
-                amount.innerText = `$${(state.user.account.allowances[i].amount).toFixed(2)}`;
+                amountValue = state.user.account.allowances[i].amount;
             }
+            amount.innerText = `$${amountValue.toFixed(2)}`;
             amount.classList.add("subTd");
             tr.appendChild(amount);
 
@@ -1025,7 +1027,7 @@ const homePage = {
             tr.appendChild(spent);
 
             let remaining = document.createElement("td");
-            remaining.innerText = `$${(incomeTotal - allowanceSpent).toFixed(2)}`;
+            remaining.innerText = `$${(amountValue - allowanceSpent).toFixed(2)}`;
             remaining.classList.add("subTd");
             tr.appendChild(remaining);
 
