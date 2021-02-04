@@ -45,6 +45,7 @@ class User{
                     this._account = new Account(
                         response.account._id,
                         response.account.name,
+                        response.account.balance,
                         response.account.bills,
                         response.account.income,
                         response.account.categories,

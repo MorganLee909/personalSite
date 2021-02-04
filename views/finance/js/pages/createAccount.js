@@ -36,7 +36,7 @@ const createAccount = {
                 state.homePage.newData = true;
                 controller.openPage("homePage");
             })
-            .catch((err)=>{console.log(err)});
+            .catch((err)=>{});
     }
 }
 

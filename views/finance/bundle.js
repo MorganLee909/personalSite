@@ -373,6 +373,7 @@ class User{
                     this._account = new Account(
                         response.account._id,
                         response.account.name,
+                        response.account.balance,
                         response.account.bills,
                         response.account.income,
                         response.account.categories,
@@ -519,7 +520,7 @@ const createAccount = {
                 state.homePage.newData = true;
                 controller.openPage("homePage");
             })
-            .catch((err)=>{console.log(err)});
+            .catch((err)=>{});
     }
 }
 
@@ -568,9 +569,7 @@ let createAllowance = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{
-                console.log(err);
-            });
+            .catch((err)=>{});
     }
 }
 
@@ -609,9 +608,7 @@ let createBill = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{
-                console.log(err);
-            });
+            .catch((err)=>{});
     }
 }
 
