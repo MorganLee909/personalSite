@@ -36,6 +36,7 @@ const homePage = {
                         this.populateStats();
                         this.populateIncome();
                         this.populateBills();
+                        this.populateAllowances();
                     }
                 })
                 .catch((err)=>{});
@@ -46,11 +47,13 @@ const homePage = {
             document.getElementById("createCategoryBtn").onclick = ()=>{controller.openPage("createCategoryPage")};
             document.getElementById("createBillBtn").onclick = ()=>{controller.openPage("createBillPage")};
             document.getElementById("createIncomeBtn").onclick = ()=>{controller.openPage("createIncomePage")};
+            document.getElementById("createAllowanceBtn").onclick = ()=>{controller.openPage("createAllowancePage")};
         }else if(state.homePage.newData === true){
             this.populateTransactions();
             this.populateStats();
             this.populateIncome();
             this.populateBills();
+            this.populateAllowances();
         }
     },
 
@@ -177,6 +180,7 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
+            remove.classList.add("actionable");
             remove.onclick = ()=>{this.removeCategory(state.user.account.income[i], "income")};
             tr.appendChild(remove);
         }
@@ -225,7 +229,62 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
+            remove.classList.add("actionable");
             remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i], "bills")};
+            tr.appendChild(remove);
+        }
+    },
+
+    populateAllowances: function(){
+        let tbody = document.getElementById("allowanceBody");
+
+        while(tbody.children.length > 0){
+            tbody.removeChild(tbody.firstChild);
+        }
+
+        for(let i = 0; i < state.user.account.allowances.length; i++){
+            let allowanceSpent = state.user.account.getAllowanceSpent(state.user.account.allowances[i].name);
+            let incomeTotal = state.user.account.incomeTotal();
+
+            let tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            let name = document.createElement("td");
+            name.innerText = state.user.account.allowances[i].name;
+            name.classList.add("subTd");
+            tr.appendChild(name);
+
+            let amount = document.createElement("td");
+            let amountValue = 0;
+            if(state.user.account.allowances[i].amount === undefined){
+                amountValue = (incomeTotal * (state.user.account.allowances[i].percent / 100));
+            }else{
+                amountValue = state.user.account.allowances[i].amount;
+            }
+            amount.innerText = `$${(amountValue /100).toFixed(2)}`;
+            amount.classList.add("subTd");
+            tr.appendChild(amount);
+
+            let spent = document.createElement("td");
+            spent.innerText = `$${allowanceSpent.toFixed(2)}`;
+            spent.classList.add("subTd");
+            tr.appendChild(spent);
+
+            let remaining = document.createElement("td");
+            remaining.innerText = `$${((amountValue - allowanceSpent) / 100).toFixed(2)}`;
+            remaining.classList.add("subTd");
+            tr.appendChild(remaining);
+
+            let remove = document.createElement("td");
+            remove.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            `;
+            remove.classList.add("subTd");
+            remove.classList.add("actionable");
+            remove.onclick = ()=>{this.removeCategory(state.user.account.allowances[i], "allowances")};
             tr.appendChild(remove);
         }
     },

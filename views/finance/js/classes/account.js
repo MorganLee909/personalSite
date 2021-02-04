@@ -1,11 +1,12 @@
 const Transaction = require("./transaction.js");
 
 class Account{
-    constructor(id, name, bills, income, categories, balance, transactions){
+    constructor(id, name, bills, income, allowances, categories, balance, transactions){
         this._id = id
         this._name = name;
         this._bills = bills;
         this._income = income;
+        this._allowances = allowances;
         this._categories = categories;
         this._balance = balance;
         this._transactions = [];
@@ -75,6 +76,21 @@ class Account{
         state.homePage.newData = true;
     }
 
+    get allowances(){
+        return this._allowances;
+    }
+
+    addAllowance(name, amount, percent){
+        let allowance = {
+            name: name
+        };
+        
+        (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
+
+        this._allowances.push(allowance);
+        state.homePage.newData = true;
+    }
+
     get categories(){
         return this._categories;
     }
@@ -110,6 +126,12 @@ class Account{
                     }
                 }
                 break;
+            case "allowances":
+                for(let i = 0; i < this._allowances.length; i++){
+                    if(name === this._allowances[i].name){
+                        this.allowances.splice(i, 1);
+                    }
+                }
         }
 
         state.homePage.newData = true;
@@ -129,6 +151,15 @@ class Account{
             transaction.note,
             transaction.items
         ));
+
+        let amount = transaction.amount;
+        for(let i = 0; i < state.user.account.income.length; i++){
+            if(transaction.category === state.user.account.income[i].name){
+                amount = -amount;
+            }
+        }
+
+        this._balance += -amount;
 
         state.homePage.newData = true;
     }
@@ -151,6 +182,7 @@ class Account{
     discretionary(){
         let bills = 0;
         let income = 0;
+        let allowances = 0;
 
         for(let i = 0; i < this._bills.length; i++){
             bills += this._bills[i].amount;
@@ -160,7 +192,15 @@ class Account{
             income += this._income[i].amount;
         }
 
-        return parseFloat(((income - bills) / 100).toFixed(2));
+        for(let i = 0; i < this._allowances.length; i++){
+            if(this._allowances[i].amount === undefined){
+                allowances += income * (this._allowances[i].percent / 100);
+            }else{
+                allowances += this._allowances[i].amount;
+            }
+        }
+        
+        return ((income - bills - allowances) / 100).toFixed(2);
     }
 
     remainingDiscretionary(){
@@ -193,6 +233,18 @@ class Account{
         }
 
         return parseFloat((bills / 100).toFixed(2));
+    }
+
+    getAllowanceSpent(category){
+        let total = 0;
+
+        for(let i = 0; i < this._transactions.length; i++){
+            if(this._transactions[i].category === category){
+                total += this.transactions[i].amount;
+            }
+        }
+
+        return total / 100;
     }
 }
 

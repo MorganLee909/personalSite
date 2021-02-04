@@ -101,8 +101,10 @@ module.exports = {
                     responseUser.account = {
                         _id: user.accounts[0]._id,
                         name: user.accounts[0].name,
+                        balance: user.accounts[0].balance,
                         bills: user.accounts[0].bills,
                         income: user.accounts[0].income,
+                        allowances: user.accounts[0].allowances,
                         categories: user.accounts[0].categories,
                         transactions: []
                     };
@@ -110,33 +112,16 @@ module.exports = {
                     const from = new Date(req.body.from);
                     const to = new Date(req.body.to);
 
-                    let transactions = Transaction.find({
+                    return Transaction.find({
                         account: user.accounts[0]._id,
                         date: {$gte: from, $lt: to}
-                    });
-
-                    let balance = Transaction.aggregate([
-                        {$match: {
-                            account: user.accounts[0]._id
-                        }},
-                        {$group: {
-                            _id: "$account",
-                            balance: {$sum: "$amount"}
-                        }}
-                    ]);
-
-                    return Promise.all([transactions, balance]);
+                    })
                 }
 
                 throw "no account";
             })
-            .then((response)=>{
-                responseUser.account.transactions = response[0];
-                if(response[1].length >= 1){
-                    responseUser.account.balance = response[1][0].balance;
-                }else{
-                    responseUser.account.balance = 0;
-                }
+            .then((transactions)=>{
+                responseUser.account.transactions = transactions;
 
                 return res.json(responseUser);
             })
@@ -157,6 +142,7 @@ module.exports = {
         let account = new Account({
             name: req.body.name,
             user: req.session.user,
+            balance: 0,
             bills: [],
             income: [],
             categories: ["Discretionary"]
@@ -195,18 +181,20 @@ module.exports = {
             return res.redirect("/finance");
         }
 
-        User.findOne({_id: req.session.user})
-            .then((user)=>{
-                let exists = false;
-                for(let i = 0; i < user.accounts.length; i++){
-                    if(user.accounts[i].toString() === req.body.account){
-                        exists = true;
-                        break;
+        Account.findOne({_id: req.body.account})
+            .then((account)=>{
+                if(account.user.toString() !== req.session.user){
+                    throw "YOU DO NOT HAVE PERMISSION TO DO THAT";
+                }
+
+                let amount = req.body.amount;
+                for(let i = 0; i < account.income.length; i++){
+                    if(account.income[i].name === req.body.category){
+                        amount = -amount;
                     }
                 }
-                if(exists === false){
-                    throw exists;
-                }
+
+                account.balance -= amount;
 
                 let transaction = new Transaction({
                     account: req.body.account,
@@ -217,10 +205,10 @@ module.exports = {
                     note: req.body.note
                 });
 
-                return transaction.save();
+                return Promise.all([account.save(), transaction.save()])
             })
-            .then((transaction)=>{
-                return res.json(transaction);
+            .then((response)=>{
+                return res.json(response[1]);
             })
             .catch((err)=>{});
     },
@@ -423,6 +411,44 @@ module.exports = {
             });
     },
 
+    createAllowance: function(req, res){
+        if(req.session.user === undefined){
+            return res.redirect("/finance");
+        }
+
+        let newAllowance = {}
+        User.findOne({_id: req.session.user})
+            .then((user)=>{
+                let exists = false;
+                for(let i = 0; i < user.accounts.length; i++){
+                    if(user.accounts[i].toString() === req.body.account){
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists === false){
+                    throw exists;
+                }
+
+                return Account.findOne({_id: req.body.account})
+            })
+            .then((account)=>{
+                newAllowance.name = req.body.name;
+
+                (req.body.amount === undefined) ? newAllowance.percent = req.body.percent : newAllowance.amount = req.body.amount;
+
+                account.allowances.push(newAllowance);
+                
+                return account.save();
+            })
+            .then((account)=>{
+                return res.json(newAllowance);
+            })
+            .catch((err)=>{
+                return res.json("ERROR: UNABLE TO SAVE NEW ALLOWANCE");
+            });
+    },
+
     deleteTransaction: function(req, res){
         if(req.session.user === undefined){
             return res.redirect("/finance");
@@ -474,6 +500,14 @@ module.exports = {
                                 account.bills.splice(i, 1);
                                 break;
                             }
+                        }
+                        break;
+                    case "allowances":
+                        for(let i = 0; i < account.allowances.length; i++){
+                            if(account.allowances[i].name === req.params.name){
+                                account.allowances.splice(i, 1);
+                            }
+                            break;
                         }
                         break;
                 }

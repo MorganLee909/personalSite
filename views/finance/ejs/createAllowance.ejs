@@ -1,0 +1,25 @@
+<div id="createAllowancePage" class="page" style="display:none;">
+    <back-button></back-button>
+
+    <form id="createAllowanceForm">
+        <h3>Create Allowance</h3>
+
+        <label>Name
+            <input id="createAllowanceName" type="text" required>
+        </label>
+
+        <div class="lineyBoi"></div>
+
+        <label>Amount ($)
+            <input id="createAllowanceAmount" type="number" min="0" step="0.01">
+        </label>
+
+        <h4>OR</h4>
+        
+        <label>Percent of Income
+            <input id="createAllowancePercent" type="number" min="0" step="1">
+        </label>
+
+        <input type="submit" value="Submit">
+    </form>
+</div>

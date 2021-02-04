@@ -3,6 +3,7 @@
 body, html{
     height: 100vh;
     width: 100vw;
+    font-family: 'IBM Plex Mono', monospace;
 }
 
 form{
@@ -13,6 +14,12 @@ form{
     form > *{
         margin: 5px 0;
     }
+
+.lineyBoi{
+    height: 0;
+    width: 100%;
+    border: 1px solid black;
+}
 
 /* Tables */
 th{
@@ -83,7 +90,11 @@ HOME PAGE
 
             .mainTd{
                 padding: 5px;
-                width: 175px;
+                width: 150px;
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
         
@@ -96,13 +107,14 @@ HOME PAGE
 
             .subTd{
                 text-align: center;
+                padding: 0 3px;
             }
 
-            .subTd:nth-child(4n){
+            .actionable{
                 cursor: pointer;
             }
-            
-                .subTd:nth-child(4n):hover{
+
+                .actionable:hover{
                     box-shadow: 0 0 5px gray;
                 }
 
@@ -152,6 +164,14 @@ CREATE BILL PAGE
 CREATE INCOME PAGE
 */
 #createIncomePage{
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+CREATE ALLOWANCE PAGE
+*/
+#createAllowancePage{
     justify-content: center;
     align-items: center;
 }
