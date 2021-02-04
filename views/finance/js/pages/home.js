@@ -256,9 +256,9 @@ const homePage = {
 
             let amount = document.createElement("td");
             if(state.user.account.allowances[i].amount === undefined){
-                amount.innerText = `$${incomeTotal * (state.user.account.allowances[i].percent / 100)}`;
+                amount.innerText = `$${(incomeTotal * (state.user.account.allowances[i].percent / 100)).toFixed(2)}`;
             }else{
-                amount.innerText = `$${state.user.account.allowances[i].amount}`;
+                amount.innerText = `$${(state.user.account.allowances[i].amount).toFixed(2)}`;
             }
             amount.classList.add("subTd");
             tr.appendChild(amount);
