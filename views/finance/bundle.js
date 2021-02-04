@@ -77,6 +77,10 @@ class Account{
         state.homePage.newData = true;
     }
 
+    get allowances(){
+        return this._allowances;
+    }
+
     addAllowance(name, amount, percent){
         let allowance = {
             name: name
@@ -215,6 +219,18 @@ class Account{
         }
 
         return parseFloat((bills / 100).toFixed(2));
+    }
+
+    getAllowanceSpent(category){
+        let total = 0;
+
+        for(let i = 0; i < this._transactions.length; i++){
+            if(this._transactions[i].category === category){
+                total += this.transactions[i].amount;
+            }
+        }
+
+        return total / 100;
     }
 }
 
@@ -768,6 +784,7 @@ const homePage = {
                         this.populateStats();
                         this.populateIncome();
                         this.populateBills();
+                        this.populateAllowances();
                     }
                 })
                 .catch((err)=>{});
@@ -784,6 +801,7 @@ const homePage = {
             this.populateStats();
             this.populateIncome();
             this.populateBills();
+            this.populateAllowances();
         }
     },
 
@@ -959,6 +977,56 @@ const homePage = {
             `;
             remove.classList.add("subTd");
             remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i], "bills")};
+            tr.appendChild(remove);
+        }
+    },
+
+    populateAllowances: function(){
+        let tbody = document.getElementById("allowanceBody");
+
+        while(tbody.children.length > 0){
+            tbody.removeChild(tbody.firstChild);
+        }
+
+        for(let i = 0; i < state.user.account.allowances.length; i++){
+            let allowanceSpent = state.user.account.getAllowanceSpent(state.user.account.allowances[i].name);
+            let incomeTotal = state.user.account.incomeTotal();
+
+            let tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            let name = document.createElement("td");
+            name.innerText = state.user.account.allowances[i].name;
+            name.classList.add("subTd");
+            tr.appendChild(name);
+
+            let amount = document.createElement("td");
+            if(state.user.account.allowances[i].amount === undefined){
+                amount.innerText = `$${incomeTotal * (state.user.account.allowances[i].percent / 100)}`;
+            }else{
+                amount = `$${state.user.account.allowances[i].amount}`;
+            }
+            amount.classList.add("subTd");
+            tr.appendChild(amount);
+
+            let spent = document.createElement("td");
+            spent.innerText = `$${allowanceSpent.toFixed(2)}`;
+            spent.classList.add("subTd");
+            tr.appendChild(spent);
+
+            let remaining = document.createElement("td");
+            remaining.innerText = `$${(incomeTotal - allowanceSpent).toFixed(2)}`;
+            remaining.classList.add("subTd");
+            tr.appendChild(remaining);
+
+            let remove = document.createElement("td");
+            remove.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            `;
+            remove.classList.add("subTd");
             tr.appendChild(remove);
         }
     },

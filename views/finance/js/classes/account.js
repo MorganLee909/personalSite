@@ -76,6 +76,10 @@ class Account{
         state.homePage.newData = true;
     }
 
+    get allowances(){
+        return this._allowances;
+    }
+
     addAllowance(name, amount, percent){
         let allowance = {
             name: name
@@ -214,6 +218,18 @@ class Account{
         }
 
         return parseFloat((bills / 100).toFixed(2));
+    }
+
+    getAllowanceSpent(category){
+        let total = 0;
+
+        for(let i = 0; i < this._transactions.length; i++){
+            if(this._transactions[i].category === category){
+                total += this.transactions[i].amount;
+            }
+        }
+
+        return total / 100;
     }
 }
 
