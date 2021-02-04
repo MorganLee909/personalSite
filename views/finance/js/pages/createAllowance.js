@@ -41,7 +41,9 @@ let createAllowance = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                console.log(err);
+            });
     }
 }
 

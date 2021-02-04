@@ -31,7 +31,9 @@ let createBill = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                console.log(err);
+            });
     }
 }
 

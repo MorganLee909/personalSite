@@ -84,7 +84,7 @@ class Account{
     addAllowance(name, amount, percent){
         let allowance = {
             name: name
-        }
+        };
         
         (amount === undefined) ? allowance.percent = percent : allowance.amount = amount;
 
@@ -567,7 +567,9 @@ let createAllowance = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                console.log(err);
+            });
     }
 }
 
@@ -606,7 +608,9 @@ let createBill = {
 
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                console.log(err);
+            });
     }
 }
 
@@ -1012,7 +1016,7 @@ const homePage = {
             if(state.user.account.allowances[i].amount === undefined){
                 amount.innerText = `$${incomeTotal * (state.user.account.allowances[i].percent / 100)}`;
             }else{
-                amount = `$${state.user.account.allowances[i].amount}`;
+                amount.innerText = `$${state.user.account.allowances[i].amount}`;
             }
             amount.classList.add("subTd");
             tr.appendChild(amount);
