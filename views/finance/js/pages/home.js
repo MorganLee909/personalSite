@@ -180,6 +180,7 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
+            remove.classList.add("actionable");
             remove.onclick = ()=>{this.removeCategory(state.user.account.income[i], "income")};
             tr.appendChild(remove);
         }
@@ -228,6 +229,7 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
+            remove.classList.add("actionable");
             remove.onclick = ()=>{this.removeCategory(state.user.account.bills[i], "bills")};
             tr.appendChild(remove);
         }
@@ -279,6 +281,8 @@ const homePage = {
                 </svg>
             `;
             remove.classList.add("subTd");
+            remove.classList.add("actionable");
+            remove.onclick = ()=>{this.removeCategory(state.user.account.allowances[i], "allowances")};
             tr.appendChild(remove);
         }
     },

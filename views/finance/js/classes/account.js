@@ -126,6 +126,12 @@ class Account{
                     }
                 }
                 break;
+            case "allowances":
+                for(let i = 0; i < this._allowances.length; i++){
+                    if(name === this._allowances[i].name){
+                        this.allowances.splice(i, 1);
+                    }
+                }
         }
 
         state.homePage.newData = true;

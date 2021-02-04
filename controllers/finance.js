@@ -502,6 +502,14 @@ module.exports = {
                             }
                         }
                         break;
+                    case "allowances":
+                        for(let i = 0; i < account.allowances.length; i++){
+                            if(account.allowances[i].name === req.params.name){
+                                account.allowances.splice(i, 1);
+                            }
+                            break;
+                        }
+                        break;
                 }
 
                 return account.save();

@@ -105,11 +105,11 @@ HOME PAGE
                 text-align: center;
             }
 
-            .subTd:nth-child(4n){
+            .actionable{
                 cursor: pointer;
             }
-            
-                .subTd:nth-child(4n):hover{
+
+                .actionable:hover{
                     box-shadow: 0 0 5px gray;
                 }
 
