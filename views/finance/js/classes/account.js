@@ -182,6 +182,7 @@ class Account{
     discretionary(){
         let bills = 0;
         let income = 0;
+        let allowances = 0;
 
         for(let i = 0; i < this._bills.length; i++){
             bills += this._bills[i].amount;
@@ -191,7 +192,15 @@ class Account{
             income += this._income[i].amount;
         }
 
-        return parseFloat(((income - bills) / 100).toFixed(2));
+        for(let i = 0; i < this._allowances.length; i++){
+            if(this._allowances[i].amount === undefined){
+                allowances += income * (this._allowances[i].percent / 100);
+            }else{
+                allowances += this._allowances[i].amount;
+            }
+        }
+        
+        return ((income - bills - allowances) / 100).toFixed(2);
     }
 
     remainingDiscretionary(){

@@ -261,7 +261,7 @@ const homePage = {
             }else{
                 amountValue = state.user.account.allowances[i].amount;
             }
-            amount.innerText = `$${amountValue.toFixed(2)}`;
+            amount.innerText = `$${(amountValue /100).toFixed(2)}`;
             amount.classList.add("subTd");
             tr.appendChild(amount);
 
@@ -271,7 +271,7 @@ const homePage = {
             tr.appendChild(spent);
 
             let remaining = document.createElement("td");
-            remaining.innerText = `$${(amountValue - allowanceSpent).toFixed(2)}`;
+            remaining.innerText = `$${((amountValue - allowanceSpent) / 100).toFixed(2)}`;
             remaining.classList.add("subTd");
             tr.appendChild(remaining);
 

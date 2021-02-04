@@ -19,7 +19,7 @@ let createAllowance = {
                 return;
             }
 
-            data.amount = amount;
+            data.amount = parseInt(amount * 100);
         }else{
             data.percent = percent;
         }
