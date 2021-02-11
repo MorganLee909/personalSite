@@ -34,14 +34,17 @@ let createAllowance = {
             .then(response => response.json())
             .then((response)=>{
                 if(typeof(response) === "string"){
-                    throw response;
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.addAllowance(data.name, data.amount, data.percent);
+
+                    controller.createBanner(`${data.name} ADDED TO ALLOWANCES`, "success");
+                    controller.openPage("homePage");
                 }
-
-                state.user.account.addAllowance(data.name, data.amount, data.percent);
-
-                controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     }
 }
 

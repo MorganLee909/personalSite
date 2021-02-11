@@ -76,11 +76,19 @@ let createTransaction = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.account.addTransaction(response);
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.addTransaction(response);
 
-                controller.openPage("homePage");
+                    controller.createBanner("TRANSACTION CREATED", "success");
+                    controller.openPage("homePage");
+                }
+                
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE");
+            });
     }
 }
 

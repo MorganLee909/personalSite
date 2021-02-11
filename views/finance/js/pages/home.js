@@ -15,32 +15,38 @@ const homePage = {
                 body: JSON.stringify({from: from, to: new Date()})
             })
                 .then(response => response.json())
-                .then(async (response)=>{                    
-                    state.homePage.newData = true;
-
-                    if(response.accounts.length === 0){
-                        state.user = new User(
-                            response._id,
-                            response.accounts
-                        );
-
-                        controller.openPage("createAccountPage");
+                .then(async (response)=>{
+                    if(typeof(response) === "string"){
+                        controller.createBanner(response, "error");
                     }else{
-                        state.user = new User(
-                            response._id,
-                            response.accounts,
-                            response.account
-                        );
+                        state.homePage.newData = true;
 
-                        this.populateTransactions();
-                        this.populateStats();
-                        this.populateIncome();
-                        this.populateBills();
-                        this.populateAllowances();
-                        this.populateCategories();
+                        if(response.accounts.length === 0){
+                            state.user = new User(
+                                response._id,
+                                response.accounts
+                            );
+
+                            controller.openPage("createAccountPage");
+                        }else{
+                            state.user = new User(
+                                response._id,
+                                response.accounts,
+                                response.account
+                            );
+
+                            this.populateTransactions();
+                            this.populateStats();
+                            this.populateIncome();
+                            this.populateBills();
+                            this.populateAllowances();
+                            this.populateCategories();
+                        }
                     }
                 })
-                .catch((err)=>{});
+                .catch((err)=>{
+                    controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+                });
 
             document.getElementById("deleteAccount").onclick = ()=>{this.deleteAccount()};
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
@@ -344,30 +350,47 @@ const homePage = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.account.removeCategory(thing.name, type);
-                controller.openPage("homePage");
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.removeCategory(thing.name, type);
+
+                    let name = (type === "categories") ? thing : thing.name;
+                    controller.createBanner(`${name} REMOVED FROM ${type.toUpperCase()}`, "success");
+                    controller.openPage("homePage");
+                }      
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     },
 
     deleteAccount: function(){
         fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
             .then(response => response.json())
             .then((response)=>{
-                for(let i = 0; i < state.user.accounts.length; i++){
-                    if(state.user.accounts[i].id === state.user.account.id){
-                        state.user.accounts.splice(i, 1);
-                    }
-                }
-                state.user.account = {};
-                
-                if(state.user.accounts.length === 0){
-                    controller.openPage("createAccountPage");
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error")
                 }else{
-                    state.user.changeAccount(state.user.accounts[0].id);
+                    for(let i = 0; i < state.user.accounts.length; i++){
+                        if(state.user.accounts[i].id === state.user.account.id){
+                            state.user.accounts.splice(i, 1);
+                        }
+                    }
+                    state.user.account = {};
+                    
+                    if(state.user.accounts.length === 0){
+                        controller.openPage("createAccountPage");
+                    }else{
+                        state.user.changeAccount(state.user.accounts[0].id);
+                    }
+
+                    controller.createBanner("ACCOUNT DELETED", "success");
                 }
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE");
+            });
     }
 }
 

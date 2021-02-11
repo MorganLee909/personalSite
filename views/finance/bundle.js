@@ -383,21 +383,27 @@ class User{
             return fetch(`/finance/account/${account}`)
                 .then(response => response.json())
                 .then((response)=>{
-                    this._account = new Account(
-                        response.account._id,
-                        response.account.name,
-                        response.account.balance,
-                        response.account.bills,
-                        response.account.income,
-                        response.account.categories,
-                        response.account.balance,
-                        response.transactions
-                    );
-
-                    state.homePage.newData = true;
-                    controller.openPage("homePage");
+                    if(typeof(response) === "string"){
+                        controller.createBanner(response, "error");
+                    }else{
+                        this._account = new Account(
+                            response.account._id,
+                            response.account.name,
+                            response.account.balance,
+                            response.account.bills,
+                            response.account.income,
+                            response.account.categories,
+                            response.account.balance,
+                            response.transactions
+                        );
+    
+                        state.homePage.newData = true;
+                        controller.openPage("homePage");
+                    }
                 })
-                .catch((err)=>{});
+                .catch((err)=>{
+                    controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+                });
         }else{
             this._account = account;
         }
@@ -480,6 +486,27 @@ controller = {
                 transactionPage.display(data);
                 break;
         }
+    },
+
+    createBanner: function(text, type){
+        let banner = document.getElementById("banner");
+        banner.style.display = "block";
+        document.getElementById("bannerText").innerText = text;
+
+        switch(type){
+            case "error":
+                banner.classList.add("bannerRed");
+                break;
+            case "success":
+                banner.classList.add("bannerGreen");
+                break;
+        }
+
+        setTimeout(()=>{
+            banner.classList.remove("bannerRed");
+            banner.classList.remove("bannerGreen");
+            banner.style.display = "none";
+        }, 5000);
     }
 }
 
@@ -514,26 +541,32 @@ const createAccount = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.addAccount({
-                    id: response._id,
-                    name: response.name
-                });
-                
-                state.user.changeAccount(new Account(
-                    response._id,
-                    response.name,
-                    response.balance,
-                    response.bills,
-                    response.income,
-                    response.categories,
-                    0,
-                    []
-                ));
+                if(typeof(response) === "string"){
+                    banner.createBanner(response, "error");
+                }else{
+                    state.user.addAccount({
+                        id: response._id,
+                        name: response.name
+                    });
+                    
+                    state.user.changeAccount(new Account(
+                        response._id,
+                        response.name,
+                        response.balance,
+                        response.bills,
+                        response.income,
+                        response.categories,
+                        0,
+                        []
+                    ));
 
-                state.homePage.newData = true;
-                controller.openPage("homePage");
+                    state.homePage.newData = true;
+                    controller.openPage("homePage");
+                }
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                banner.createError("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE.", "error");
+            });
     }
 }
 
@@ -575,14 +608,17 @@ let createAllowance = {
             .then(response => response.json())
             .then((response)=>{
                 if(typeof(response) === "string"){
-                    throw response;
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.addAllowance(data.name, data.amount, data.percent);
+
+                    controller.createBanner(`${data.name} ADDED TO ALLOWANCES`, "success");
+                    controller.openPage("homePage");
                 }
-
-                state.user.account.addAllowance(data.name, data.amount, data.percent);
-
-                controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     }
 }
 
@@ -614,14 +650,17 @@ let createBill = {
             .then(response => response.json())
             .then((response)=>{
                 if(typeof(response) === "string"){
-                    throw response;
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.addBill(data.name, data.amount);
+
+                    controller.createBanner(`${data.name} ADDED TO BILLS`);
+                    controller.openPage("homePage");
                 }
-
-                state.user.account.addBill(data.name, data.amount);
-
-                controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     }
 }
 
@@ -649,11 +688,18 @@ let createCategory = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.account.addCategory(data.name);
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.addCategory(data.name);
 
-                controller.openPage("homePage");
+                    controller.createBanner(`${data.name} ADDED TO CATEGORIES`, "success");
+                    controller.openPage("homePage");
+                }
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     }
 }
 
@@ -685,14 +731,17 @@ let createIncome = {
             .then(response => response.json())
             .then((response)=>{
                 if(typeof(response) === "string"){
-                    throw response;
+                    controller.createBanner(response, "error");
                 }
 
                 state.user.account.addIncome(data.name, data.amount);
 
+                controller.createBanner(`${data.name} ADDED TO INCOME`, "success");
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH PAGE", "error");
+            });
     }
 }
 
@@ -776,11 +825,19 @@ let createTransaction = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.account.addTransaction(response);
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.addTransaction(response);
 
-                controller.openPage("homePage");
+                    controller.createBanner("TRANSACTION CREATED", "success");
+                    controller.openPage("homePage");
+                }
+                
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE");
+            });
     }
 }
 
@@ -803,32 +860,38 @@ const homePage = {
                 body: JSON.stringify({from: from, to: new Date()})
             })
                 .then(response => response.json())
-                .then(async (response)=>{                    
-                    state.homePage.newData = true;
-
-                    if(response.accounts.length === 0){
-                        state.user = new User(
-                            response._id,
-                            response.accounts
-                        );
-
-                        controller.openPage("createAccountPage");
+                .then(async (response)=>{
+                    if(typeof(response) === "string"){
+                        controller.createBanner(response, "error");
                     }else{
-                        state.user = new User(
-                            response._id,
-                            response.accounts,
-                            response.account
-                        );
+                        state.homePage.newData = true;
 
-                        this.populateTransactions();
-                        this.populateStats();
-                        this.populateIncome();
-                        this.populateBills();
-                        this.populateAllowances();
-                        this.populateCategories();
+                        if(response.accounts.length === 0){
+                            state.user = new User(
+                                response._id,
+                                response.accounts
+                            );
+
+                            controller.openPage("createAccountPage");
+                        }else{
+                            state.user = new User(
+                                response._id,
+                                response.accounts,
+                                response.account
+                            );
+
+                            this.populateTransactions();
+                            this.populateStats();
+                            this.populateIncome();
+                            this.populateBills();
+                            this.populateAllowances();
+                            this.populateCategories();
+                        }
                     }
                 })
-                .catch((err)=>{});
+                .catch((err)=>{
+                    controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+                });
 
             document.getElementById("deleteAccount").onclick = ()=>{this.deleteAccount()};
             document.getElementById("createAccountBtn").onclick = ()=>{controller.openPage("createAccountPage")};
@@ -1132,30 +1195,47 @@ const homePage = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.account.removeCategory(thing.name, type);
-                controller.openPage("homePage");
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.removeCategory(thing.name, type);
+
+                    let name = (type === "categories") ? thing : thing.name;
+                    controller.createBanner(`${name} REMOVED FROM ${type.toUpperCase()}`, "success");
+                    controller.openPage("homePage");
+                }      
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     },
 
     deleteAccount: function(){
         fetch(`/finance/account/${state.user.account.id}`, {method: "delete"})
             .then(response => response.json())
             .then((response)=>{
-                for(let i = 0; i < state.user.accounts.length; i++){
-                    if(state.user.accounts[i].id === state.user.account.id){
-                        state.user.accounts.splice(i, 1);
-                    }
-                }
-                state.user.account = {};
-                
-                if(state.user.accounts.length === 0){
-                    controller.openPage("createAccountPage");
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error")
                 }else{
-                    state.user.changeAccount(state.user.accounts[0].id);
+                    for(let i = 0; i < state.user.accounts.length; i++){
+                        if(state.user.accounts[i].id === state.user.account.id){
+                            state.user.accounts.splice(i, 1);
+                        }
+                    }
+                    state.user.account = {};
+                    
+                    if(state.user.accounts.length === 0){
+                        controller.openPage("createAccountPage");
+                    }else{
+                        state.user.changeAccount(state.user.accounts[0].id);
+                    }
+
+                    controller.createBanner("ACCOUNT DELETED", "success");
                 }
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE");
+            });
     }
 }
 
@@ -1177,13 +1257,16 @@ let transaction = {
             .then(response => response.json())
             .then((response)=>{
                 if(typeof(response) === "string"){
-                    throw response;
+                    controller.createBanner(response, "error");
+                }else{
+                    controller.createBanner("TRANSACTION DELETED", "success");
+                    state.user.account.removeTransaction(transaction.id);
+                    controller.openPage("homePage");
                 }
-
-                state.user.account.removeTransaction(transaction.id);
-                controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     }
 }
 
