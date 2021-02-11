@@ -20,11 +20,18 @@ let createCategory = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.account.addCategory(data.name);
+                if(typeof(response) === "string"){
+                    controller.createBanner(response, "error");
+                }else{
+                    state.user.account.addCategory(data.name);
 
-                controller.openPage("homePage");
+                    controller.createBanner(`${data.name} ADDED TO CATEGORIES`, "success");
+                    controller.openPage("homePage");
+                }
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     }
 }
 

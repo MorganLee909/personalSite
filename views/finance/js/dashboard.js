@@ -45,6 +45,27 @@ controller = {
                 transactionPage.display(data);
                 break;
         }
+    },
+
+    createBanner: function(text, type){
+        let banner = document.getElementById("banner");
+        banner.style.display = "block";
+        document.getElementById("bannerText").innerText = text;
+
+        switch(type){
+            case "error":
+                banner.classList.add("bannerRed");
+                break;
+            case "success":
+                banner.classList.add("bannerGreen");
+                break;
+        }
+
+        setTimeout(()=>{
+            banner.classList.remove("bannerRed");
+            banner.classList.remove("bannerGreen");
+            banner.style.display = "none";
+        }, 5000);
     }
 }
 

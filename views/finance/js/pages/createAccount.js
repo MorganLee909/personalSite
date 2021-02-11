@@ -17,26 +17,32 @@ const createAccount = {
         })
             .then(response => response.json())
             .then((response)=>{
-                state.user.addAccount({
-                    id: response._id,
-                    name: response.name
-                });
-                
-                state.user.changeAccount(new Account(
-                    response._id,
-                    response.name,
-                    response.balance,
-                    response.bills,
-                    response.income,
-                    response.categories,
-                    0,
-                    []
-                ));
+                if(typeof(response) === "string"){
+                    banner.createBanner(response, "error");
+                }else{
+                    state.user.addAccount({
+                        id: response._id,
+                        name: response.name
+                    });
+                    
+                    state.user.changeAccount(new Account(
+                        response._id,
+                        response.name,
+                        response.balance,
+                        response.bills,
+                        response.income,
+                        response.categories,
+                        0,
+                        []
+                    ));
 
-                state.homePage.newData = true;
-                controller.openPage("homePage");
+                    state.homePage.newData = true;
+                    controller.openPage("homePage");
+                }
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                banner.createError("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE.", "error");
+            });
     }
 }
 

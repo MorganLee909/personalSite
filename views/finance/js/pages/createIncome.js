@@ -24,14 +24,17 @@ let createIncome = {
             .then(response => response.json())
             .then((response)=>{
                 if(typeof(response) === "string"){
-                    throw response;
+                    controller.createBanner(response, "error");
                 }
 
                 state.user.account.addIncome(data.name, data.amount);
 
+                controller.createBanner(`${data.name} ADDED TO INCOME`, "success");
                 controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH PAGE", "error");
+            });
     }
 }
 

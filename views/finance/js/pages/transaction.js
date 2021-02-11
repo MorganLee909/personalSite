@@ -14,13 +14,16 @@ let transaction = {
             .then(response => response.json())
             .then((response)=>{
                 if(typeof(response) === "string"){
-                    throw response;
+                    controller.createBanner(response, "error");
+                }else{
+                    controller.createBanner("TRANSACTION DELETED", "success");
+                    state.user.account.removeTransaction(transaction.id);
+                    controller.openPage("homePage");
                 }
-
-                state.user.account.removeTransaction(transaction.id);
-                controller.openPage("homePage");
             })
-            .catch((err)=>{});
+            .catch((err)=>{
+                controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+            });
     }
 }
 

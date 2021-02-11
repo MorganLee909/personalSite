@@ -42,21 +42,27 @@ class User{
             return fetch(`/finance/account/${account}`)
                 .then(response => response.json())
                 .then((response)=>{
-                    this._account = new Account(
-                        response.account._id,
-                        response.account.name,
-                        response.account.balance,
-                        response.account.bills,
-                        response.account.income,
-                        response.account.categories,
-                        response.account.balance,
-                        response.transactions
-                    );
-
-                    state.homePage.newData = true;
-                    controller.openPage("homePage");
+                    if(typeof(response) === "string"){
+                        controller.createBanner(response, "error");
+                    }else{
+                        this._account = new Account(
+                            response.account._id,
+                            response.account.name,
+                            response.account.balance,
+                            response.account.bills,
+                            response.account.income,
+                            response.account.categories,
+                            response.account.balance,
+                            response.transactions
+                        );
+    
+                        state.homePage.newData = true;
+                        controller.openPage("homePage");
+                    }
                 })
-                .catch((err)=>{});
+                .catch((err)=>{
+                    controller.createBanner("SOMETHING WENT WRONG. PLEASE REFRESH THE PAGE", "error");
+                });
         }else{
             this._account = account;
         }
