@@ -169,13 +169,23 @@ class Account{
     }
 
     removeTransaction(id){
+        let amount = 0;
         for(let i = 0; i < this._transactions.length; i++){
             if(this._transactions[i].id === id){
+                amount = this._transactions[i]._amount;
+                for(let j = 0; j < this._income.length; j++){
+                    if(this._transactions[i].category === this._income[j].name){
+                        amount = -amount;
+                        break;
+                    }
+                }
+
                 this._transactions.splice(i, 1);
                 break;
             }
         }
 
+        this._balance += amount;
         state.homePage.newData = true;
     }
 

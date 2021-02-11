@@ -466,7 +466,15 @@ module.exports = {
                     throw "YOU DO NOT HAVE PERMISSION TO DO THAT";
                 }
 
-                return Transaction.deleteOne({_id: req.params.id})
+                let amount = transaction.amount;
+                for(let i = 0; i < transaction.account.income.length; i++){
+                    if(transaction.account.income[i].name === transaction.category){
+                        amount = -amount;
+                    }
+                }
+                transaction.account.balance += amount;
+
+                return Promise.all([transaction.account.save(), Transaction.deleteOne({_id: req.params.id})])
             })
             .then(()=>{
                 return res.json({});
