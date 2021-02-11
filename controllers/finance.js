@@ -64,6 +64,11 @@ module.exports = {
             });
     },
 
+    logout: function(req, res){
+        req.session.user = undefined;
+        return res.redirect("/");
+    },
+
     dashboard: function(req, res){
         if(req.session.user === undefined){
             return res.redirect("/finance");
