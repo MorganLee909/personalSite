@@ -510,6 +510,10 @@ module.exports = {
                             break;
                         }
                         break;
+                    case "categories":
+                        let category = account.categories.indexOf(req.params.name);
+                        account.categories.splice(category, 1);
+                        break;
                 }
 
                 return account.save();

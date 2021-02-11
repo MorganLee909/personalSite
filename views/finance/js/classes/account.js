@@ -132,6 +132,10 @@ class Account{
                         this.allowances.splice(i, 1);
                     }
                 }
+                break;
+            case "categories":
+                this._categories.splice(this._categories.indexOf(name), 1);
+                break;
         }
 
         state.homePage.newData = true;

@@ -37,6 +37,7 @@ const homePage = {
                         this.populateIncome();
                         this.populateBills();
                         this.populateAllowances();
+                        this.populateCategories();
                     }
                 })
                 .catch((err)=>{});
@@ -54,6 +55,7 @@ const homePage = {
             this.populateIncome();
             this.populateBills();
             this.populateAllowances();
+            this.populateCategories();
         }
     },
 
@@ -286,6 +288,53 @@ const homePage = {
             remove.classList.add("actionable");
             remove.onclick = ()=>{this.removeCategory(state.user.account.allowances[i], "allowances")};
             tr.appendChild(remove);
+        }
+    },
+
+    populateCategories: function(){
+        let tbody = document.getElementById("categoriesBody");
+
+        while(tbody.children.length > 0){
+            tbody.removeChild(tbody.firstChild);
+        }
+
+        for(let i = 0; i < state.user.account.categories.length; i++){
+            let tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            let name = document.createElement("td");
+            name.innerText = state.user.account.categories[i];
+            name.classList.add("subTd");
+            tr.appendChild(name);
+
+            let totalSpent = 0;
+            for(let j = 0; j < state.user.account.transactions.length; j++){
+                if(state.user.account.transactions[j].category === state.user.account.categories[i]){
+                    totalSpent += state.user.account.transactions[j].amount;
+                    break;
+                }
+            }
+            let spent = document.createElement("td");
+            spent.innerText = `$${totalSpent}`;
+            spent.classList.add("subTd");
+            tr.appendChild(spent);
+
+            if(state.user.account.categories[i] === "Discretionary"){
+                let remove = document.createElement("td");
+                tr.appendChild(remove);
+            }else{
+                let remove = document.createElement("td");
+                remove.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                `;
+                remove.classList.add("subTd");
+                remove.classList.add("actionable");
+                remove.onclick = ()=>{this.removeCategory(state.user.account.categories[i], "categories")};
+                tr.appendChild(remove);
+            }
         }
     },
 
